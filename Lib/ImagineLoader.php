@@ -12,7 +12,7 @@ class ImagineLoader {
 	public static function load($name) {
 		$imagineBase = \Configure::read('Imagine.base');
 		if (empty($imagineBase)) {
-			$imagineBase = \App::pluginPath('Imagine') . 'Vendor' . DS . 'Imagine' . DS . 'lib' . DS;
+			$imagineBase = \CakePlugin::path('Imagine') . 'Vendor' . DS . 'Imagine' . DS . 'lib' . DS;
 		}
 
 		$filePath = $imagineBase . $name . '.php';

@@ -10,6 +10,11 @@ class ImagineBehavior extends ModelBehavior {
  */
 	public $settings = array();
 
+/**
+ * Default settings array
+ *
+ * @var array
+ */
 	protected $_defaults = array(
 		'engine' => 'Gd');
 
@@ -36,30 +41,28 @@ class ImagineBehavior extends ModelBehavior {
  * @param
  * @return boolean
  */
-	public function processImage(Model $Model, $image = '', $output = false,  $rules = array()) {
+	public function processImage(Model $Model, $image = '', $output = null,  $rules = array()) {
 		if (empty($rules) || !($this->checkSignature($Model, $rules))) {
-			//return false;
+			return false;
 		}
 
 		$ImageObject = $this->Imagine->open($image);
-
+		unset($rules['hash']);
 		foreach ($rules as $operation  => $params) {
+			if (is_string($params)) {
+				$params = $this->buildImageParams($Model, $params);
+			}
+
 			if (method_exists($Model, $operation)) {
-				$object->{$operation}($ImageObject, $this->buildParams($Model, $params));
+				$Model->{$operation}(&$ImageObject, $params);
 			} elseif (method_exists($this, $operation)) {
-				$object = $this;
+				$this->{$operation}($Model, &$ImageObject, $params);
 			} else {
 				return false;
 			}
-
-			if (is_string($params)) {
-				$params = $this->buildParams($Model, $params);
-			}
-
-			$object->{$operation}(&$ImageObject, $params);
 		}
 
-		if ($output === false) {
+		if (is_null($output)) {
 			return $ImageObject;
 		}
 
@@ -72,7 +75,7 @@ class ImagineBehavior extends ModelBehavior {
  * @param array
  * @return array
  */
-	public function buildParams(Model $Model, $params = array()) {
+	public function buildImageParams(Model $Model, $params = array()) {
 		$tmpParams = explode(';', $params);
 		$resultParams = array();
 		foreach ($tmpParams as &$param) {
@@ -82,16 +85,37 @@ class ImagineBehavior extends ModelBehavior {
 		return $resultParams;
 	}
 
-	public function crop($Image, $options = array()) {
+/**
+ * Wrapper for Imagines crop
+ *
+ * @param object Model
+ * @param object Imagine Image Object
+ * @param array Array of options for processing the image
+ */
+	public function crop(Model $Model, $Image, $options = array()) {
 		$Image->resize(new Imagine\Image\Box(150, 150))
 			->crop(new Imagine\Image\Point(0, 0), new Imagine\Image\Box(150, 150));
 	}
 
-	public function thumbnail($Image, $options = array()) {
+/**
+ * Wrapper for Imagines thumbnail
+ *
+ * @param object Model
+ * @param object Imagine Image Object
+ * @param array Array of options for processing the image
+ */
+	public function thumbnail(Model $Model, $Image, $options = array()) {
 		$Image = $Image->thumbnail(new Imagine\Image\Box($options['width'], $options['height']));
 	}
 
-	public function resize($Image, $options = array()) {
+/**
+ * Wrapper for Imagines resize
+ *
+ * @param object Model
+ * @param object Imagine Image Object
+ * @param array Array of options for processing the image
+ */
+	public function resize(Model $Model, $Image, $options = array()) {
 		$Image->resize(new Imagine\Image\Box($options['width'], $options['height']));
 	}
 
@@ -105,7 +129,7 @@ class ImagineBehavior extends ModelBehavior {
 	public function checkSignature(Model $Model, $options = array()) {
 		$mediaSalt = Configure::read('Imagine.salt');
 		if (empty($mediaSalt)) {
-			throw new Exception(__('Please configure Media.salt using Configure::write(\'Imagine.salt\', \'YOUR-SALT-VALUE\')', true));
+			throw new Exception(__('Please configure Imagine.salt using Configure::write(\'Imagine.salt\', \'YOUR-SALT-VALUE\')', true));
 		}
 
 		if (isset($options['hash'])) {

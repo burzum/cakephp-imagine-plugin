@@ -1,6 +1,6 @@
 <?php
 App::uses('Utilities', 'Security');
-class ImagineImageHelper extends AppHelper {
+class ImagineHelper extends AppHelper {
 /**
  * Helpers
  *
@@ -72,4 +72,3 @@ class ImagineImageHelper extends AppHelper {
 	}
 
 }
-?>

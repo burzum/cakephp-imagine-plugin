@@ -57,8 +57,8 @@ class ImagineBehaviorTest extends CakeTestCase {
  *
  * @return void
  */
-	public function testBuildParams() {
-		$result = $this->Model->buildParams('width|300;height|300');
+	public function testBuildImageParams() {
+		$result = $this->Model->buildImageParams('width|300;height|300');
 		$this->assertEqual($result, array('width' => 300, 'height' => 300));
 	}
 

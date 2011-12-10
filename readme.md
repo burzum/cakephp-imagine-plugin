@@ -1,0 +1,1 @@
+# Imagine Plugin for CakePHP #

@@ -29,7 +29,7 @@ class ImagineHelper extends AppHelper {
 			$url = array_merge(array('plugin' => 'media', 'admin' => false, 'controller' => 'media', 'action' => 'image'), array($url));
 		}
 		$options = $this->pack($options);
-		$options['hash'] = $this->sign($options);
+		$options['hash'] = $this->hash($options);
 
 		$url = array_merge((array)$url, $options + array('base' => false));
 		return $this->Html->url($url, $full);
@@ -42,7 +42,7 @@ class ImagineHelper extends AppHelper {
  * @return string
  * @access public
  */
-	public function sign($options) {
+	public function hash($options) {
 		$mediaSalt = Configure::read('Imagine.salt');
 		if (empty($mediaSalt)) {
 			throw new Exception(__('Please configure Imagine.salt using Configure::write(\'Imagine.salt\', \'YOUR-SALT-VALUE\')', true));
@@ -52,7 +52,7 @@ class ImagineHelper extends AppHelper {
 	}
 
 /**
- * Pack
+ * Packs the image options array into an array of named arguments that can be used in a cake url
  *
  * @param array $options
  * @return array

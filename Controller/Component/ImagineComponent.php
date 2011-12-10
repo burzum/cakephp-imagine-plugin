@@ -3,42 +3,89 @@ App::uses('Component', 'Controller/Component');
 
 class ImagineComponent extends Component {
 
-	public $settings = array('hash' => 'hash');
-	public $Controller;
 /**
- * 
+ * Settings
+ *
+ * @var array
+ */
+	public $settings = array(
+		'hashField' => 'hash');
+
+/**
+ * Controller instance
+ *
+ * @var object
+ */
+	public $Controller;
+
+/**
+ * Constructor
+ *
+ * @param ComponentCollection $collection
+ * @param array $settings
+ * @return void
+ */
+	public function __construct(ComponentCollection $collection, $settings = array()) {
+		$this->settings = Set::merge($this->settings, $settings);
+		parent::__construct($collection, $this->settings);
+	}
+
+/**
+ * Start Up
+ *
+ * @param Controller $Controller
+ * @return void
  */
 	public function startUp(Controller $Controller) {
 		$this->Controller = $Controller;
 	}
 
 /**
- * Creates a hash that can be used to create versions of an image based on the passed params
+ * Creates a hash based on the named params but ignores the hash field
+ *
+ * The hash can also be used to determine if there is already a cached version
+ * of the requested image that was processed with these params. How you do that
+ * is up to you.
  *
  * @return string
  */
-	public function hashParams() {
-		$cacheHash = '';
+	public function getHash() {
+		$mediaSalt = Configure::read('Imagine.salt');
+		if (empty($mediaSalt)) {
+			throw new Exception(__('Please configure Imagine.salt using Configure::write(\'Imagine.salt\', \'YOUR-SALT-VALUE\')', true));
+		}
+
 		if (!empty($this->Controller->request->params['named'])) {
 			$params = $this->Controller->request->params['named'];
-			unset($params['hash']);
+			unset($params[$this->settings['hashField']]);
 			ksort($params);
-			return md5(serialize($params));
+			return urlencode(Security::hash(serialize($params) . $mediaSalt));
 		}
-		return $cacheHash;
+		return '';
 	}
 
-	public function render() {
-		$this->_render();
+/**
+ * Compares the hash passed within the named args with the hash calculated based
+ * on the other named args and the imagine salt
+ *
+ * This is done to avoid that people can randomly generate tons of images by
+ * just incrementing the width and height for example in the url.
+ *
+ * @param boolean $error If set to false no 404 page will be rendered if the hash is wrong
+ * @return boolean True if the hashes match
+ */
+	public function checkHash($error = true) {
+		if (!isset($this->Controller->request->params['named'][$this->settings['hashField']])) {
+			return false;
+		}
+
+		$result = $this->Controller->request->params['named'][$this->settings['hashField']] == $this->getHash();
+
+		if (!$result && $error) {
+			throw new NotFoundException();
+		}
+
+		return $result;
 	}
 
-	protected function __render() {
-		$this->Controller->set('cache', '3 days');
-		$this->Controller->set('name', $image['Image']['filename']);
-		$this->Controller->set('download', false);
-		$this->Controller->set('extension', 'jpg');
-		$this->Controller->set('id', $image['Image']['id'] . $cacheHash);
-		$this->Controller->set('path', $image['Image']['path']);
-		$this->render();
-	}
 }

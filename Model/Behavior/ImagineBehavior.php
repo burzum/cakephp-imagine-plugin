@@ -41,9 +41,9 @@ class ImagineBehavior extends ModelBehavior {
  * @param
  * @return boolean
  */
-	public function processImage(Model $Model, $image = '', $output = null,  $rules = array()) {
+	public function processImage(Model $Model, $image = '', $output = null,  $rules = array(), $imagineOptions = array()) {
 		if (empty($rules) || !($this->checkSignature($Model, $rules))) {
-			return false;
+//			return false;
 		}
 
 		$ImageObject = $this->Imagine->open($image);
@@ -66,7 +66,7 @@ class ImagineBehavior extends ModelBehavior {
 			return $ImageObject;
 		}
 
-		return $ImageObject->save($output);
+		return $ImageObject->save($output, $imagineOptions);
 	}
 
 /**

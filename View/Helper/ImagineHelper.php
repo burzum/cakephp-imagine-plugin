@@ -1,5 +1,6 @@
 <?php
 App::uses('Utilities', 'Security');
+
 class ImagineHelper extends AppHelper {
 /**
  * Helpers
@@ -35,7 +36,7 @@ class ImagineHelper extends AppHelper {
 	}
 
 /**
- * Sign
+ * Signs the url with a salted hash
  *
  * @param array $options
  * @return string

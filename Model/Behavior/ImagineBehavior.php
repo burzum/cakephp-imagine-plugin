@@ -36,21 +36,17 @@ class ImagineBehavior extends ModelBehavior {
  *
  * Caching and taking care of the file storage is NOT the purpose of this method!
  *
- * @param object Model instance
- * @param string image path
- * @param
+ * @param Model $Model
+ * @param string $image source image path
+ * @param mixed 
+ * @param array Imagine image objects save() 2nd parameter options
  * @return boolean
  */
-	public function processImage(Model $Model, $image = '', $output = null,  $rules = array(), $imagineOptions = array()) {
-		if (empty($rules) || !($this->checkSignature($Model, $rules))) {
-//			return false;
-		}
-
+	public function processImage(Model $Model, $image, $output = null, $imagineOptions = array()) {
 		$ImageObject = $this->Imagine->open($image);
-		unset($rules['hash']);
 		foreach ($rules as $operation  => $params) {
 			if (is_string($params)) {
-				$params = $this->buildImageParams($Model, $params);
+				$params = $this->unpackParams($Model, $params);
 			}
 
 			if (method_exists($Model, $operation)) {
@@ -70,12 +66,13 @@ class ImagineBehavior extends ModelBehavior {
 	}
 
 /**
- * Test
+ * Unpacks the strings into arrays that were packed with ImagineHelper::pack()
  *
- * @param array
+ * @param Model $Model
+ * @param array $params
  * @return array
  */
-	public function buildImageParams(Model $Model, $params = array()) {
+	public function unpackParams(Model $Model, $params = array()) {
 		$tmpParams = explode(';', $params);
 		$resultParams = array();
 		foreach ($tmpParams as &$param) {
@@ -93,8 +90,8 @@ class ImagineBehavior extends ModelBehavior {
  * @param array Array of options for processing the image
  */
 	public function crop(Model $Model, $Image, $options = array()) {
-		$Image->resize(new Imagine\Image\Box(150, 150))
-			->crop(new Imagine\Image\Point(0, 0), new Imagine\Image\Box(150, 150));
+		$Image->resize(new Imagine\Image\Box($options['width'], $options['height']))
+			->crop(new Imagine\Image\Point(0, 0), new Imagine\Image\Box($options['width'], $options['height']));
 	}
 
 /**
@@ -117,35 +114,6 @@ class ImagineBehavior extends ModelBehavior {
  */
 	public function resize(Model $Model, $Image, $options = array()) {
 		$Image->resize(new Imagine\Image\Box($options['width'], $options['height']));
-	}
-
-/**
- * Checks the hash for signed url params
- *
- * @param 
- * @param 
- * @return 
- */
-	public function checkSignature(Model $Model, $options = array()) {
-		$mediaSalt = Configure::read('Imagine.salt');
-		if (empty($mediaSalt)) {
-			throw new Exception(__('Please configure Imagine.salt using Configure::write(\'Imagine.salt\', \'YOUR-SALT-VALUE\')', true));
-		}
-
-		if (isset($options['hash'])) {
-			$signature = $options['hash'];
-			unset($options['hash']);
-		} else {
-			return false;
-		}
-
-		foreach ($options as $key => $val) {
-			$options[$key] = urlencode($val);
-		}
-
-		App::uses('Security', 'Utility');
-		ksort($options);
-		return urlencode(Security::hash(serialize($options) . $mediaSalt)) == $signature;
 	}
 
 }

@@ -9,7 +9,8 @@ class ImagineComponent extends Component {
  * @var array
  */
 	public $settings = array(
-		'hashField' => 'hash');
+		'hashField' => 'hash',
+		'actions' => array());
 
 /**
  * Controller instance
@@ -38,6 +39,11 @@ class ImagineComponent extends Component {
  */
 	public function startUp(Controller $Controller) {
 		$this->Controller = $Controller;
+		if (!empty($this->settings['actions'])) {
+			if (in_array($this->Controlle->action, $this->settings['actions'])) {
+				$this->checkHash();
+			}
+		}
 	}
 
 /**

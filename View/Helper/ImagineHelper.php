@@ -1,5 +1,5 @@
 <?php
-App::uses('Utilities', 'Security');
+App::uses('Security', 'Utility');
 
 class ImagineHelper extends AppHelper {
 /**
@@ -67,7 +67,7 @@ class ImagineHelper extends AppHelper {
 					$tmp[] = "$key|$value";
 				}
 			}
-			$result[$operation] = urlencode(join(';', $tmp));
+			$result[$operation] = join(';', $tmp);
 		}
 		return $result;
 	}

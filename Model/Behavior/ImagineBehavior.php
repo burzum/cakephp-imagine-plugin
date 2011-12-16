@@ -42,13 +42,9 @@ class ImagineBehavior extends ModelBehavior {
  * @param array Imagine image objects save() 2nd parameter options
  * @return boolean
  */
-	public function processImage(Model $Model, $image, $output = null, $imagineOptions = array()) {
+	public function processImage(Model $Model, $image, $output = null, $imagineOptions = array(), $operations = array()) {
 		$ImageObject = $this->Imagine->open($image);
-		foreach ($rules as $operation  => $params) {
-			if (is_string($params)) {
-				$params = $this->unpackParams($Model, $params);
-			}
-
+		foreach ($operations as $operation  => $params) {
 			if (method_exists($Model, $operation)) {
 				$Model->{$operation}(&$ImageObject, $params);
 			} elseif (method_exists($this, $operation)) {
@@ -63,23 +59,6 @@ class ImagineBehavior extends ModelBehavior {
 		}
 
 		return $ImageObject->save($output, $imagineOptions);
-	}
-
-/**
- * Unpacks the strings into arrays that were packed with ImagineHelper::pack()
- *
- * @param Model $Model
- * @param array $params
- * @return array
- */
-	public function unpackParams(Model $Model, $params = array()) {
-		$tmpParams = explode(';', $params);
-		$resultParams = array();
-		foreach ($tmpParams as &$param) {
-			list($key, $value) = explode('|', $param);
-			$resultParams[$key] = $value;
-		}
-		return $resultParams;
 	}
 
 /**

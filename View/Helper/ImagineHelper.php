@@ -45,7 +45,7 @@ class ImagineHelper extends AppHelper {
 	public function hash($options) {
 		$mediaSalt = Configure::read('Imagine.salt');
 		if (empty($mediaSalt)) {
-			throw new Exception(__('Please configure Imagine.salt using Configure::write(\'Imagine.salt\', \'YOUR-SALT-VALUE\')', true));
+			throw new Exception(__d('imagine', 'Please configure Imagine.salt using Configure::write(\'Imagine.salt\', \'YOUR-SALT-VALUE\')', true));
 		}
 		ksort($options);
 		return urlencode(Security::hash(serialize($options) . $mediaSalt));

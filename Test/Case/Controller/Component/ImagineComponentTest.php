@@ -27,7 +27,7 @@ if (!class_exists('ArticlesTestController')) {
 	 * @var mixed
 	 */
 		public $redirectUrl = null;
-		
+
 	/**
 	 * 
 	 */
@@ -68,10 +68,13 @@ class ImagineComponentTest extends CakeTestCase {
  */
 	public function setUp() {
 		parent::setUp();
+
 		Configure::write('Imagine.salt', 'this-is-a-nice-salt');
-		$this->Controller = new ImagineImagesTestController();
+		$request = new CakeRequest(null, false);
+		$this->Controller = new ImagineImagesTestController($request, $this->getMock('CakeResponse'));
 		$this->Controller->constructClasses();
 		$this->Controller->Components->init($this->Controller);
+		$this->Controller->Imagine->Controller = $this->Controller;
 	}
 
 /**
@@ -85,12 +88,62 @@ class ImagineComponentTest extends CakeTestCase {
 		ClassRegistry::flush();
 	}
 
+/**
+ * testGetHash method
+ *
+ * @return void
+ */
 	public function testGetHash() {
-		$this->Controller->Imagine->getHash();
+		$this->Controller->request->params['named'] = array( 
+			'thumbnail' => 'width|200;height|150');
+		$hash = $this->Controller->Imagine->getHash();
+		$this->assertTrue(is_string($hash));
 	}
 
+/**
+ * testCheckHash method
+ *
+ * @return void
+ */
 	public function testCheckHash() {
+		$this->Controller->request->params['named'] = array( 
+			'thumbnail' => 'width|200;height|150',
+			'hash' => '69aa9f46cdc5a200dc7539fc10eec00f2ba89023');
 		$this->Controller->Imagine->checkHash();
+	}
+
+/**
+ * @expectedException NotFoundException
+ */
+	public function testInvalidHash() {
+		$this->Controller->request->params['named'] = array( 
+			'thumbnail' => 'width|200;height|150',
+			'hash' => 'wrong-hash-value');
+		$this->Controller->Imagine->checkHash();
+	}
+
+/**
+ * @expectedException NotFoundException
+ */
+	public function testMissingHash() {
+		$this->Controller->request->params['named'] = array( 
+			'thumbnail' => 'width|200;height|150');
+		$this->Controller->Imagine->checkHash();
+	}
+
+/**
+ * testCheckHash method
+ *
+ * @return void
+ */
+	public function testUnpackParams() {
+		$this->assertEqual($this->Controller->Imagine->operations, array());
+		$this->Controller->request->params['named']['thumbnail'] = 'width|200;height|150';
+		$this->Controller->Imagine->unpackParams();
+		$this->assertEqual($this->Controller->Imagine->operations, array(
+			'thumbnail' => array(
+				'width' => 200,
+				'height' => 150)));
 	}
 
 }

@@ -1,5 +1,6 @@
 <?php
 App::uses('Component', 'Controller/Component');
+App::uses('Security', 'Utility');
 
 class ImagineComponent extends Component {
 
@@ -10,6 +11,7 @@ class ImagineComponent extends Component {
  */
 	public $settings = array(
 		'hashField' => 'hash',
+		'checkHash' => true,
 		'actions' => array());
 
 /**
@@ -18,6 +20,15 @@ class ImagineComponent extends Component {
  * @var object
  */
 	public $Controller;
+
+/**
+ * Image processing operations taken by ImagineBehavior::processImage()
+ *
+ * This property is auto populated by ImagineComponent::unpackParams()
+ *
+ * @var array
+ */
+	public $operations = array();
 
 /**
  * Constructor
@@ -41,7 +52,10 @@ class ImagineComponent extends Component {
 		$this->Controller = $Controller;
 		if (!empty($this->settings['actions'])) {
 			if (in_array($this->Controlle->action, $this->settings['actions'])) {
-				$this->checkHash();
+				if ($this->settings['checkHash'] === true) {
+					$this->checkHash();
+				}
+				$this->unpackParams();
 			}
 		}
 	}
@@ -53,21 +67,21 @@ class ImagineComponent extends Component {
  * of the requested image that was processed with these params. How you do that
  * is up to you.
  *
- * @return string
+ * @return mixed String if a hash could be retrieved, false if not
  */
 	public function getHash() {
 		$mediaSalt = Configure::read('Imagine.salt');
 		if (empty($mediaSalt)) {
-			throw new Exception(__('Please configure Imagine.salt using Configure::write(\'Imagine.salt\', \'YOUR-SALT-VALUE\')', true));
+			throw new InvalidArgumentException(__d('imagine', 'Please configure Imagine.salt using Configure::write(\'Imagine.salt\', \'YOUR-SALT-VALUE\')', true));
 		}
 
 		if (!empty($this->Controller->request->params['named'])) {
 			$params = $this->Controller->request->params['named'];
 			unset($params[$this->settings['hashField']]);
 			ksort($params);
-			return urlencode(Security::hash(serialize($params) . $mediaSalt));
+			return Security::hash(serialize($params) . $mediaSalt);
 		}
-		return '';
+		return false;
 	}
 
 /**
@@ -81,8 +95,8 @@ class ImagineComponent extends Component {
  * @return boolean True if the hashes match
  */
 	public function checkHash($error = true) {
-		if (!isset($this->Controller->request->params['named'][$this->settings['hashField']])) {
-			return false;
+		if (!isset($this->Controller->request->params['named'][$this->settings['hashField']]) && $error) {
+			throw new NotFoundException();
 		}
 
 		$result = $this->Controller->request->params['named'][$this->settings['hashField']] == $this->getHash();
@@ -92,6 +106,32 @@ class ImagineComponent extends Component {
 		}
 
 		return $result;
+	}
+
+/**
+ * Unpacks the strings into arrays that were packed with ImagineHelper::pack()
+ *
+ * @param array $params If empty the method tries to get them from Controller->request['named']
+ * @return array Array with operation options for imagine, if none found an empty array
+ */
+	public function unpackParams($namedParams = array()) {
+		if (empty($namedParams)) {
+			$namedParams = $this->Controller->request['named'];
+		}
+
+		foreach ($namedParams as $name => $params) {
+			$tmpParams = explode(';', $params);
+			$resultParams = array();
+			foreach ($tmpParams as &$param) {
+				list($key, $value) = explode('|', $param);
+				$resultParams[$key] = $value;
+			}
+			$resultParams;
+			$namedParams[$name] = $resultParams;
+		}
+
+		$this->operations = $namedParams;
+		return $namedParams;
 	}
 
 }

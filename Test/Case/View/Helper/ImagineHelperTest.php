@@ -45,20 +45,34 @@ class ImagineHelperTest extends CakeTestCase {
 				'thumbnail' => array(
 					'width' => 200,
 					'height' => 150)));
-
 		$expected = '/images/display/1/thumbnail:width|200;height|150/hash:69aa9f46cdc5a200dc7539fc10eec00f2ba89023';
 		$this->assertEqual($result, $expected);
 	}
 
 /**
- * testUrl method
+ * testHash method
  *
  * @return void
  */
-	public function testSign() {
-		
+	public function testHash() {
+		$options = $this->Imagine->pack(array(
+			'thumbnail' => array(
+				'width' => 200,
+				'height' => 150)));
+		$result = $this->Imagine->hash($options);
+		$this->assertEqual($result, '69aa9f46cdc5a200dc7539fc10eec00f2ba89023');
 	}
 
+/**
+ * testHash method
+ *
+ * @expectedException Exception
+ * @return void
+ */
+	public function testMissingSaltForHash() {
+		Configure::write('Imagine.salt', null);
+		$result = $this->Imagine->hash('foo');
+	}
 /**
  * testUrl method
  *

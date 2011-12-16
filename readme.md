@@ -2,6 +2,17 @@
 
 ## Setup ##
 
+### Add the external Imagine Lib ###
+
+You need to init the git submodule of imagine
+
+	git submodule update --init
+
+Or get it from https://github.com/avalanche123/Imagine
+
+Copy imagine into the plugins vedor folder Vendor/Imagine, the root of the Imagine package should be inside this folder. Vendor/Imagine/README.md should be present if you placed the code correctly.
+
+### Salt ###
 You need to configure a salt for Imagine security functions.
 
 	Configure::write('Imagine.salt', 'your-salt-string-here');

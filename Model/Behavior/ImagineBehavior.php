@@ -5,7 +5,7 @@
  * Licensed under The MIT License
  * Redistributions of files must retain the above copyright notice.
  *
- * @copyright Copyright 2010, Cake Development Corporation (http://cakedc.com)
+ * @copyright Copyright 2011, Cake Development Corporation (http://cakedc.com)
  * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
 
@@ -91,7 +91,7 @@ class ImagineBehavior extends ModelBehavior {
  * @return string Filename compatible String representation of the operations
  * @link http://support.microsoft.com/kb/177506
  */
-	public function paramsAsFilestring($operations, $separators = array()) {
+	public function paramsAsFilestring(Model $Model, $operations, $separators = array()) {
 		ksort($operations);
 
 		$defaultSeparators = array(
@@ -105,10 +105,10 @@ class ImagineBehavior extends ModelBehavior {
 			$tmp = array();
 			foreach ($data as $key => $value) {
 				if (is_string($value) || is_numeric($value)) {
-					$tmp[] = "$key" . '-' . "$value";
+					$tmp[] = $key . $separators['value'] . $value;
 				}
 			}
-			$result .= '.' . $operation . '+' . join('+', $tmp);
+			$result .= $separators['operations'] . $operation . $separators['params'] . join($separators['params'], $tmp);
 		}
 		return $result;
 	}

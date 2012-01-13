@@ -54,35 +54,27 @@ class ImagineBehaviorTest extends CakeTestCase {
 	}
 
 /**
- * testBuildParams
+ * testImagineObject
  *
  * @return void
  */
-	public function testBuildImageParams() {
-		$result = $this->Model->buildImageParams('width|300;height|300');
-		$this->assertEqual($result, array('width' => 300, 'height' => 300));
+	public function testImagineObject() {
+		$result = $this->Model->imagineObject();
+		$this->assertTrue(is_a($result, 'Imagine\Gd\Imagine'));
 	}
 
 /**
- * testCheckSignature
+ * testParamsAsFileString
  *
  * @return void
  */
-	public function testCheckSignature() {
-		Configure::write('Imagine.salt', 'test');
-
-		$url = array('test' => 'foo');
-		$url['hash'] = Security::hash(serialize($url) . Configure::read('Imagine.salt'));
-		$this->assertTrue($this->Model->checkSignature($url));
-		$this->assertFalse($this->Model->checkSignature());
-
-		Configure::delete('Imagine.salt');
-		$this->expectException('Exception');
-		$this->Model->checkSignature();
-	}
-
-	public function testProcessImage() {
-		
+	public function testParamsAsFileString() {
+		$operations = array(
+			'thumbnail' => array(
+				'width' => 200,
+				'height' => 150));
+		$result = $this->Model->paramsAsFilestring($operations);
+		$this->assertEqual($result, '.thumbnail+width-200+height-150');
 	}
 
 }

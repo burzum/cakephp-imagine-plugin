@@ -47,6 +47,15 @@ class ImagineBehavior extends ModelBehavior {
 	}
 
 /**
+ * Get the imagine object
+ *
+ * @return Imagine object
+ */
+	public function imagineObject(Model $Model) {
+		return $this->Imagine;
+	}
+
+/**
  * Loads an image and applies operations on it
  *
  * Caching and taking care of the file storage is NOT the purpose of this method!
@@ -108,7 +117,7 @@ class ImagineBehavior extends ModelBehavior {
 					$tmp[] = $key . $separators['value'] . $value;
 				}
 			}
-			$result .= $separators['operations'] . $operation . $separators['params'] . join($separators['params'], $tmp);
+			$result = $separators['operations'] . $operation . $separators['params'] . join($separators['params'], $tmp);
 		}
 		return $result;
 	}

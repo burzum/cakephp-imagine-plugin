@@ -13,6 +13,7 @@ Or get it from https://github.com/avalanche123/Imagine
 Copy imagine into the plugins vedor folder Vendor/Imagine, the root of the Imagine package should be inside this folder. Vendor/Imagine/README.md should be present if you placed the code correctly.
 
 ### Salt ###
+
 You need to configure a salt for Imagine security functions.
 
 	Configure::write('Imagine.salt', 'your-salt-string-here');
@@ -61,7 +62,19 @@ The imagine component does the following:
 
 ## Imagine Behavior ##
 
-To be documented
+The behavior interacts with the component and will process a given image file with a set of operations that should be applie don it. See ImagineBehavior::processImage().
+
+### Imagine instance ###
+
+Makes an Imagine instance available to the model. Get it by calling 
+
+	$this->imagineObject();
+
+or directly through the behavior
+
+	$this->Behaviors->Imagine->Imagine
+
+
 
 ## Caching and Storage ##
 

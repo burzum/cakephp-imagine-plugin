@@ -100,7 +100,7 @@ class ImagineBehavior extends ModelBehavior {
  * @return string Filename compatible String representation of the operations
  * @link http://support.microsoft.com/kb/177506
  */
-	public function paramsAsFilestring(Model $Model, $operations, $separators = array()) {
+	public function paramsAsFilestring(Model $Model, $operations, $separators = array(), $hash = false) {
 		ksort($operations);
 
 		$defaultSeparators = array(
@@ -119,6 +119,16 @@ class ImagineBehavior extends ModelBehavior {
 			}
 			$result = $separators['operations'] . $operation . $separators['params'] . join($separators['params'], $tmp);
 		}
+
+		if ($hash && $result != '') {
+			if (function_exists($hash)) {
+				return $hash($result);
+			} elseif (method_exists($Model, $hash)) {
+				return $Model->{$hash}($result);
+			}
+			throw new BadFunctionCallException();
+		}
+
 		return $result;
 	}
 

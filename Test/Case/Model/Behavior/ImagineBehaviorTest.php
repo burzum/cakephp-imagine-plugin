@@ -68,13 +68,24 @@ class ImagineBehaviorTest extends CakeTestCase {
  *
  * @return void
  */
-	public function testParamsAsFileString() {
+	public function testOperationsToString() {
 		$operations = array(
 			'thumbnail' => array(
 				'width' => 200,
 				'height' => 150));
-		$result = $this->Model->paramsAsFilestring($operations);
+		$result = $this->Model->operationsToString($operations);
 		$this->assertEqual($result, '.thumbnail+width-200+height-150');
+	}
+
+/**
+ * getImageSize
+ *
+ * @return void
+ */
+	public function getImageSize() {
+		$image = CakePlugin::path('Imagine') . 'Test' . DS . 'Fixture' . DS . 'cake.icon.png';
+		$result = $this->Model->getImageSize($image);
+		$this->assertEqual($result, array(20, 20));
 	}
 
 }

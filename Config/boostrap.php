@@ -1,2 +1,2 @@
 <?php
-App::uses('ImagineLoader', 'Imagine.Lib');
+App::uses('ImagineUtility', 'Imagine.Lib');

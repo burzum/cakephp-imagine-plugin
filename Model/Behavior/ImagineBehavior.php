@@ -1,15 +1,15 @@
 <?php
 /**
- * Copyright 2011, Cake Development Corporation (http://cakedc.com)
+ * Copyright 2011-2012, Cake Development Corporation (http://cakedc.com)
  *
  * Licensed under The MIT License
  * Redistributions of files must retain the above copyright notice.
  *
- * @copyright Copyright 2011, Cake Development Corporation (http://cakedc.com)
+ * Copyright 2011-2012, Cake Development Corporation (http://cakedc.com)
  * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
 
-App::import('Lib', 'Imagine.ImagineUtility');
+App::uses('ImagineUtility', 'Imagine.Lib');
 
 /**
  * CakePHP Imagine Plugin
@@ -118,6 +118,11 @@ class ImagineBehavior extends ModelBehavior {
 	public function crop(Model $Model, $Image, $options = array()) {
 		$defaults = array('cropX' => 0, 'cropY' => 0);
 		$options = array_merge($defaults, $options);
+
+		if (empty($options['height']) || empty($options['width'])) {
+			throw new InvalidArgumentException(__d('Imagine', 'You have to pass height and width in the options!'));
+		}
+
 		$Image->resize(new Imagine\Image\Box($options['width'], $options['height']))
 			->crop(new Imagine\Image\Point($options['cropX'], $options['cropY']), new Imagine\Image\Box($options['width'], $options['height']));
 	}
@@ -141,6 +146,10 @@ class ImagineBehavior extends ModelBehavior {
  * @param array Array of options for processing the image
  */
 	public function thumbnail(Model $Model, $Image, $options = array()) {
+		if (empty($options['height']) || empty($options['width'])) {
+			throw new InvalidArgumentException(__d('Imagine', 'You have to pass height and width in the options!'));
+		}
+
 		$mode = Imagine\Image\ImageInterface::THUMBNAIL_INSET;
 		if (isset($options['mode']) && $options['mode'] == 'outbound') {
 			$mode = Imagine\Image\ImageInterface::THUMBNAIL_OUTBOUND;
@@ -156,6 +165,10 @@ class ImagineBehavior extends ModelBehavior {
  * @param array Array of options for processing the image
  */
 	public function resize(Model $Model, $Image, $options = array()) {
+		if (empty($options['height']) || empty($options['width'])) {
+			throw new InvalidArgumentException(__d('Imagine', 'You have to pass height and width in the options!'));
+		}
+
 		$Image->resize(new Imagine\Image\Box($options['width'], $options['height']));
 	}
 

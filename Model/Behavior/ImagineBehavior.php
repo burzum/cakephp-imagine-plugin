@@ -66,8 +66,11 @@ class ImagineBehavior extends ModelBehavior {
  * @param array Imagine image objects save() 2nd parameter options
  * @return boolean
  */
-	public function processImage(Model $Model, $image, $output = null, $imagineOptions = array(), $operations = array()) {
-		$ImageObject = $this->Imagine->open($image);
+	public function processImage(Model $Model, $ImageObject, $output = null, $imagineOptions = array(), $operations = array()) {
+		if (is_string($ImageObject)) {
+			$ImageObject = $this->Imagine->open($ImageObject);
+		}
+
 		foreach ($operations as $operation  => $params) {
 			if (method_exists($Model, $operation)) {
 				$Model->{$operation}(&$ImageObject, $params);
@@ -134,7 +137,6 @@ class ImagineBehavior extends ModelBehavior {
  * @param object Imagine Image Object
  */
 	public function rotate(Model $Model, $Image, $options = array()) {
-		if (empty($options['degree']))
 		$Image->rotate($options['degree']);
 	}
 

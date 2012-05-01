@@ -88,4 +88,40 @@ class ImagineBehaviorTest extends CakeTestCase {
 		$this->assertEqual($result, array(20, 20));
 	}
 
+/**
+ * testCropInvalidArgumentException
+ *
+ * @expectedException InvalidArgumentException
+ * @return void
+ */
+	public function testCropInvalidArgumentException() {
+		$image = CakePlugin::path('Imagine') . 'Test' . DS . 'Fixture' . DS . 'titus.jpg';
+		$this->Model->processImage($image, TMP . 'crop.jpg', array(), array(
+			'crop' => array()));
+	}
+
+/**
+ * testCrop
+ *
+ * @return void
+ */
+	public function testCrop() {
+		$image = CakePlugin::path('Imagine') . 'Test' . DS . 'Fixture' . DS . 'titus.jpg';
+		$this->Model->processImage($image, TMP . 'crop.jpg', array(), array(
+			'crop' => array(
+				'height' => 100,
+				'width' => 100)));
+	}
+
+/**
+ * testgetImageSize
+ *
+ * @return void
+ */
+	public function testgetImageSize() {
+		$image = CakePlugin::path('Imagine') . 'Test' . DS . 'Fixture' . DS . 'titus.jpg';
+		$result = $this->Model->getImageSize($image);
+		$this->assertEqual($result,
+			array(500, 664));
+	}
 }

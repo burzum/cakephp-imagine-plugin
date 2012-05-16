@@ -66,9 +66,12 @@ class ImagineBehavior extends ModelBehavior {
  * @param array Imagine image objects save() 2nd parameter options
  * @return boolean
  */
-	public function processImage(Model $Model, $image, $output = null, $imagineOptions = array(), $operations = array()) {
-		$ImageObject = $this->Imagine->open($image);
-		foreach ($operations as $operation  => $params) {
+	public function processImage(Model $Model, $ImageObject, $output = null, $imagineOptions = array(), $operations = array()) {
+		if (is_string($ImageObject)) {
+			$ImageObject = $this->Imagine->open($ImageObject);
+		}
+
+		foreach ($operations as $operation => $params) {
 			if (method_exists($Model, $operation)) {
 				$Model->{$operation}(&$ImageObject, $params);
 			} elseif (method_exists($this, $operation)) {
@@ -116,8 +119,27 @@ class ImagineBehavior extends ModelBehavior {
  * @param array Array of options for processing the image
  */
 	public function crop(Model $Model, $Image, $options = array()) {
-		$defaults = array('cropX' => 0, 'cropY' => 0);
+		$cropTypes = array(
+			'fit',
+			'stretch',
+			'pad',
+			'crop',
+			'fillCrop');
+
+		$defaults = array(
+			'cropX' => 0,
+			'cropY' => 0,
+			'type' => 'stretch');
+
 		$options = array_merge($defaults, $options);
+/*
+		switch ($options['type']) {
+			case 'stretch':
+				$Image->resize(new Imagine\Image\Box($options['width'], $options['height']))
+					->crop(new Imagine\Image\Point($options['cropX'], $options['cropY']), new Imagine\Image\Box($options['width'], $options['height']));
+				break;
+		}
+*/
 
 		if (empty($options['height']) || empty($options['width'])) {
 			throw new InvalidArgumentException(__d('Imagine', 'You have to pass height and width in the options!'));
@@ -128,13 +150,31 @@ class ImagineBehavior extends ModelBehavior {
 	}
 
 /**
+ * Wrapper for Imagine flipHorizontally and flipVertically
+ *
+ * @param object Model
+ * @param object Imagine Image Object
+ * @param array Array of options for processing the image
+ */
+	public function flip(Model $Model, $Image, $options = array()) {
+		if (!isset($options['direction'])) {
+			$options['direction'] = 'vertically';
+		}
+		if (!in_array($options['direction'], array('vertically', 'horizontall'))) {
+			throw new InvalidArgumentException(__d('Imagine', 'Invalid direction, use verticall or horizontall'));
+		}
+		$method = 'flip' . $options['direction'];
+		$Image->{$method}();
+	}
+
+/**
  * Wrapper for rotate
  *
  * @param object Model
  * @param object Imagine Image Object
+ * @param array Array of options for processing the image
  */
 	public function rotate(Model $Model, $Image, $options = array()) {
-		if (empty($options['degree']))
 		$Image->rotate($options['degree']);
 	}
 

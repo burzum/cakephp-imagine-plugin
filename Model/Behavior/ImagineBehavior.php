@@ -1,15 +1,15 @@
 <?php
 /**
- * Copyright 2011, Cake Development Corporation (http://cakedc.com)
+ * Copyright 2011-2012, Cake Development Corporation (http://cakedc.com)
  *
  * Licensed under The MIT License
  * Redistributions of files must retain the above copyright notice.
  *
- * @copyright Copyright 2011, Cake Development Corporation (http://cakedc.com)
+ * Copyright 2011-2012, Cake Development Corporation (http://cakedc.com)
  * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
 
-App::import('Lib', 'Imagine.ImagineLoader');
+App::uses('ImagineUtility', 'Imagine.Lib');
 
 /**
  * CakePHP Imagine Plugin
@@ -66,9 +66,12 @@ class ImagineBehavior extends ModelBehavior {
  * @param array Imagine image objects save() 2nd parameter options
  * @return boolean
  */
-	public function processImage(Model $Model, $image, $output = null, $imagineOptions = array(), $operations = array()) {
-		$ImageObject = $this->Imagine->open($image);
-		foreach ($operations as $operation  => $params) {
+	public function processImage(Model $Model, $ImageObject, $output = null, $imagineOptions = array(), $operations = array()) {
+		if (is_string($ImageObject)) {
+			$ImageObject = $this->Imagine->open($ImageObject);
+		}
+
+		foreach ($operations as $operation => $params) {
 			if (method_exists($Model, $operation)) {
 				$Model->{$operation}(&$ImageObject, $params);
 			} elseif (method_exists($this, $operation)) {
@@ -100,26 +103,19 @@ class ImagineBehavior extends ModelBehavior {
  * @return string Filename compatible String representation of the operations
  * @link http://support.microsoft.com/kb/177506
  */
-	public function paramsAsFilestring(Model $Model, $operations, $separators = array()) {
-		ksort($operations);
+	public function operationsToString(Model $Model, $operations, $separators = array(), $hash = false) {
+		return \Imagine\ImagineUtility::operationsToString($operations, $separators, $hash);
+	}
 
-		$defaultSeparators = array(
-			'operations' => '.',
-			'params' => '+',
-			'value' => '-');
-		$separators = array_merge($defaultSeparators, $separators);
-
-		$result = '';
-		foreach ($operations as $operation => $data) {
-			$tmp = array();
-			foreach ($data as $key => $value) {
-				if (is_string($value) || is_numeric($value)) {
-					$tmp[] = $key . $separators['value'] . $value;
-				}
-			}
-			$result = $separators['operations'] . $operation . $separators['params'] . join($separators['params'], $tmp);
-		}
-		return $result;
+/**
+ * hashImageOperations
+ *
+ * @param array $imageSizes
+ * @param integer $hashLenght
+ * @return string
+ */
+	public function hashImageOperations($imageSizes, $hashLenght = 8) {
+		return \Imagine\ImagineUtility::hashImageOperations($imageSizes, $hashLenght = 8);
 	}
 
 /**
@@ -130,8 +126,80 @@ class ImagineBehavior extends ModelBehavior {
  * @param array Array of options for processing the image
  */
 	public function crop(Model $Model, $Image, $options = array()) {
+		if (empty($options['height']) || empty($options['width'])) {
+			throw new InvalidArgumentException(__d('Imagine', 'You have to pass height and width in the options!'));
+		}
+
+		$defaults = array(
+			'cropX' => 0,
+			'cropY' => 0);
+
+		$options = array_merge($defaults, $options);
+
 		$Image->resize(new Imagine\Image\Box($options['width'], $options['height']))
-			->crop(new Imagine\Image\Point(0, 0), new Imagine\Image\Box($options['width'], $options['height']));
+			->crop(new Imagine\Image\Point($options['cropX'], $options['cropY']), new Imagine\Image\Box($options['width'], $options['height']));
+	}
+
+/**
+ * Crops an image based on its widht or height, crops it to a square and resizes it to the given size
+ *
+ * @param object Model
+ * @param object Imagine Image Object
+ * @param array Array of options for processing the image
+ */
+	public function squareCenterCrop(Model $Model, $Image, $options = array()) {
+		if (empty($options['size'])) {
+			throw new InvalidArgumentException(__d('Imagine', 'You have to pass size in the options!'));
+		}
+
+		$imageSize = $this->getImageSize($Model, $Image);
+
+		$width  = $imageSize[0];
+		$height = $imageSize[1];
+
+		if ($width > $height) {
+			$x2 = $height;
+			$y2 = $height;
+			$x = ($width - $height) / 2;
+			$y = 0;
+		} else {
+			$x2 = $width;
+			$y2 = $width;
+			$x = 0;
+			$y = ($height - $width) / 2;
+		}
+
+		$Image->crop(new Imagine\Image\Point($x, $y), new Imagine\Image\Box($x2, $y2));
+		$Image->resize(new Imagine\Image\Box($options['size'], $options['size']));
+	}
+
+/**
+ * Wrapper for Imagine flipHorizontally and flipVertically
+ *
+ * @param object Model
+ * @param object Imagine Image Object
+ * @param array Array of options for processing the image
+ */
+	public function flip(Model $Model, $Image, $options = array()) {
+		if (!isset($options['direction'])) {
+			$options['direction'] = 'vertically';
+		}
+		if (!in_array($options['direction'], array('vertically', 'horizontall'))) {
+			throw new InvalidArgumentException(__d('Imagine', 'Invalid direction, use verticall or horizontall'));
+		}
+		$method = 'flip' . $options['direction'];
+		$Image->{$method}();
+	}
+
+/**
+ * Wrapper for rotate
+ *
+ * @param object Model
+ * @param object Imagine Image Object
+ * @param array Array of options for processing the image
+ */
+	public function rotate(Model $Model, $Image, $options = array()) {
+		$Image->rotate($options['degree']);
 	}
 
 /**
@@ -142,7 +210,15 @@ class ImagineBehavior extends ModelBehavior {
  * @param array Array of options for processing the image
  */
 	public function thumbnail(Model $Model, $Image, $options = array()) {
-		$Image = $Image->thumbnail(new Imagine\Image\Box($options['width'], $options['height']));
+		if (empty($options['height']) || empty($options['width'])) {
+			throw new InvalidArgumentException(__d('Imagine', 'You have to pass height and width in the options!'));
+		}
+
+		$mode = Imagine\Image\ImageInterface::THUMBNAIL_INSET;
+		if (isset($options['mode']) && $options['mode'] == 'outbound') {
+			$mode = Imagine\Image\ImageInterface::THUMBNAIL_OUTBOUND;
+		}
+		$Image = $Image->thumbnail(new Imagine\Image\Box($options['width'], $options['height']), $mode);
 	}
 
 /**
@@ -153,7 +229,33 @@ class ImagineBehavior extends ModelBehavior {
  * @param array Array of options for processing the image
  */
 	public function resize(Model $Model, $Image, $options = array()) {
+		if (empty($options['height']) || empty($options['width'])) {
+			throw new InvalidArgumentException(__d('Imagine', 'You have to pass height and width in the options!'));
+		}
+
 		$Image->resize(new Imagine\Image\Box($options['width'], $options['height']));
+	}
+
+/**
+ * Gets the size of an image
+ *
+ * @param Model $Model
+ * @param mixed Imagine Image object or string of a file name
+ * @return array first value is width, second height
+ * @see Imagine\Image\ImageInterface::getSize()
+ */
+	public function getImageSize(Model $Model, $Image) {
+		if (is_string($Image)) {
+			$class = 'Imagine\\' . $this->settings['engine'] . '\Imagine';
+			$Imagine = new $class();
+			$Image = $Imagine->open($Image);
+		}
+
+		$BoxInterface = $Image->getSize($Image);
+
+		return array(
+			$BoxInterface->getWidth(),
+			$BoxInterface->getHeight());
 	}
 
 }

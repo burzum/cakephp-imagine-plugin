@@ -109,8 +109,43 @@ class ImagineBehaviorTest extends CakeTestCase {
 		$image = CakePlugin::path('Imagine') . 'Test' . DS . 'Fixture' . DS . 'titus.jpg';
 		$this->Model->processImage($image, TMP . 'crop.jpg', array(), array(
 			'crop' => array(
-				'height' => 100,
-				'width' => 100)));
+				'height' => 300,
+				'width' => 300)));
+	}
+
+/**
+ * testThumbnail
+ *
+ * @return void
+ */
+	public function testThumbnail() {
+		$image = CakePlugin::path('Imagine') . 'Test' . DS . 'Fixture' . DS . 'titus.jpg';
+		$this->Model->processImage($image, TMP . 'thumbnail.jpg', array(), array(
+			'thumbnail' => array(
+				'mode' => 'outbound',
+				'height' => 300,
+				'width' => 300)));
+
+		$result = $this->Model->getImageSize(TMP . 'thumbnail.jpg');
+		$this->assertEqual($result,
+			array(300, 300));
+
+		$this->Model->processImage($image, TMP . 'thumbnail2.jpg', array(), array(
+			'thumbnail' => array(
+				'mode' => 'inset',
+				'height' => 300,
+				'width' => 300)));
+
+		$result = $this->Model->getImageSize(TMP . 'thumbnail2.jpg');
+		$this->assertEqual($result,
+			array(226, 300));
+	}
+
+	public function testSquareCenterCrop() {
+		$image = CakePlugin::path('Imagine') . 'Test' . DS . 'Fixture' . DS . 'titus.jpg';
+		$this->Model->processImage($image, TMP . 'testSquareCenterCrop.jpg', array(), array(
+			'squareCenterCrop' => array(
+				'size' => 255)));
 	}
 
 /**

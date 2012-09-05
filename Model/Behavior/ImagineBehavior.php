@@ -107,6 +107,13 @@ class ImagineBehavior extends ModelBehavior {
 		return \Imagine\ImagineUtility::operationsToString($operations, $separators, $hash);
 	}
 
+/**
+ * hashImageOperations
+ *
+ * @param array $imageSizes
+ * @param integer $hashLenght
+ * @return string
+ */
 	public function hashImageOperations($imageSizes, $hashLenght = 8) {
 		return \Imagine\ImagineUtility::hashImageOperations($imageSizes, $hashLenght = 8);
 	}
@@ -119,34 +126,51 @@ class ImagineBehavior extends ModelBehavior {
  * @param array Array of options for processing the image
  */
 	public function crop(Model $Model, $Image, $options = array()) {
-		$cropTypes = array(
-			'fit',
-			'stretch',
-			'pad',
-			'crop',
-			'fillCrop');
-
-		$defaults = array(
-			'cropX' => 0,
-			'cropY' => 0,
-			'type' => 'stretch');
-
-		$options = array_merge($defaults, $options);
-/*
-		switch ($options['type']) {
-			case 'stretch':
-				$Image->resize(new Imagine\Image\Box($options['width'], $options['height']))
-					->crop(new Imagine\Image\Point($options['cropX'], $options['cropY']), new Imagine\Image\Box($options['width'], $options['height']));
-				break;
-		}
-*/
-
 		if (empty($options['height']) || empty($options['width'])) {
 			throw new InvalidArgumentException(__d('Imagine', 'You have to pass height and width in the options!'));
 		}
 
+		$defaults = array(
+			'cropX' => 0,
+			'cropY' => 0);
+
+		$options = array_merge($defaults, $options);
+
 		$Image->resize(new Imagine\Image\Box($options['width'], $options['height']))
 			->crop(new Imagine\Image\Point($options['cropX'], $options['cropY']), new Imagine\Image\Box($options['width'], $options['height']));
+	}
+
+/**
+ * Crops an image based on its widht or height, crops it to a square and resizes it to the given size
+ *
+ * @param object Model
+ * @param object Imagine Image Object
+ * @param array Array of options for processing the image
+ */
+	public function squareCenterCrop(Model $Model, $Image, $options = array()) {
+		if (empty($options['size'])) {
+			throw new InvalidArgumentException(__d('Imagine', 'You have to pass size in the options!'));
+		}
+
+		$imageSize = $this->getImageSize($Model, $Image);
+
+		$width  = $imageSize[0];
+		$height = $imageSize[1];
+
+		if ($width > $height) {
+			$x2 = $height;
+			$y2 = $height;
+			$x = ($width - $height) / 2;
+			$y = 0;
+		} else {
+			$x2 = $width;
+			$y2 = $width;
+			$x = 0;
+			$y = ($height - $width) / 2;
+		}
+
+		$Image->crop(new Imagine\Image\Point($x, $y), new Imagine\Image\Box($x2, $y2));
+		$Image->resize(new Imagine\Image\Box($options['size'], $options['size']));
 	}
 
 /**
@@ -226,7 +250,9 @@ class ImagineBehavior extends ModelBehavior {
 			$Imagine = new $class();
 			$Image = $Imagine->open($Image);
 		}
+
 		$BoxInterface = $Image->getSize($Image);
+
 		return array(
 			$BoxInterface->getWidth(),
 			$BoxInterface->getHeight());

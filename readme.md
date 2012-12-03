@@ -20,6 +20,12 @@ You need to configure a salt for Imagine security functions.
 
 We do not use Security.salt on purpose because we do not want to use the same salt here for security reasons.
 
+### Load plugin ###
+
+Load the imagine plugin in your bootstrap file, remember to use plugin bootstrap, like this
+
+    CakePlugin::load('Imagine' => array('bootstrap' => true));
+
 ## Imagine Helper ##
 
 The helper will generate image urls with named params to get thumbnails or whatever else operation is wanted and a hashes the url.

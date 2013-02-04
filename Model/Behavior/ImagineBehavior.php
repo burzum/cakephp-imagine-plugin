@@ -49,6 +49,7 @@ class ImagineBehavior extends ModelBehavior {
 /**
  * Get the imagine object
  *
+ * @param Model $Model
  * @return Imagine object
  */
 	public function imagineObject(Model $Model) {
@@ -61,9 +62,14 @@ class ImagineBehavior extends ModelBehavior {
  * Caching and taking care of the file storage is NOT the purpose of this method!
  *
  * @param Model $Model
- * @param string $image source image path
- * @param mixed 
- * @param array Imagine image objects save() 2nd parameter options
+ * @param $ImageObject
+ * @param null $output
+ * @param array $imagineOptions
+ * @param array $operations
+ * @throws BadMethodCallException
+ * @internal param string $image source image path
+ * @internal param $mixed
+ * @internal param \Imagine $array image objects save() 2nd parameter options
  * @return boolean
  */
 	public function processImage(Model $Model, $ImageObject, $output = null, $imagineOptions = array(), $operations = array()) {
@@ -73,11 +79,11 @@ class ImagineBehavior extends ModelBehavior {
 
 		foreach ($operations as $operation => $params) {
 			if (method_exists($Model, $operation)) {
-				$Model->{$operation}(&$ImageObject, $params);
+				$Model->{$operation}($ImageObject, $params);
 			} elseif (method_exists($this, $operation)) {
-				$this->{$operation}($Model, &$ImageObject, $params);
+				$this->{$operation}($Model, $ImageObject, $params);
 			} else {
-				return false;
+				throw new BadMethodCallException(__d('imagine', 'Unsupported image operation %s!', $operation));
 			}
 		}
 
@@ -98,8 +104,10 @@ class ImagineBehavior extends ModelBehavior {
  * with this string and store the string also in the db. In the views, if no further control over the image access is needd,
  * you can simply direct linke the image like $this->Html->image('/images/05/04/61/my_horse.thumbnail+width-100-height+100.jpg');
  *
+ * @param Model $Model
  * @param array $operations Imagine image operations
  * @param array $separators Optional
+ * @param bool $hash
  * @return string Filename compatible String representation of the operations
  * @link http://support.microsoft.com/kb/177506
  */
@@ -121,9 +129,13 @@ class ImagineBehavior extends ModelBehavior {
 /**
  * Wrapper for Imagines crop
  *
- * @param object Model
- * @param object Imagine Image Object
+ * @param Model $Model
+ * @param $Image
  * @param array Array of options for processing the image
+ * @throws InvalidArgumentException
+ * @return void
+ * @internal param \Model $object
+ * @internal param \Imagine $object Image Object
  */
 	public function crop(Model $Model, $Image, $options = array()) {
 		if (empty($options['height']) || empty($options['width'])) {
@@ -143,9 +155,13 @@ class ImagineBehavior extends ModelBehavior {
 /**
  * Crops an image based on its widht or height, crops it to a square and resizes it to the given size
  *
- * @param object Model
- * @param object Imagine Image Object
+ * @param Model $Model
+ * @param $Image
  * @param array Array of options for processing the image
+ * @throws InvalidArgumentException
+ * @return void
+ * @internal param \Model $object
+ * @internal param \Imagine $object Image Object
  */
 	public function squareCenterCrop(Model $Model, $Image, $options = array()) {
 		if (empty($options['size'])) {
@@ -174,11 +190,132 @@ class ImagineBehavior extends ModelBehavior {
 	}
 
 /**
+ * Widen
+ *
+ * @param Model $Model
+ * @param $Image
+ * @param array $options
+ * @throws InvalidArgumentException
+ * @return void
+ */
+	public function widen(Model $Model, $Image, $options = array()) {
+		if (empty($options['size'])) {
+			throw new InvalidArgumentException(__d('Imagine', 'You must pass a size value!'));
+		}
+		$this->widenAndHeighten($Model, $Image, array('width' => $options['size']));
+	}
+
+/**
+ * Heighten
+ *
+ * @param Model $Model
+ * @param $Image
+ * @param array $options
+ * @throws InvalidArgumentException
+ * @return void
+ */
+	public function heighten(Model $Model, $Image, $options = array()) {
+		if (empty($options['size'])) {
+			throw new InvalidArgumentException(__d('Imagine', 'You must pass a size value!'));
+		}
+		$this->widenAndHeighten($Model, $Image, array('height' => $options['size']));
+	}
+
+/**
+ * WidenAndHeighten
+ *
+ * @param Model $Model
+ * @param $Image
+ * @param array $options
+ * @throws InvalidArgumentException
+ * @return void
+ */
+	public function widenAndHeighten(Model $Model, $Image, $options = array()) {
+		if (empty($options['height']) && empty($options['width']) && empty($options['size'])) {
+			throw new InvalidArgumentException(__d('Imagine', 'You have to pass a height, width or size!'));
+		}
+
+		if (!empty($options['height']) && !empty($options['width'])) {
+			throw new InvalidArgumentException(__d('Imagine', 'You can only scale by width or height!'));
+		}
+
+		if (isset($options['width'])) {
+			$size = $options['width'];
+			$method = 'widen';
+		} elseif (isset($options['height'])) {
+			$size = $options['height'];
+			$method = 'heighten';
+		} else {
+			$size = $options['size'];
+			$method = 'scale';
+		}
+
+		$imageSize = $this->getImageSize($Model, $Image);
+		$width  = $imageSize[0];
+		$height = $imageSize[1];
+
+		if (isset($options['noUpScale'])) {
+			if ($method == 'widen') {
+				if ($size > $width) {
+					throw new InvalidArgumentException(__d('Imagine', 'You can not scale up!'));
+				}
+			} elseif ('heighten') {
+				if ($size > $height) {
+					throw new InvalidArgumentException(__d('Imagine', 'You can not scale up!'));
+				}
+			}
+		}
+
+		if (isset($options['noDownScale'])) {
+			if ($method == 'widen') {
+				if ($size < $width) {
+					throw new InvalidArgumentException(__d('Imagine', 'You can not scale down!'));
+				}
+			} elseif ('heighten') {
+				if ($size < $height) {
+					throw new InvalidArgumentException(__d('Imagine', 'You can not scale down!'));
+				}
+			}
+		}
+
+		$Box = new Imagine\Image\Box($width, $height);
+		$Box = $Box->{$method}($size);
+		$Image->resize($Box);
+	}
+
+/**
+ * Heighten
+ *
+ * @param Model $Model
+ * @param $Image
+ * @param array $options
+ * @throws InvalidArgumentException
+ * @return void
+ */
+	public function scale(Model $Model, $Image, $options = array()) {
+		if (empty($options['factor'])) {
+			throw new InvalidArgumentException(__d('Imagine', 'You must pass a factor value!'));
+		}
+
+		$imageSize = $this->getImageSize($Model, $Image);
+		$width  = $imageSize[0];
+		$height = $imageSize[1];
+
+		$Box = new Imagine\Image\Box($width, $height);
+		$Box = $Box->scale($options['factor']);
+		$Image->resize($Box);
+	}
+
+/**
  * Wrapper for Imagine flipHorizontally and flipVertically
  *
- * @param object Model
- * @param object Imagine Image Object
+ * @param Model $Model
+ * @param $Image
  * @param array Array of options for processing the image
+ * @throws InvalidArgumentException
+ * @return void
+ * @internal param \Model $object
+ * @internal param \Imagine $object Image Object
  */
 	public function flip(Model $Model, $Image, $options = array()) {
 		if (!isset($options['direction'])) {

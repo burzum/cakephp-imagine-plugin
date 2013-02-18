@@ -159,4 +159,65 @@ class ImagineBehaviorTest extends CakeTestCase {
 		$this->assertEqual($result,
 			array(500, 664));
 	}
+
+
+/**
+ * testWidenAndHeighten
+ *
+ * @return void
+ */
+	public function testWidenAndHeighten() {
+		$image = CakePlugin::path('Imagine') . 'Test' . DS . 'Fixture' . DS . 'titus.jpg';
+
+		$result = $this->Model->getImageSize($image);
+		$this->assertEqual($result,
+			array(500, 664));
+
+		// Width
+		$this->Model->processImage($image, TMP . 'thumbnail2.jpg', array(), array(
+			'widen' => array(
+				'size' => 200)));
+
+		$result = $this->Model->getImageSize(TMP . 'thumbnail2.jpg');
+		$this->assertEqual($result,
+			array(200, 266));
+
+		// Height
+		$this->Model->processImage($image, TMP . 'thumbnail3.jpg', array(), array(
+			'heighten' => array(
+				'size' => 200)));
+
+		$result = $this->Model->getImageSize(TMP . 'thumbnail3.jpg');
+		$this->assertEqual($result,
+			array(151, 200));
+
+	}
+
+/**
+ * testScale
+ *
+ * @return void
+ */
+	public function testScale() {
+		$image = CakePlugin::path('Imagine') . 'Test' . DS . 'Fixture' . DS . 'titus.jpg';
+
+		// Scale
+		$this->Model->processImage($image, TMP . 'thumbnail4.jpg', array(), array(
+			'scale' => array(
+				'factor' => 2)));
+
+		$result = $this->Model->getImageSize(TMP . 'thumbnail4.jpg');
+		$this->assertEqual($result,
+			array(1000, 1328));
+
+		// Scale2
+		$this->Model->processImage($image, TMP . 'thumbnail5.jpg', array(), array(
+			'scale' => array(
+				'factor' => 1.25)));
+
+		$result = $this->Model->getImageSize(TMP . 'thumbnail5.jpg');
+		$this->assertEqual($result,
+			array(625, 830));
+	}
+
 }

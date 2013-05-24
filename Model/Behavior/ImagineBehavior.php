@@ -392,7 +392,9 @@ class ImagineBehavior extends ModelBehavior {
 
 		return array(
 			$BoxInterface->getWidth(),
-			$BoxInterface->getHeight());
+			$BoxInterface->getHeight(),
+			'x' => $BoxInterface->getWidth(),
+			'y' => $BoxInterface->getHeight());
 	}
 
 }

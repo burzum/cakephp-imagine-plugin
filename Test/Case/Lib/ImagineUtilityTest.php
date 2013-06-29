@@ -23,17 +23,19 @@ class ImagineUtilityTest extends CakeTestCase {
 /**
  * startTest
  *
+ * @param string $method Test method about to get executed.
  * @return void
  */
-	public function startTest() {
+	public function startTest($method) {
 	}
 
 /**
  * endTest
  *
+ * @param string $method Test method about that was executed.
  * @return void
  */
-	public function endTest() {
+	public function endTest($method) {
 	}
 
 /**

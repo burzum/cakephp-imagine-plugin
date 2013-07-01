@@ -57,7 +57,7 @@ class ImagineHelperTest extends CakeTestCase {
 					'width' => 200,
 					'height' => 150)));
 		$expected = '/images/display/1/thumbnail:width|200;height|150/hash:69aa9f46cdc5a200dc7539fc10eec00f2ba89023';
-		$this->assertEqual($result, $expected);
+		$this->assertEqual(urldecode($result), $expected);
 	}
   
 /**

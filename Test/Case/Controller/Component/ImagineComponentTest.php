@@ -9,8 +9,8 @@
  * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
 
-App::import('Controller', 'Controller', false);
-App::import('Imagine', 'Imagine.Controller/Component');
+App::uses('Controller', 'Controller');
+App::uses('ImagineComponent', 'Imagine.Controller/Component');
 
 if (!class_exists('ImagineImagesTestController')) {
 	class ImagineImagesTestController extends Controller {

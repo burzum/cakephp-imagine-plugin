@@ -43,14 +43,14 @@ class ImagineHelper extends AppHelper {
 		if (is_string($url)) {
 			$url = array_merge(array('plugin' => 'media', 'admin' => false, 'controller' => 'media', 'action' => 'image'), array($url));
 		}
-    
-    // backward compatibility check, switches params 2 and 3
-    if (is_bool($options)) {
-      $tmp = $options;
-      $options = $full;
-      $full = $tmp;
-    }
-    
+
+	// backward compatibility check, switches params 2 and 3
+	if (is_bool($options)) {
+		$tmp = $options;
+		$options = $full;
+		$full = $tmp;
+	}
+
 		$options = $this->pack($options);
 		$options['hash'] = $this->hash($options);
 

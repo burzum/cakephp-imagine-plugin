@@ -1,0 +1,19 @@
+{
+    "name": "cakedc/Imagine",
+    "type": "cakephp-plugin",
+    "description": "Imagine Plugin for CakePHP",
+    "keywords": ["cakephp","media","upload"],
+    "homepage": "http://cakedc.com",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Cake Development Corporation",
+            "homepage": "http://cakedc.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.2",
+        "imagine/imagine": "*",
+        "composer/installers": "*"
+    }
+}

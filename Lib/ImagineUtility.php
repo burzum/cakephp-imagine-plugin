@@ -58,7 +58,7 @@ class ImagineUtility {
 	public static function hashImageOperations($imageSizes, $hashLenght = 8) {
 		foreach ($imageSizes as $model => $operations) {
 			foreach ($operations as $name => $operation) {
-				$imageSizes[$model][$name] = substr(self::operationsToString($operation, array(), 'md5'), 0, 8);
+				$imageSizes[$model][$name] = substr(self::operationsToString($operation, array(), 'md5'), 0, $hashLenght);
 			}
 		}
 		return $imageSizes;
@@ -91,5 +91,3 @@ class ImagineUtility {
 	}
 
 }
-
-spl_autoload_register(__NAMESPACE__ .'\ImagineUtility::load');

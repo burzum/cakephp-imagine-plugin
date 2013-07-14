@@ -21,44 +21,35 @@ class ImagineUtilityTest extends CakeTestCase {
 	public $fixtures = array();
 
 /**
- * startTest
+ * testOperationsToString
  *
- * @param string $method Test method about to get executed.
  * @return void
- */
-	public function startTest($method) {
-	}
-
-/**
- * endTest
- *
- * @param string $method Test method about that was executed.
- * @return void
- */
-	public function endTest($method) {
-	}
-
-/**
- *
  */
 	public function testOperationsToString() {
 		$operations = array(
 			'thumbnail' => array(
 				'width' => 200,
 				'height' => 150));
-		$result = ImagineUtility::operationsToString($operations);
+		$result = \Imagine\ImagineUtility::operationsToString($operations);
 		$this->assertEqual($result, '.thumbnail+width-200+height-150');
 	}
 
 /**
- * 
+ * testHashImageOperations
+ *
+ * @return void
  */
 	public function testHashImageOperations() {
 		$operations = array(
-			'thumbnail' => array(
-				'width' => 200,
-				'height' => 150));
-		$result = ImagineUtility::hashImageOperations();
+			'SomeModel' => array(
+				't200x150' => array(
+					'thumbnail' => array(
+						'width' => 200,
+						'height' => 150))));
+		$result = \Imagine\ImagineUtility::hashImageOperations($operations);
+		$this->assertEqual($result, array(
+			'SomeModel' => array(
+			't200x150' => '38b1868f')));
 	}
 
 }

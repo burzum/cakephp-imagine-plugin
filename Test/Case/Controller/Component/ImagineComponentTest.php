@@ -12,7 +12,7 @@
 App::import('Controller', 'Controller', false);
 App::import('Imagine', 'Imagine.Controller/Component');
 
-if (!class_exists('ArticlesTestController')) {
+if (!class_exists('ImagineImagesTestController')) {
 	class ImagineImagesTestController extends Controller {
 
 	/**

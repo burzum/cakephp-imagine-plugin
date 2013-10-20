@@ -1,14 +1,15 @@
 {
-    "name": "cakedc/Imagine",
+    "name": "burzum/Imagine",
     "type": "cakephp-plugin",
     "description": "Imagine Plugin for CakePHP",
     "keywords": ["cakephp","media","upload"],
-    "homepage": "http://cakedc.com",
+	"homepage": "http://github.com/burzum/Imagine",
     "license": "MIT",
     "authors": [
         {
-            "name": "Cake Development Corporation",
-            "homepage": "http://cakedc.com"
+			"name": "Florian Krämer",
+			"email": "florian.kraemer@kreative-design.net",
+			"homepage": "http://florian-kraemer.net"
         }
     ],
     "require": {

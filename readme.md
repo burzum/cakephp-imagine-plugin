@@ -80,10 +80,30 @@ or directly through the behavior
 
 	$this->Behaviors->Imagine->Imagine
 
-
-
 ## Caching and Storage ##
 
 This plugin *does not* take care of how you store the images or how you cache them but it will offer you some helping methods for caching images based on a hash or a unique string.
 
 This is a design decision that was made because everyone likes to implement the file storage a little different. So it is up to you how you store the generated images.
+
+Support
+-------
+
+For bugs and feature requests, please use the [issues](https://github.com/burzum/cakephp-imagine-plugin/issues) section of this repository.
+
+Contributing
+------------
+
+To contribute to this plugin please follow a few basic rules.
+
+* Pull requests must be send to the ```develop``` branch.
+* Contributions must follow the [CakePHP coding standard](http://book.cakephp.org/2.0/en/contributing/cakephp-coding-conventions.html).
+* [Unit tests](http://book.cakephp.org/2.0/en/development/testing.html) are required.
+
+License
+-------
+
+Copyright 2012 - 2014, Florian Krämer
+
+Licensed under The MIT License
+Redistributions of files must retain the above copyright notice.

@@ -24,7 +24,7 @@ We do not use Security.salt on purpose because we do not want to use the same sa
 
 Load the imagine plugin in your bootstrap file, remember to use plugin bootstrap, like this
 
-    CakePlugin::load('Imagine' => array('bootstrap' => true));
+    CakePlugin::load('Imagine', array('bootstrap' => true));
 
 ## Imagine Helper ##
 

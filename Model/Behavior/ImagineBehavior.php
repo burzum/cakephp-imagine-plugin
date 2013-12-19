@@ -148,8 +148,7 @@ class ImagineBehavior extends ModelBehavior {
 
 		$options = array_merge($defaults, $options);
 
-		$Image->resize(new Imagine\Image\Box($options['width'], $options['height']))
-			->crop(new Imagine\Image\Point($options['cropX'], $options['cropY']), new Imagine\Image\Box($options['width'], $options['height']));
+		$Image->crop(new Imagine\Image\Point($options['cropX'], $options['cropY']), new Imagine\Image\Box($options['width'], $options['height']));
 	}
 
 /**
@@ -392,7 +391,9 @@ class ImagineBehavior extends ModelBehavior {
 
 		return array(
 			$BoxInterface->getWidth(),
-			$BoxInterface->getHeight());
+			$BoxInterface->getHeight(),
+			'x' => $BoxInterface->getWidth(),
+			'y' => $BoxInterface->getHeight());
 	}
 
 }

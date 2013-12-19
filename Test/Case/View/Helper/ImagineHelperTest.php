@@ -51,12 +51,39 @@ class ImagineHelperTest extends CakeTestCase {
 				'controller' => 'images',
 				'action' => 'display',
 				1),
+      false,
 			array(
 				'thumbnail' => array(
 					'width' => 200,
 					'height' => 150)));
-		$expected = '/images/display/1/thumbnail:width|200;height|150/hash:69aa9f46cdc5a200dc7539fc10eec00f2ba89023';
+		$expected = '/images/display/1/thumbnail:width%7C200%3Bheight%7C150/hash:69aa9f46cdc5a200dc7539fc10eec00f2ba89023';
 		$this->assertEqual($result, $expected);
+	}
+  
+/**
+ * testUrl method for backward compatibility
+ *
+ * @return void
+ */
+	public function testUrlBackwardCompatibility() {
+    $param1 = array(
+      'controller' => 'images',
+			'action' => 'display',
+			1
+    );
+    $param2 = false;
+    $param3 = array(
+      'thumbnail' => array(
+        'width' => 200,
+				'height' => 150
+       )
+    );
+
+    $result1 = $this->Imagine->url($param1, $param2, $param3);
+    $result2 = $this->Imagine->url($param1, $param3, $param2);
+
+    $this->assertEquals($result1, $result2);
+
 	}
 
 /**

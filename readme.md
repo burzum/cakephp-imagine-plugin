@@ -2,7 +2,7 @@
 
 ## Setup ##
 
-### Add the external Imagine Lib ###
+### Using Git ###
 
 You need to init the git submodule of imagine
 
@@ -11,6 +11,28 @@ You need to init the git submodule of imagine
 Or get it from https://github.com/avalanche123/Imagine
 
 Copy Imagine into the plugins vendor folder Vendor/Imagine, the root of the Imagine package should be inside this folder. Vendor/Imagine/README.md should be present if you placed the code correctly.
+
+### Using Composer ###
+
+Assuming you're mostly familiar with the basics of composer just take a look at the ```extra```section. You'll have to define the installer path for the imagine plugin so that composer can put it in the right place with the right name.
+
+```js
+{
+    "config": {
+        "vendor-dir": "app/Vendor/",
+        "preferred-install": "source"
+    },
+    "require": {
+        "burzum/cakephp-imagine-plugin": "dev-master",
+        "imagine/imagine": "dev-master"
+    },
+    "extra": {
+        "installer-paths": {
+            "app/Plugin/Imagine": ["burzum/cakephp-imagine-plugin"]
+        }
+    }
+}
+```
 
 ### Salt ###
 

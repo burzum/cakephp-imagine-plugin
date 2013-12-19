@@ -8,9 +8,15 @@ You need to init the git submodule of imagine
 
 	git submodule update --init
 
-Or get it from https://github.com/avalanche123/Imagine
+If you're **not** using the submodule get it from https://github.com/avalanche123/Imagine
 
 Copy Imagine into the plugins vendor folder Vendor/Imagine, the root of the Imagine package should be inside this folder. Vendor/Imagine/README.md should be present if you placed the code correctly.
+
+Load the imagine plugin in your apps ```app/Config/bootstrap.php``` file including it's bootstrap.
+
+    CakePlugin::load('Imagine' => array('bootstrap' => true));
+
+The bootstrap.php of the plugin will just register a SPL autoloader for the Imagine namespace. If you didn't put Imagine in the plugins vendor folder you'll have set your own autoloader up to load it.
 
 ### Using Composer ###
 
@@ -41,12 +47,6 @@ You need to configure a salt for Imagine security functions.
 	Configure::write('Imagine.salt', 'your-salt-string-here');
 
 We do not use Security.salt on purpose because we do not want to use the same salt here for security reasons.
-
-### Load plugin ###
-
-Load the imagine plugin in your bootstrap file, remember to use plugin bootstrap, like this
-
-    CakePlugin::load('Imagine' => array('bootstrap' => true));
 
 ## Imagine Helper ##
 

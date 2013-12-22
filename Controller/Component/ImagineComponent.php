@@ -27,7 +27,8 @@ class ImagineComponent extends Component {
 	public $settings = array(
 		'hashField' => 'hash',
 		'checkHash' => true,
-		'actions' => array());
+		'actions' => array()
+	);
 
 /**
  * Controller instance

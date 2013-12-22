@@ -1,4 +1,14 @@
 <?php
+/**
+ * Copyright 2011-2014, Florian Krämer
+ *
+ * Licensed under The MIT License
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * Copyright 2011-2014, Florian Krämer
+ * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
+ */
+
 namespace Imagine;
 
 class ImagineUtility {
@@ -71,7 +81,7 @@ class ImagineUtility {
  * @return void
  */
 	public static function load($name) {
-	  $name = str_replace("\\", DS, $name);
+		$name = str_replace("\\", DS, $name);
 		$imagineBase = \Configure::read('Imagine.base');
 		if (empty($imagineBase)) {
 			$imagineBase = \CakePlugin::path('Imagine') . 'Vendor' . DS . 'Imagine' . DS . 'lib' . DS;
@@ -79,13 +89,13 @@ class ImagineUtility {
 
 		$filePath = $imagineBase . $name . '.php';
 		if (file_exists($filePath)) {
-			require_once($filePath);
+			require_once ($filePath);
 			return;
 		}
 
 		$imagineBase = $imagineBase . 'Image' . DS;
 		if (file_exists($imagineBase . $name . '.php')) {
-			require_once($imagineBase . $name . '.php');
+			require_once ($imagineBase . $name . '.php');
 			return;
 		}
 	}

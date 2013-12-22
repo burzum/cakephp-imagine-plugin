@@ -40,7 +40,7 @@ before_script:
     " >> ../cakephp/app/Config/bootstrap.php
 
 script:
-  - ./lib/Cake/Console/cake test Image AllImaginePlugin --stderr
+  - ./lib/Cake/Console/cake test Imagine AllImaginePlugin --stderr
  
 notifications:
   email: false

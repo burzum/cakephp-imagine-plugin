@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright 2011-2012, Cake Development Corporation (http://cakedc.com)
+ * Copyright 2011-2014, Florian Krämer
  *
  * Licensed under The MIT License
  * Redistributions of files must retain the above copyright notice.
  *
- * Copyright 2011-2012, Cake Development Corporation (http://cakedc.com)
+ * Copyright 2011-2014, Florian Krämer
  * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
 
@@ -31,12 +31,13 @@ class ImagineBehavior extends ModelBehavior {
  * @var array
  */
 	protected $_defaults = array(
-		'engine' => 'Gd');
+		'engine' => 'Gd'
+	);
 
 /**
  * Setup
  *
- * @param AppModel $Model
+ * @param Model $Model
  * @param array $settings
  * @return void
  */
@@ -134,8 +135,6 @@ class ImagineBehavior extends ModelBehavior {
  * @param array Array of options for processing the image
  * @throws InvalidArgumentException
  * @return void
- * @internal param \Model $object
- * @internal param \Imagine $object Image Object
  */
 	public function crop(Model $Model, $Image, $options = array()) {
 		if (empty($options['height']) || empty($options['width'])) {
@@ -144,7 +143,8 @@ class ImagineBehavior extends ModelBehavior {
 
 		$defaults = array(
 			'cropX' => 0,
-			'cropY' => 0);
+			'cropY' => 0
+		);
 
 		$options = array_merge($defaults, $options);
 
@@ -159,8 +159,6 @@ class ImagineBehavior extends ModelBehavior {
  * @param array Array of options for processing the image
  * @throws InvalidArgumentException
  * @return void
- * @internal param \Model $object
- * @internal param \Imagine $object Image Object
  */
 	public function squareCenterCrop(Model $Model, $Image, $options = array()) {
 		if (empty($options['size'])) {
@@ -169,7 +167,7 @@ class ImagineBehavior extends ModelBehavior {
 
 		$imageSize = $this->getImageSize($Model, $Image);
 
-		$width  = $imageSize[0];
+		$width = $imageSize[0];
 		$height = $imageSize[1];
 
 		if ($width > $height) {
@@ -250,7 +248,7 @@ class ImagineBehavior extends ModelBehavior {
 		}
 
 		$imageSize = $this->getImageSize($Model, $Image);
-		$width  = $imageSize[0];
+		$width = $imageSize[0];
 		$height = $imageSize[1];
 
 		if (isset($options['noUpScale'])) {
@@ -297,7 +295,7 @@ class ImagineBehavior extends ModelBehavior {
 		}
 
 		$imageSize = $this->getImageSize($Model, $Image);
-		$width  = $imageSize[0];
+		$width = $imageSize[0];
 		$height = $imageSize[1];
 
 		$Box = new Imagine\Image\Box($width, $height);
@@ -330,7 +328,7 @@ class ImagineBehavior extends ModelBehavior {
 /**
  * Wrapper for rotate
  *
- * @param object Model
+ * @param Model Model
  * @param object Imagine Image Object
  * @param array Array of options for processing the image
  */
@@ -341,7 +339,7 @@ class ImagineBehavior extends ModelBehavior {
 /**
  * Wrapper for Imagines thumbnail
  *
- * @param object Model
+ * @param Model Model
  * @param object Imagine Image Object
  * @param array Array of options for processing the image
  */
@@ -360,7 +358,7 @@ class ImagineBehavior extends ModelBehavior {
 /**
  * Wrapper for Imagines resize
  *
- * @param object Model
+ * @param Model Model
  * @param object Imagine Image Object
  * @param array Array of options for processing the image
  */
@@ -393,7 +391,8 @@ class ImagineBehavior extends ModelBehavior {
 			$BoxInterface->getWidth(),
 			$BoxInterface->getHeight(),
 			'x' => $BoxInterface->getWidth(),
-			'y' => $BoxInterface->getHeight());
+			'y' => $BoxInterface->getHeight()
+		);
 	}
 
 }

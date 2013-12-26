@@ -1,4 +1,14 @@
 <?php
+/**
+ * Copyright 2011-2014, Florian Krämer
+ *
+ * Licensed under The MIT License
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * Copyright 2011-2014, Florian Krämer
+ * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
+ */
+
 namespace Imagine;
 
 class ImagineUtility {
@@ -13,8 +23,10 @@ class ImagineUtility {
  * with this string and store the string also in the db. In the views, if no further control over the image access is needd,
  * you can simply direct linke the image like $this->Html->image('/images/05/04/61/my_horse.thumbnail+width-100-height+100.jpg');
  *
- * @param array
- * @param array $separators Optional
+ * @param array $operations
+ * @param array $separators
+ * @param mixed $hash
+ * @throws BadFunctionCallException
  * @return string Filename compatible String representation of the operations
  * @link http://support.microsoft.com/kb/177506
  */
@@ -24,7 +36,8 @@ class ImagineUtility {
 		$defaultSeparators = array(
 			'operations' => '.',
 			'params' => '+',
-			'value' => '-');
+			'value' => '-'
+		);
 		$separators = array_merge($defaultSeparators, $separators);
 
 		$result = '';
@@ -71,7 +84,7 @@ class ImagineUtility {
  * @return void
  */
 	public static function load($name) {
-	  $name = str_replace("\\", DS, $name);
+		$name = str_replace("\\", DS, $name);
 		$imagineBase = \Configure::read('Imagine.base');
 		if (empty($imagineBase)) {
 			$imagineBase = \CakePlugin::path('Imagine') . 'Vendor' . DS . 'Imagine' . DS . 'lib' . DS;
@@ -79,13 +92,13 @@ class ImagineUtility {
 
 		$filePath = $imagineBase . $name . '.php';
 		if (file_exists($filePath)) {
-			require_once($filePath);
+			require_once ($filePath);
 			return;
 		}
 
 		$imagineBase = $imagineBase . 'Image' . DS;
 		if (file_exists($imagineBase . $name . '.php')) {
-			require_once($imagineBase . $name . '.php');
+			require_once ($imagineBase . $name . '.php');
 			return;
 		}
 	}

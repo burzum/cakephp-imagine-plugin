@@ -23,8 +23,10 @@ class ImagineUtility {
  * with this string and store the string also in the db. In the views, if no further control over the image access is needd,
  * you can simply direct linke the image like $this->Html->image('/images/05/04/61/my_horse.thumbnail+width-100-height+100.jpg');
  *
- * @param array
- * @param array $separators Optional
+ * @param array $operations
+ * @param array $separators
+ * @param mixed $hash
+ * @throws BadFunctionCallException
  * @return string Filename compatible String representation of the operations
  * @link http://support.microsoft.com/kb/177506
  */
@@ -34,7 +36,8 @@ class ImagineUtility {
 		$defaultSeparators = array(
 			'operations' => '.',
 			'params' => '+',
-			'value' => '-');
+			'value' => '-'
+		);
 		$separators = array_merge($defaultSeparators, $separators);
 
 		$result = '';

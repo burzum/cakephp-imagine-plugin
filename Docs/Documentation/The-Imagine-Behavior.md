@@ -3,7 +3,7 @@
 The behavior interacts with the component and will process a given image file with a set of operations that should be applied to it. See ImagineBehavior::processImage().
 
 ```php
-SomeModel extends AppModel {
+class SomeModel extends AppModel {
 	public $actsAs = array(
 		'Imagine.Imagine'
 	);

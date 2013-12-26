@@ -17,13 +17,16 @@ App::uses('Security', 'Utility');
  * @package Imagine.View.Helper
  */
 class ImagineHelper extends AppHelper {
+
 /**
  * Helpers
  *
  * @var array $helpers
  * @access public
  */
-	public $helpers = array('Html');
+	public $helpers = array(
+		'Html'
+	);
 
 /**
  * Finds URL for specified action and sign it.
@@ -44,12 +47,12 @@ class ImagineHelper extends AppHelper {
 			$url = array_merge(array('plugin' => 'media', 'admin' => false, 'controller' => 'media', 'action' => 'image'), array($url));
 		}
 
-	// backward compatibility check, switches params 2 and 3
-	if (is_bool($options)) {
-		$tmp = $options;
-		$options = $full;
-		$full = $tmp;
-	}
+		// backward compatibility check, switches params 2 and 3
+		if (is_bool($options)) {
+			$tmp = $options;
+			$options = $full;
+			$full = $tmp;
+		}
 
 		$options = $this->pack($options);
 		$options['hash'] = $this->hash($options);
@@ -61,6 +64,7 @@ class ImagineHelper extends AppHelper {
 /**
  * Signs the url with a salted hash
  *
+ * @throws RuntimeException
  * @param array $options
  * @return string
  * @access public
@@ -68,7 +72,7 @@ class ImagineHelper extends AppHelper {
 	public function hash($options) {
 		$mediaSalt = Configure::read('Imagine.salt');
 		if (empty($mediaSalt)) {
-			throw new Exception(__d('imagine', 'Please configure Imagine.salt using Configure::write(\'Imagine.salt\', \'YOUR-SALT-VALUE\')', true));
+			throw new RuntimeException(__d('imagine', 'Please configure Imagine.salt using Configure::write(\'Imagine.salt\', \'YOUR-SALT-VALUE\')', true));
 		}
 		ksort($options);
 		return urlencode(Security::hash(serialize($options) . $mediaSalt));

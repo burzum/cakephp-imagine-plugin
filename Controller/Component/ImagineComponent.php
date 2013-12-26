@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright 2011-2012, Cake Development Corporation (http://cakedc.com)
+ * Copyright 2011-2014, Florian Krämer
  *
  * Licensed under The MIT License
  * Redistributions of files must retain the above copyright notice.
  *
- * Copyright 2011-2012, Cake Development Corporation (http://cakedc.com)
+ * Copyright 2011-2014, Florian Krämer
  * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
 
@@ -27,7 +27,8 @@ class ImagineComponent extends Component {
 	public $settings = array(
 		'hashField' => 'hash',
 		'checkHash' => true,
-		'actions' => array());
+		'actions' => array()
+	);
 
 /**
  * Controller instance

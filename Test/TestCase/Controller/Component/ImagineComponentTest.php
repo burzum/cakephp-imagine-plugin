@@ -14,7 +14,6 @@ use Cake\Controller\ComponentRegistry;
 use Imagine\Controller\Component\ImagineComponent;
 use Cake\TestSuite\TestCase;
 
-
 if (!class_exists('ImagineImagesTestController')) {
 	class ImagineImagesTestController extends Controller {
 

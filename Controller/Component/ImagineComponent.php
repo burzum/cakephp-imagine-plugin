@@ -8,9 +8,13 @@
  * Copyright 2011-2014, Florian Krämer
  * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
+namespace Imagine\Controller\Component;
 
-App::uses('Component', 'Controller/Component');
-App::uses('Security', 'Utility');
+use Cake\Controller\Component;
+use Cake\Utility\Hash;
+use Cake\Utility\Security;
+use Cake\Controller\ComponentRegistry;
+use Cake\Event\Event;
 
 /**
  * CakePHP Imagine Plugin
@@ -49,22 +53,27 @@ class ImagineComponent extends Component {
 /**
  * Constructor
  *
- * @param ComponentCollection $collection
+ * @param ComponentRegistry $collection
  * @param array $settings
- * @return void
+ * @return \Cake\Controller\Component\ImagineComponent
  */
-	public function __construct(ComponentCollection $collection, $settings = array()) {
-		$this->settings = Set::merge($this->settings, $settings);
+	public function __construct(ComponentRegistry $collection, $settings = array()) {
+		$this->settings = Hash::merge($this->settings, $settings);
 		parent::__construct($collection, $this->settings);
+
+		$Controller = $collection->getController();
+		$this->request = $Controller->request;
+		$this->response = $Controller->response;
 	}
 
 /**
  * Start Up
  *
- * @param Controller $Controller
+ * @param Event $Event
  * @return void
  */
-	public function startUp(Controller $Controller) {
+	public function startup(Event $Event) {
+		$Controller = $Event->subject();
 		$this->Controller = $Controller;
 		if (!empty($this->settings['actions'])) {
 			if (in_array($this->Controlle->action, $this->settings['actions'])) {
@@ -127,7 +136,7 @@ class ImagineComponent extends Component {
 /**
  * Unpacks the strings into arrays that were packed with ImagineHelper::pack()
  *
- * @param array $params If empty the method tries to get them from Controller->request['named']
+ * @param array $namedParams If empty the method tries to get them from Controller->request['named']
  * @return array Array with operation options for imagine, if none found an empty array
  */
 	public function unpackParams($namedParams = array()) {

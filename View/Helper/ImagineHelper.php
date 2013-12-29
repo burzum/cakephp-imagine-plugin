@@ -8,8 +8,10 @@
  * Copyright 2011-2014, Florian Krämer
  * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
+namespace Cake\View\Helper;
 
-App::uses('Security', 'Utility');
+use Cake\Utility\Security;
+use Cake\Core\Configure;
 
 /**
  * CakePHP Imagine Plugin

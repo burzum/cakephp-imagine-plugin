@@ -8,9 +8,12 @@
  * Copyright 2011-2014, Florian Krämer
  * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
+namespace Imagine\Test\TestCase\Controller\Component;
 
-App::uses('Controller', 'Controller');
-App::uses('ImagineComponent', 'Imagine.Controller/Component');
+use Cake\Controller\ComponentRegistry;
+use Imagine\Controller\Component\ImagineComponent;
+use Cake\TestSuite\TestCase;
+
 
 if (!class_exists('ImagineImagesTestController')) {
 	class ImagineImagesTestController extends Controller {
@@ -30,7 +33,8 @@ if (!class_exists('ImagineImagesTestController')) {
 	 */
 		public $components = array(
 			'Session',
-			'Imagine.Imagine');
+			'Imagine.Imagine'
+		);
 
 	/**
 	 * Redirect url
@@ -61,7 +65,7 @@ if (!class_exists('ImagineImagesTestController')) {
  * @package Imagine
  * @subpackage Imagine.tests.cases.components
  */
-class ImagineComponentTest extends CakeTestCase {
+class ImagineComponentTest extends TestCase {
 
 /**
  * Fixtures
@@ -69,7 +73,8 @@ class ImagineComponentTest extends CakeTestCase {
  * @var array
  */
 	public $fixtures = array(
-		'plugin.Imagine.Image');
+		'plugin.Imagine.Image'
+	);
 
 /**
  * setUp method
@@ -128,7 +133,8 @@ class ImagineComponentTest extends CakeTestCase {
 	public function testInvalidHash() {
 		$this->Controller->request->params['named'] = array( 
 			'thumbnail' => 'width|200;height|150',
-			'hash' => 'wrong-hash-value');
+			'hash' => 'wrong-hash-value'
+		);
 		$this->Controller->Imagine->checkHash();
 	}
 
@@ -137,7 +143,8 @@ class ImagineComponentTest extends CakeTestCase {
  */
 	public function testMissingHash() {
 		$this->Controller->request->params['named'] = array( 
-			'thumbnail' => 'width|200;height|150');
+			'thumbnail' => 'width|200;height|150'
+		);
 		$this->Controller->Imagine->checkHash();
 	}
 
@@ -151,9 +158,12 @@ class ImagineComponentTest extends CakeTestCase {
 		$this->Controller->request->params['named']['thumbnail'] = 'width|200;height|150';
 		$this->Controller->Imagine->unpackParams();
 		$this->assertEqual($this->Controller->Imagine->operations, array(
-			'thumbnail' => array(
-				'width' => 200,
-				'height' => 150)));
+				'thumbnail' => array(
+					'width' => 200,
+					'height' => 150
+				)
+			)
+		);
 	}
 
 }

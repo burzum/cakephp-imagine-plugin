@@ -8,6 +8,10 @@
  * Copyright 2011-2014, Florian Krämer
  * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
+namespace Imagine\Model\Behavior;
+
+use Cake\Model\ModelBehavior;
+use Cake\Model\Model;
 
 App::uses('ImagineUtility', 'Imagine.Lib');
 
@@ -43,7 +47,7 @@ class ImagineBehavior extends ModelBehavior {
  */
 	public function setup(Model $Model, $settings = array()) {
 		$this->settings = array_merge($this->_defaults, $settings);
-		$class = 'Imagine\\' . $this->settings['engine'] . '\Imagine';
+		$class = '\Imagine\\' . $this->settings['engine'] . '\Imagine';
 		$this->Imagine = new $class();
 	}
 

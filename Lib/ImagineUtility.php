@@ -9,7 +9,10 @@
  * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
 
-namespace Imagine;
+namespace Imagine\Lib;
+
+use Cake\Core\Configure;
+use Cake\Core\Plugin;
 
 class ImagineUtility {
 
@@ -85,9 +88,9 @@ class ImagineUtility {
  */
 	public static function load($name) {
 		$name = str_replace("\\", DS, $name);
-		$imagineBase = \Configure::read('Imagine.base');
+		$imagineBase = Configure::read('Imagine.base');
 		if (empty($imagineBase)) {
-			$imagineBase = \CakePlugin::path('Imagine') . 'Vendor' . DS . 'Imagine' . DS . 'lib' . DS;
+			$imagineBase = Plugin::path('Imagine') . 'Vendor' . DS . 'Imagine' . DS . 'lib' . DS;
 		}
 
 		$filePath = $imagineBase . $name . '.php';

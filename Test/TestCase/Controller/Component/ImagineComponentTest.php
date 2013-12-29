@@ -10,9 +10,11 @@
  */
 namespace Imagine\Test\TestCase\Controller\Component;
 
-use Cake\Controller\ComponentRegistry;
-use Imagine\Controller\Component\ImagineComponent;
 use Cake\TestSuite\TestCase;
+use Cake\Controller\Controller;
+use Cake\Event\Event;
+use Cake\Core\Configure;
+use Cake\Network\Request;
 
 if (!class_exists('ImagineImagesTestController')) {
 	class ImagineImagesTestController extends Controller {
@@ -44,7 +46,7 @@ if (!class_exists('ImagineImagesTestController')) {
 	/**
 	 * 
 	 */
-		public function beforeFilter() {
+		public function beforeFilter(Event $Event) {
 			parent::beforeFilter();
 			$this->Imagine->userModel = 'UserModel';
 		}
@@ -84,7 +86,7 @@ class ImagineComponentTest extends TestCase {
 		parent::setUp();
 
 		Configure::write('Imagine.salt', 'this-is-a-nice-salt');
-		$request = new CakeRequest(null, false);
+		$request = new Request(null, false);
 		$this->Controller = new ImagineImagesTestController($request, $this->getMock('CakeResponse'));
 		$this->Controller->constructClasses();
 		$this->Controller->Components->init($this->Controller);
@@ -108,8 +110,9 @@ class ImagineComponentTest extends TestCase {
  * @return void
  */
 	public function testGetHash() {
-		$this->Controller->request->params['named'] = array( 
-			'thumbnail' => 'width|200;height|150');
+		$this->Controller->request->params['named'] = [
+			'thumbnail' => 'width|200;height|150'
+		];
 		$hash = $this->Controller->Imagine->getHash();
 		$this->assertTrue(is_string($hash));
 	}
@@ -120,9 +123,10 @@ class ImagineComponentTest extends TestCase {
  * @return void
  */
 	public function testCheckHash() {
-		$this->Controller->request->params['named'] = array( 
+		$this->Controller->request->params['named'] = [
 			'thumbnail' => 'width|200;height|150',
-			'hash' => '69aa9f46cdc5a200dc7539fc10eec00f2ba89023');
+			'hash' => '69aa9f46cdc5a200dc7539fc10eec00f2ba89023'
+		];
 		$this->Controller->Imagine->checkHash();
 	}
 
@@ -130,10 +134,10 @@ class ImagineComponentTest extends TestCase {
  * @expectedException NotFoundException
  */
 	public function testInvalidHash() {
-		$this->Controller->request->params['named'] = array( 
+		$this->Controller->request->params['named'] = [
 			'thumbnail' => 'width|200;height|150',
 			'hash' => 'wrong-hash-value'
-		);
+		];
 		$this->Controller->Imagine->checkHash();
 	}
 
@@ -141,9 +145,9 @@ class ImagineComponentTest extends TestCase {
  * @expectedException NotFoundException
  */
 	public function testMissingHash() {
-		$this->Controller->request->params['named'] = array( 
+		$this->Controller->request->params['named'] = [
 			'thumbnail' => 'width|200;height|150'
-		);
+		];
 		$this->Controller->Imagine->checkHash();
 	}
 

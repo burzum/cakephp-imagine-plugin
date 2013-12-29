@@ -8,8 +8,11 @@
  * Copyright 2011-2014, Florian Krämer
  * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
+namespace Imagine\Test\Fixture;
 
-class ImageFixture extends CakeTestFixture {
+use Cake\TestSuite\Fixture\TestFixture;
+
+class ImageFixture extends TestFixture {
 
 /**
  * name property
@@ -23,9 +26,11 @@ class ImageFixture extends CakeTestFixture {
  *
  * @var array
  */
-	public $fields = array(
-		'id' => array('type' => 'integer', 'key' => 'primary'),
-		'title' => array('type' => 'string', 'null' => false));
+	public $fields = [
+		'id' => ['type' => 'integer'],
+		'title' => ['type' => 'string', 'null' => false],
+		'_constraints' => ['primary' => ['type' => 'primary', 'columns' => ['id']]]
+	];
 
 /**
  * Records
@@ -34,5 +39,6 @@ class ImageFixture extends CakeTestFixture {
  */
 	public $records = array(
 		array('title' => 'First Image'),
-		array('title' => 'Second Image'));
+		array('title' => 'Second Image')
+	);
 }

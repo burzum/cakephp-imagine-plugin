@@ -15,6 +15,7 @@ use Cake\Utility\Hash;
 use Cake\Utility\Security;
 use Cake\Controller\ComponentRegistry;
 use Cake\Event\Event;
+use Cake\Core\Configure;
 
 /**
  * CakePHP Imagine Plugin

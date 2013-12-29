@@ -8,10 +8,11 @@
  * Copyright 2011-2014, Florian Krämer
  * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
-namespace Cake\View\Helper;
+namespace Imagine\View\Helper;
 
-use Cake\Utility\Security;
 use Cake\Core\Configure;
+use Cake\Utility\Security;
+use App\View\Helper\AppHelper;
 
 /**
  * CakePHP Imagine Plugin
@@ -66,7 +67,7 @@ class ImagineHelper extends AppHelper {
 /**
  * Signs the url with a salted hash
  *
- * @throws RuntimeException
+ * @throws \RuntimeException
  * @param array $options
  * @return string
  * @access public
@@ -74,7 +75,7 @@ class ImagineHelper extends AppHelper {
 	public function hash($options) {
 		$mediaSalt = Configure::read('Imagine.salt');
 		if (empty($mediaSalt)) {
-			throw new RuntimeException(__d('imagine', 'Please configure Imagine.salt using Configure::write(\'Imagine.salt\', \'YOUR-SALT-VALUE\')', true));
+			throw new \RuntimeException(__d('imagine', 'Please configure Imagine.salt using Configure::write(\'Imagine.salt\', \'YOUR-SALT-VALUE\')', true));
 		}
 		ksort($options);
 		return urlencode(Security::hash(serialize($options) . $mediaSalt));

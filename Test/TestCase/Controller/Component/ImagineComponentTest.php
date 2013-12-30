@@ -86,10 +86,9 @@ class ImagineComponentTest extends TestCase {
 		parent::setUp();
 
 		Configure::write('Imagine.salt', 'this-is-a-nice-salt');
-		$request = new Request(null, false);
+		$request = new Request();
 		$this->Controller = new ImagineImagesTestController($request, $this->getMock('CakeResponse'));
 		$this->Controller->constructClasses();
-		$this->Controller->Components->init($this->Controller);
 		$this->Controller->Imagine->Controller = $this->Controller;
 	}
 
@@ -101,7 +100,6 @@ class ImagineComponentTest extends TestCase {
 	public function tearDown() {
 		parent::tearDown();
 		unset($this->Controller);
-		ClassRegistry::flush();
 	}
 
 /**
@@ -131,7 +129,7 @@ class ImagineComponentTest extends TestCase {
 	}
 
 /**
- * @expectedException NotFoundException
+ * @expectedException Cake\Error\NotFoundException
  */
 	public function testInvalidHash() {
 		$this->Controller->request->params['named'] = [
@@ -142,7 +140,7 @@ class ImagineComponentTest extends TestCase {
 	}
 
 /**
- * @expectedException NotFoundException
+ * @expectedException Cake\Error\NotFoundException
  */
 	public function testMissingHash() {
 		$this->Controller->request->params['named'] = [
@@ -157,10 +155,10 @@ class ImagineComponentTest extends TestCase {
  * @return void
  */
 	public function testUnpackParams() {
-		$this->assertEqual($this->Controller->Imagine->operations, array());
+		$this->assertEquals($this->Controller->Imagine->operations, array());
 		$this->Controller->request->params['named']['thumbnail'] = 'width|200;height|150';
 		$this->Controller->Imagine->unpackParams();
-		$this->assertEqual($this->Controller->Imagine->operations, array(
+		$this->assertEquals($this->Controller->Imagine->operations, array(
 				'thumbnail' => array(
 					'width' => 200,
 					'height' => 150

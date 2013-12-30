@@ -11,13 +11,10 @@
 namespace Imagine\Model\Behavior;
 
 use Cake\ORM\Behavior;
-use Cake\Model\Model;
-use Imagine\Imagine;
+use Cake\ORM\Table;
 
 /**
  * CakePHP Imagine Plugin
- *
- * @package Imagine.Model.Behavior
  */
 class ImagineBehavior extends Behavior {
 
@@ -89,10 +86,10 @@ class ImagineBehavior extends Behavior {
 		}
 
 		foreach ($operations as $operation => $params) {
-			if (method_exists($Model, $operation)) {
+			if (method_exists($this->_table, $operation)) {
 				$this->_table->{$operation}($ImageObject, $params);
 			} elseif (method_exists($this, $operation)) {
-				$this->{$operation}($Model, $ImageObject, $params);
+				$this->{$operation}($ImageObject, $params);
 			} else {
 				throw new \BadMethodCallException(__d('imagine', 'Unsupported image operation %s!', $operation));
 			}
@@ -122,7 +119,7 @@ class ImagineBehavior extends Behavior {
  * @link http://support.microsoft.com/kb/177506
  */
 	public function operationsToString($operations, $separators = array(), $hash = false) {
-		return \Imagine\ImagineUtility::operationsToString($operations, $separators, $hash);
+		return \Imagine\Lib\ImagineUtility::operationsToString($operations, $separators, $hash);
 	}
 
 /**
@@ -133,7 +130,7 @@ class ImagineBehavior extends Behavior {
  * @return string
  */
 	public function hashImageOperations($imageSizes, $hashLenght = 8) {
-		return \Imagine\ImagineUtility::hashImageOperations($imageSizes, $hashLenght = 8);
+		return \Imagine\Lib\ImagineUtility::hashImageOperations($imageSizes, $hashLenght = 8);
 	}
 
 /**
@@ -156,7 +153,7 @@ class ImagineBehavior extends Behavior {
 
 		$options = array_merge($defaults, $options);
 
-		$Image->crop(new Imagine\Image\Point($options['cropX'], $options['cropY']), new Imagine\Image\Box($options['width'], $options['height']));
+		$Image->crop(new \Imagine\Image\Point($options['cropX'], $options['cropY']), new \Imagine\Image\Box($options['width'], $options['height']));
 	}
 
 /**
@@ -189,8 +186,8 @@ class ImagineBehavior extends Behavior {
 			$y = ($height - $width) / 2;
 		}
 
-		$Image->crop(new Imagine\Image\Point($x, $y), new Imagine\Image\Box($x2, $y2));
-		$Image->resize(new Imagine\Image\Box($options['size'], $options['size']));
+		$Image->crop(new \Imagine\Image\Point($x, $y), new \Imagine\Image\Box($x2, $y2));
+		$Image->resize(new \Imagine\Image\Box($options['size'], $options['size']));
 	}
 
 /**
@@ -279,7 +276,7 @@ class ImagineBehavior extends Behavior {
 			}
 		}
 
-		$Box = new Imagine\Image\Box($width, $height);
+		$Box = new \Imagine\Image\Box($width, $height);
 		$Box = $Box->{$method}($size);
 		$Image->resize($Box);
 	}
@@ -301,7 +298,7 @@ class ImagineBehavior extends Behavior {
 		$width = $imageSize[0];
 		$height = $imageSize[1];
 
-		$Box = new Imagine\Image\Box($width, $height);
+		$Box = new \Imagine\Image\Box($width, $height);
 		$Box = $Box->scale($options['factor']);
 		$Image->resize($Box);
 	}
@@ -313,8 +310,6 @@ class ImagineBehavior extends Behavior {
  * @param array Array of options for processing the image
  * @throws \InvalidArgumentException
  * @return void
- * @internal param \Model $object
- * @internal param \Imagine $object Image Object
  */
 	public function flip($Image, $options = array()) {
 		if (!isset($options['direction'])) {
@@ -349,11 +344,12 @@ class ImagineBehavior extends Behavior {
 			throw new \InvalidArgumentException(__d('Imagine', 'You have to pass height and width in the options!'));
 		}
 
-		$mode = Imagine\Image\ImageInterface::THUMBNAIL_INSET;
+		$mode = \Imagine\Image\ImageInterface::THUMBNAIL_INSET;
 		if (isset($options['mode']) && $options['mode'] == 'outbound') {
-			$mode = Imagine\Image\ImageInterface::THUMBNAIL_OUTBOUND;
+			$mode = \Imagine\Image\ImageInterface::THUMBNAIL_OUTBOUND;
 		}
-		$Image = $Image->thumbnail(new Imagine\Image\Box($options['width'], $options['height']), $mode);
+
+		$Image = $Image->thumbnail(new \Imagine\Image\Box($options['width'], $options['height']), $mode);
 	}
 
 /**
@@ -369,7 +365,7 @@ class ImagineBehavior extends Behavior {
 			throw new \InvalidArgumentException(__d('Imagine', 'You have to pass height and width in the options!'));
 		}
 
-		$Image->resize(new Imagine\Image\Box($options['width'], $options['height']));
+		$Image->resize(new \Imagine\Image\Box($options['width'], $options['height']));
 	}
 
 /**

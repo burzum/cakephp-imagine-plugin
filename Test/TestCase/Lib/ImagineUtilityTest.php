@@ -8,10 +8,12 @@
  * Copyright 2011-2014, Florian Krämer
  * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
+namespace Imagine\Test\TestCase\Lib;
 
-App::import('Lib', 'ImagineUtility');
+use Cake\TestSuite\TestCase;
+use Imagine\Lib\ImagineUtility;
 
-class ImagineUtilityTest extends CakeTestCase {
+class ImagineUtilityTest extends TestCase {
 
 /**
  * Fixtures
@@ -30,8 +32,8 @@ class ImagineUtilityTest extends CakeTestCase {
 			'thumbnail' => array(
 				'width' => 200,
 				'height' => 150));
-		$result = \Imagine\ImagineUtility::operationsToString($operations);
-		$this->assertEqual($result, '.thumbnail+width-200+height-150');
+		$result = ImagineUtility::operationsToString($operations);
+		$this->assertEquals($result, '.thumbnail+width-200+height-150');
 	}
 
 /**
@@ -46,8 +48,8 @@ class ImagineUtilityTest extends CakeTestCase {
 					'thumbnail' => array(
 						'width' => 200,
 						'height' => 150))));
-		$result = \Imagine\ImagineUtility::hashImageOperations($operations);
-		$this->assertEqual($result, array(
+		$result = ImagineUtility::hashImageOperations($operations);
+		$this->assertEquals($result, array(
 			'SomeModel' => array(
 			't200x150' => '38b1868f')));
 	}

@@ -9,6 +9,8 @@
  * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
 
+use Cake\Core\Plugin;
+
 class AllImaginePluginTest extends PHPUnit_Framework_TestSuite {
 
 /**
@@ -19,16 +21,11 @@ class AllImaginePluginTest extends PHPUnit_Framework_TestSuite {
 	public static function suite() {
 		$suite = new PHPUnit_Framework_TestSuite('All Imagine Plugin Tests');
 
-		$basePath = CakePlugin::path('Imagine') . DS . 'Test' . DS . 'Case' . DS;
-
+		$basePath = Plugin::path('Imagine') . DS . 'Test' . DS . 'TestCase' . DS;
 		$suite->addTestFile($basePath . 'Controller' . DS . 'Component' . DS . 'ImagineComponentTest.php');
-
 		$suite->addTestFile($basePath . 'Lib' . DS . 'ImagineUtilityTest.php');
-
 		$suite->addTestFile($basePath . 'Model' . DS . 'Behavior' . DS . 'ImagineBehaviorTest.php');
-
 		$suite->addTestFile($basePath . 'View' . DS . 'Helper' . DS . 'ImagineHelperTest.php');
-
 		return $suite;
 	}
 

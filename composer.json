@@ -1,5 +1,5 @@
 {
-	"name": "burzum/cakephp-imagine-plugin",
+	"name": "ali1/cakephp-imagine-plugin",
 	"type": "cakephp-plugin",
 	"description": "Imagine Plugin for CakePHP",
 	"keywords": ["cakephp","media","image","image-processing"],

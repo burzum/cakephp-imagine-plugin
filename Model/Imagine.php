@@ -18,6 +18,13 @@ class Imagine extends AppModel {
 	public $name = 'Imagine';
 
 /**
+ * Table
+ *
+ * @var boolean|string
+ */
+	public $useTable = false;
+
+/**
  * Behaviors
  *
  * @var array

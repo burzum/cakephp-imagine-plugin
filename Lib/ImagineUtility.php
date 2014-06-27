@@ -9,8 +9,6 @@
  * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
 
-namespace Imagine;
-
 class ImagineUtility {
 
 /**
@@ -99,7 +97,6 @@ class ImagineUtility {
 		$imagineBase = $imagineBase . 'Image' . DS;
 		if (file_exists($imagineBase . $name . '.php')) {
 			require_once ($imagineBase . $name . '.php');
-			return;
 		}
 	}
 

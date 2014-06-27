@@ -82,7 +82,7 @@ class ImagineBehavior extends ModelBehavior {
 			}
 		}
 
-		if (is_null($output)) {
+		if ($output === null) {
 			return $Image;
 		}
 

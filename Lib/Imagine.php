@@ -29,7 +29,18 @@ class Imagine {
 	);
 
 	public function __construct(array $settings = array()) {
+		$this->_defaults = (array)Configure::read('Imagine') + $this->_defaults;
 		$this->settings = $settings + $this->_defaults;
+	}
+
+/**
+ * Imagine::create()
+ *
+ * @return Imagine object
+ */
+	public function create() {
+		$class = 'Imagine\\' . $this->settings['engine'] . '\Imagine';
+		return new $class();
 	}
 
 /**
@@ -39,8 +50,7 @@ class Imagine {
  * @return Imagine object
  */
 	public function open($file) {
-		$class = 'Imagine\\' . $this->settings['engine'] . '\Imagine';
-		$ImagineObject = new $class();
+		$ImagineObject = $this->create();
 		return $ImagineObject->open($file);
 	}
 

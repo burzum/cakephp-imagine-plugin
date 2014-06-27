@@ -22,10 +22,23 @@ class ImagineBehavior extends ModelBehavior {
 /**
  * Default settings array
  *
+ * @var Imagine
+ */
+	public $Imagine;
+
+/**
+ * Default settings array
+ *
+ * @var Imagine\[Engine]\Imagine
+ */
+	public $ImagineObject;
+
+/**
+ * Default settings array
+ *
  * @var array
  */
 	protected $_defaults = array(
-		'engine' => 'Gd'
 	);
 
 /**
@@ -39,9 +52,7 @@ class ImagineBehavior extends ModelBehavior {
 		$this->settings = $settings + $this->_defaults;
 
 		$this->Imagine = new Imagine($this->settings);
-
-		$class = 'Imagine\\' . $this->settings['engine'] . '\Imagine';
-		$this->ImagineObject = new $class();
+		$this->ImagineObject = $this->Imagine->create();
 	}
 
 /**

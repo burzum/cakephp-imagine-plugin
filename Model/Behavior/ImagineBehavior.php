@@ -60,33 +60,33 @@ class ImagineBehavior extends ModelBehavior {
  * Caching and taking care of the file storage is NOT the purpose of this method!
  *
  * @param Model $Model
- * @param $ImageObject
+ * @param $Image
  * @param null $output
  * @param array $imagineOptions
  * @param array $operations
  * @throws BadMethodCallException
  * @return boolean
  */
-	public function processImage(Model $Model, $ImageObject, $output = null, $imagineOptions = array(), $operations = array()) {
-		if (is_string($ImageObject)) {
-			$ImageObject = $this->ImagineObject->open($ImageObject);
+	public function processImage(Model $Model, $Image, $output = null, $imagineOptions = array(), $operations = array()) {
+		if (is_string($Image)) {
+			$Image = $this->Imagine->open($Image);
 		}
 
 		foreach ($operations as $operation => $params) {
 			if (method_exists($Model, $operation)) {
-				$Model->{$operation}($ImageObject, $params);
+				$Model->{$operation}($Image, $params);
 			} elseif (method_exists($this, $operation)) {
-				$this->{$operation}($Model, $ImageObject, $params);
+				$this->{$operation}($Model, $Image, $params);
 			} else {
 				throw new BadMethodCallException(__d('imagine', 'Unsupported image operation %s!', $operation));
 			}
 		}
 
 		if (is_null($output)) {
-			return $ImageObject;
+			return $Image;
 		}
 
-		return $ImageObject->save($output, $imagineOptions);
+		return $this->Imagine->save($Image, $output, $imagineOptions);
 	}
 
 /**

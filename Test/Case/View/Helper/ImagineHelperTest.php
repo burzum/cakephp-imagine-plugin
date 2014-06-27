@@ -15,7 +15,6 @@ App::uses('View', 'View');
 /**
  * ImagineHelperTest class
  *
- * @package       Imagine.Test.Case.View.Helper
  */
 class ImagineHelperTest extends CakeTestCase {
 

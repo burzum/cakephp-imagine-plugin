@@ -14,15 +14,13 @@ App::uses('Security', 'Utility');
 /**
  * CakePHP Imagine Plugin
  *
- * @package Imagine.View.Helper
  */
 class ImagineHelper extends AppHelper {
 
 /**
  * Helpers
  *
- * @var array $helpers
- * @access public
+ * @var array
  */
 	public $helpers = array(
 		'Html'
@@ -37,10 +35,9 @@ class ImagineHelper extends AppHelper {
  *                        or an array specifying any of the following: 'controller', 'action',
  *                        and/or 'plugin', in addition to named arguments (keyed array elements),
  *                        and standard URL arguments (indexed array elements)
- * @param boolean $full If true, the full base URL will be prepended to the result
+ * @param bool $full If true, the full base URL will be prepended to the result
  * @param array $options List of named arguments that need to sign
  * @return string Full translated signed URL with base path and with
- * @access public
  */
 	public function url($url = null, $full = false, $options = array()) {
 		if (is_string($url)) {
@@ -67,7 +64,6 @@ class ImagineHelper extends AppHelper {
  * @throws RuntimeException
  * @param array $options
  * @return string
- * @access public
  */
 	public function hash($options) {
 		$mediaSalt = Configure::read('Imagine.salt');
@@ -83,7 +79,6 @@ class ImagineHelper extends AppHelper {
  *
  * @param array $options
  * @return array
- * @access public
  */
 	public function pack($options) {
 		$result = array();

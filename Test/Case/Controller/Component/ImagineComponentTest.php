@@ -58,8 +58,6 @@ if (!class_exists('ImagineImagesTestController')) {
 /**
  * Imagine Component Test
  *
- * @package Imagine
- * @subpackage Imagine.tests.cases.components
  */
 class ImagineComponentTest extends CakeTestCase {
 

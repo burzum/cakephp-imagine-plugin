@@ -15,7 +15,6 @@ App::uses('Imagine', 'Imagine.Lib');
 /**
  * CakePHP Imagine Plugin
  *
- * @package Imagine.Model.Behavior
  */
 class ImagineBehavior extends ModelBehavior {
 
@@ -76,7 +75,7 @@ class ImagineBehavior extends ModelBehavior {
  * @param array $imagineOptions
  * @param array $operations
  * @throws BadMethodCallException
- * @return boolean
+ * @return bool
  */
 	public function processImage(Model $Model, $Image, $output = null, $imagineOptions = array(), $operations = array()) {
 		if (is_string($Image)) {
@@ -93,7 +92,7 @@ class ImagineBehavior extends ModelBehavior {
 			}
 		}
 
-		if (is_null($output)) {
+		if ($output === null) {
 			return $Image;
 		}
 
@@ -125,7 +124,7 @@ class ImagineBehavior extends ModelBehavior {
  * hashImageOperations
  *
  * @param array $imageSizes
- * @param integer $hashLenght
+ * @param int $hashLenght
  * @return string
  */
 	public function hashImageOperations($imageSizes, $hashLenght = 8) {

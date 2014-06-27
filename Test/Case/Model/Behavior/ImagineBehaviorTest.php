@@ -161,7 +161,6 @@ class ImagineBehaviorTest extends CakeTestCase {
 			array(500, 664, 'x' => 500, 'y' => 664));
 	}
 
-
 /**
  * testWidenAndHeighten
  *

@@ -187,7 +187,7 @@ class Imagine {
 		$height = $imageSize[1];
 
 		if (isset($options['noUpScale'])) {
-			if ($method == 'widen') {
+			if ($method === 'widen') {
 				if ($size > $width) {
 					throw new InvalidArgumentException(__d('Imagine', 'You can not scale up!'));
 				}
@@ -199,7 +199,7 @@ class Imagine {
 		}
 
 		if (isset($options['noDownScale'])) {
-			if ($method == 'widen') {
+			if ($method === 'widen') {
 				if ($size < $width) {
 					throw new InvalidArgumentException(__d('Imagine', 'You can not scale down!'));
 				}
@@ -280,7 +280,7 @@ class Imagine {
 		}
 
 		$mode = ImageInterface::THUMBNAIL_INSET;
-		if (isset($options['mode']) && $options['mode'] == 'outbound') {
+		if (isset($options['mode']) && $options['mode'] === 'outbound') {
 			$mode = ImageInterface::THUMBNAIL_OUTBOUND;
 		}
 		$Image = $Image->thumbnail(new Imagine\Image\Box($options['width'], $options['height']), $mode);

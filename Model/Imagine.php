@@ -20,7 +20,7 @@ class Imagine extends AppModel {
 /**
  * Table
  *
- * @var boolean|string
+ * @var bool|string
  */
 	public $useTable = false;
 

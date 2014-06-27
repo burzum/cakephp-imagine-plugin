@@ -15,7 +15,6 @@ App::uses('Security', 'Utility');
 /**
  * CakePHP Imagine Plugin
  *
- * @package Imagine.Controller.Component
  */
 class ImagineComponent extends Component {
 
@@ -107,8 +106,8 @@ class ImagineComponent extends Component {
  * This is done to avoid that people can randomly generate tons of images by
  * just incrementing the width and height for example in the url.
  *
- * @param boolean $error If set to false no 404 page will be rendered if the hash is wrong
- * @return boolean True if the hashes match
+ * @param bool $error If set to false no 404 page will be rendered if the hash is wrong
+ * @return bool True if the hashes match
  */
 	public function checkHash($error = true) {
 		if (!isset($this->Controller->request->params['named'][$this->settings['hashField']]) && $error) {

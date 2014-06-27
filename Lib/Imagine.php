@@ -1,5 +1,7 @@
 <?php
 
+use Imagine\Image\ImageInterface;
+
 /**
  * Convenience wrappers for common image operations.
  *
@@ -19,11 +21,41 @@ class Imagine {
  * @var array
  */
 	protected $_defaults = array(
-		'engine' => 'Gd'
+		'engine' => 'Gd',
+		'jpeg_quality' => null,
+		'png_compression_level' => null,
+		'resolution-units' =>  ImageInterface::RESOLUTION_PIXELSPERINCH,
+		'resampling-filter' => ImageInterface::FILTER_LANCZOS,
 	);
 
 	public function __construct(array $settings = array()) {
 		$this->settings = $settings + $this->_defaults;
+	}
+
+/**
+ * Imagine::open()
+ *
+ * @param string $file
+ * @return Imagine object
+ */
+	public function open($file) {
+		$class = 'Imagine\\' . $this->settings['engine'] . '\Imagine';
+		$ImagineObject = new $class();
+		return $ImagineObject->open($file);
+	}
+
+/**
+ * Imagine::save()
+ *
+ * @param Imagine $Image
+ * @param string $file
+ * @param array $options
+ * @return bool Success
+ */
+	public function save($Image, $file, $options = array()) {
+		$options += $this->_defaults;
+		$options = array_filter($options);
+		return $Image->save($file, $options);
 	}
 
 /**
@@ -237,9 +269,9 @@ class Imagine {
 			throw new InvalidArgumentException(__d('Imagine', 'You have to pass height and width in the options!'));
 		}
 
-		$mode = Imagine\Image\ImageInterface::THUMBNAIL_INSET;
+		$mode = ImageInterface::THUMBNAIL_INSET;
 		if (isset($options['mode']) && $options['mode'] == 'outbound') {
-			$mode = Imagine\Image\ImageInterface::THUMBNAIL_OUTBOUND;
+			$mode = ImageInterface::THUMBNAIL_OUTBOUND;
 		}
 		$Image = $Image->thumbnail(new Imagine\Image\Box($options['width'], $options['height']), $mode);
 	}
@@ -263,7 +295,7 @@ class Imagine {
  *
  * @param mixed Imagine Image object or string of a file name
  * @return array first value is width, second height
- * @see Imagine\Image\ImageInterface::getSize()
+ * @see ImageInterface::getSize()
  */
 	public function getImageSize($Image) {
 		if (is_string($Image)) {

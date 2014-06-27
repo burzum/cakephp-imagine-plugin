@@ -13,8 +13,9 @@ App::uses('Model', 'Model');
 App::uses('Security', 'Utility');
 
 class ImagineTestModel extends Model {
-	public $name = 'ImagineTestModel';
+
 	public $useTable = false;
+
 }
 
 class ImagineBehaviorTest extends CakeTestCase {

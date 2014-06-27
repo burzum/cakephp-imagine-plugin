@@ -99,7 +99,6 @@ class ImagineUtility {
 		$imagineBase = $imagineBase . 'Image' . DS;
 		if (file_exists($imagineBase . $name . '.php')) {
 			require_once ($imagineBase . $name . '.php');
-			return;
 		}
 	}
 

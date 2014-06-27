@@ -107,7 +107,7 @@ class ImagineBehavior extends ModelBehavior {
  * @link http://support.microsoft.com/kb/177506
  */
 	public function operationsToString(Model $Model, $operations, $separators = array(), $hash = false) {
-		return \Imagine\ImagineUtility::operationsToString($operations, $separators, $hash);
+		return ImagineUtility::operationsToString($operations, $separators, $hash);
 	}
 
 /**
@@ -118,7 +118,7 @@ class ImagineBehavior extends ModelBehavior {
  * @return string
  */
 	public function hashImageOperations($imageSizes, $hashLenght = 8) {
-		return \Imagine\ImagineUtility::hashImageOperations($imageSizes, $hashLenght = 8);
+		return ImagineUtility::hashImageOperations($imageSizes, $hashLenght = 8);
 	}
 
 /**
@@ -232,7 +232,7 @@ class ImagineBehavior extends ModelBehavior {
  * @param array Array of options for processing the image
  * @return void
  */
-	public function thumbnail(Model $Model, $Image, $options = array()) {
+	public function thumbnail(Model $Model, &$Image, $options = array()) {
 		$this->Imagine->thumbnail($Image, $options);
 	}
 

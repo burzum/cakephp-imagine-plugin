@@ -1,5 +1,4 @@
 <?php
-//namespace Imagine;
 
 /**
  * Convenience wrappers for common image operations.
@@ -233,7 +232,7 @@ class Imagine {
  * @param object Imagine Image Object
  * @param array Array of options for processing the image
  */
-	public function thumbnail($Image, $options = array()) {
+	public function thumbnail(&$Image, $options = array()) {
 		if (empty($options['height']) || empty($options['width'])) {
 			throw new InvalidArgumentException(__d('Imagine', 'You have to pass height and width in the options!'));
 		}

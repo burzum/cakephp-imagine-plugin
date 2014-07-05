@@ -13,8 +13,9 @@ App::uses('Model', 'Model');
 App::uses('Security', 'Utility');
 
 class ImagineTestModel extends Model {
-	public $name = 'ImagineTestModel';
+
 	public $useTable = false;
+
 }
 
 class ImagineBehaviorTest extends CakeTestCase {
@@ -160,7 +161,6 @@ class ImagineBehaviorTest extends CakeTestCase {
 			array(500, 664, 'x' => 500, 'y' => 664));
 	}
 
-
 /**
  * testWidenAndHeighten
  *
@@ -190,7 +190,6 @@ class ImagineBehaviorTest extends CakeTestCase {
 		$result = $this->Model->getImageSize(TMP . 'thumbnail3.jpg');
 		$this->assertEqual($result,
 			array(151, 200, 'x' => 151, 'y' => 200));
-
 	}
 
 /**

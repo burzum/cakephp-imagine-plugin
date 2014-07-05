@@ -9,7 +9,7 @@
  * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
 
-App::import('Lib', 'ImagineUtility');
+App::uses('ImagineUtility', 'Imagine.Lib');
 
 class ImagineUtilityTest extends CakeTestCase {
 
@@ -30,8 +30,8 @@ class ImagineUtilityTest extends CakeTestCase {
 			'thumbnail' => array(
 				'width' => 200,
 				'height' => 150));
-		$result = \Imagine\ImagineUtility::operationsToString($operations);
-		$this->assertEqual($result, '.thumbnail+width-200+height-150');
+		$result = ImagineUtility::operationsToString($operations);
+		$this->assertEquals('.thumbnail+width-200+height-150', $result);
 	}
 
 /**
@@ -46,10 +46,11 @@ class ImagineUtilityTest extends CakeTestCase {
 					'thumbnail' => array(
 						'width' => 200,
 						'height' => 150))));
-		$result = \Imagine\ImagineUtility::hashImageOperations($operations);
-		$this->assertEqual($result, array(
+		$result = ImagineUtility::hashImageOperations($operations);
+		$expected = array(
 			'SomeModel' => array(
-			't200x150' => '38b1868f')));
+				't200x150' => '38b1868f'));
+		$this->assertEquals($expected, $result);
 	}
 
 }

@@ -9,8 +9,6 @@
  * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
 
-namespace Imagine;
-
 class ImagineUtility {
 
 /**
@@ -51,7 +49,7 @@ class ImagineUtility {
 			$result = $separators['operations'] . $operation . $separators['params'] . join($separators['params'], $tmp);
 		}
 
-		if ($hash && $result != '') {
+		if ($hash && $result !== '') {
 			if (function_exists($hash)) {
 				return $hash($result);
 			}
@@ -65,7 +63,7 @@ class ImagineUtility {
  * This method expects an array of Model.configName => operationsArray
  *
  * @param array $imageSizes
- * @param integer $hashLenght
+ * @param int $hashLenght
  * @return array Model.configName => hashValue
  */
 	public static function hashImageOperations($imageSizes, $hashLenght = 8) {
@@ -92,14 +90,13 @@ class ImagineUtility {
 
 		$filePath = $imagineBase . $name . '.php';
 		if (file_exists($filePath)) {
-			require_once ($filePath);
+			require_once $filePath;
 			return;
 		}
 
 		$imagineBase = $imagineBase . 'Image' . DS;
 		if (file_exists($imagineBase . $name . '.php')) {
-			require_once ($imagineBase . $name . '.php');
-			return;
+			require_once $imagineBase . $name . '.php';
 		}
 	}
 

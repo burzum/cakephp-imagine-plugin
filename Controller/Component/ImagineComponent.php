@@ -15,7 +15,6 @@ App::uses('Security', 'Utility');
 /**
  * CakePHP Imagine Plugin
  *
- * @package Imagine.Controller.Component
  */
 class ImagineComponent extends Component {
 
@@ -51,7 +50,6 @@ class ImagineComponent extends Component {
  *
  * @param ComponentCollection $collection
  * @param array $settings
- * @return void
  */
 	public function __construct(ComponentCollection $collection, $settings = array()) {
 		$this->settings = Set::merge($this->settings, $settings);
@@ -88,7 +86,7 @@ class ImagineComponent extends Component {
 	public function getHash() {
 		$mediaSalt = Configure::read('Imagine.salt');
 		if (empty($mediaSalt)) {
-			throw new InvalidArgumentException(__d('imagine', 'Please configure Imagine.salt using Configure::write(\'Imagine.salt\', \'YOUR-SALT-VALUE\')', true));
+			throw new InvalidArgumentException('Please configure Imagine.salt using Configure::write(\'Imagine.salt\', \'YOUR-SALT-VALUE\')');
 		}
 
 		if (!empty($this->Controller->request->params['named'])) {
@@ -107,15 +105,15 @@ class ImagineComponent extends Component {
  * This is done to avoid that people can randomly generate tons of images by
  * just incrementing the width and height for example in the url.
  *
- * @param boolean $error If set to false no 404 page will be rendered if the hash is wrong
- * @return boolean True if the hashes match
+ * @param bool $error If set to false no 404 page will be rendered if the hash is wrong
+ * @return bool True if the hashes match
  */
 	public function checkHash($error = true) {
 		if (!isset($this->Controller->request->params['named'][$this->settings['hashField']]) && $error) {
 			throw new NotFoundException();
 		}
 
-		$result = $this->Controller->request->params['named'][$this->settings['hashField']] == $this->getHash();
+		$result = $this->Controller->request->params['named'][$this->settings['hashField']] === $this->getHash();
 
 		if (!$result && $error) {
 			throw new NotFoundException();

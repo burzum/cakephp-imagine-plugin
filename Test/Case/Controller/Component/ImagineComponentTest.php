@@ -39,7 +39,7 @@ if (!class_exists('ImagineImagesTestController')) {
 		public $redirectUrl = null;
 
 	/**
-	 * 
+	 *
 	 */
 		public function beforeFilter() {
 			parent::beforeFilter();
@@ -47,7 +47,7 @@ if (!class_exists('ImagineImagesTestController')) {
 		}
 
 	/**
-	 * 
+	 *
 	 */
 		public function redirect($url, $status = null, $exit = true) {
 			$this->redirectUrl = $url;
@@ -146,13 +146,14 @@ class ImagineComponentTest extends CakeTestCase {
  * @return void
  */
 	public function testUnpackParams() {
-		$this->assertEqual($this->Controller->Imagine->operations, array());
+		$this->assertEquals(array(), $this->Controller->Imagine->operations);
 		$this->Controller->request->params['named']['thumbnail'] = 'width|200;height|150';
 		$this->Controller->Imagine->unpackParams();
-		$this->assertEqual($this->Controller->Imagine->operations, array(
+		$expected = array(
 			'thumbnail' => array(
 				'width' => 200,
-				'height' => 150)));
+				'height' => 150));
+		$this->assertEquals($expected, $this->Controller->Imagine->operations);
 	}
 
 }

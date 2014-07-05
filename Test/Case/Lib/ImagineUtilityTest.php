@@ -31,7 +31,7 @@ class ImagineUtilityTest extends CakeTestCase {
 				'width' => 200,
 				'height' => 150));
 		$result = ImagineUtility::operationsToString($operations);
-		$this->assertEqual($result, '.thumbnail+width-200+height-150');
+		$this->assertEquals('.thumbnail+width-200+height-150', $result);
 	}
 
 /**
@@ -47,9 +47,10 @@ class ImagineUtilityTest extends CakeTestCase {
 						'width' => 200,
 						'height' => 150))));
 		$result = ImagineUtility::hashImageOperations($operations);
-		$this->assertEqual($result, array(
+		$expected = array(
 			'SomeModel' => array(
-			't200x150' => '38b1868f')));
+				't200x150' => '38b1868f'));
+		$this->assertEquals($expected, $result);
 	}
 
 }

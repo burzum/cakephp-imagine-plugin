@@ -87,7 +87,7 @@ class ImagineComponent extends Component {
 	public function getHash() {
 		$mediaSalt = Configure::read('Imagine.salt');
 		if (empty($mediaSalt)) {
-			throw new InvalidArgumentException(__d('imagine', 'Please configure Imagine.salt using Configure::write(\'Imagine.salt\', \'YOUR-SALT-VALUE\')', true));
+			throw new InvalidArgumentException('Please configure Imagine.salt using Configure::write(\'Imagine.salt\', \'YOUR-SALT-VALUE\')');
 		}
 
 		if (!empty($this->Controller->request->params['named'])) {
@@ -114,7 +114,7 @@ class ImagineComponent extends Component {
 			throw new NotFoundException();
 		}
 
-		$result = $this->Controller->request->params['named'][$this->settings['hashField']] == $this->getHash();
+		$result = $this->Controller->request->params['named'][$this->settings['hashField']] === $this->getHash();
 
 		if (!$result && $error) {
 			throw new NotFoundException();

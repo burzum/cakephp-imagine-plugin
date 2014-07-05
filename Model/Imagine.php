@@ -11,13 +11,6 @@
 class Imagine extends AppModel {
 
 /**
- * Name
- *
- * @var string
- */
-	public $name = 'Imagine';
-
-/**
  * Table
  *
  * @var bool|string

@@ -50,7 +50,6 @@ class ImagineComponent extends Component {
  *
  * @param ComponentCollection $collection
  * @param array $settings
- * @return void
  */
 	public function __construct(ComponentCollection $collection, $settings = array()) {
 		$this->settings = Set::merge($this->settings, $settings);

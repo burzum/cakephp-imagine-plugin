@@ -24,7 +24,7 @@ class Imagine {
 		'engine' => 'Gd',
 		'jpeg_quality' => null,
 		'png_compression_level' => null,
-		'resolution-units' =>  ImageInterface::RESOLUTION_PIXELSPERINCH,
+		'resolution-units' => ImageInterface::RESOLUTION_PIXELSPERINCH,
 		'resampling-filter' => ImageInterface::FILTER_LANCZOS,
 	);
 

@@ -11,6 +11,7 @@
 
 class ImageFixture extends CakeTestFixture {
 
+
 /**
  * fields property
  *

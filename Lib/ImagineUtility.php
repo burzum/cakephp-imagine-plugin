@@ -90,13 +90,13 @@ class ImagineUtility {
 
 		$filePath = $imagineBase . $name . '.php';
 		if (file_exists($filePath)) {
-			require_once ($filePath);
+			require_once $filePath;
 			return;
 		}
 
 		$imagineBase = $imagineBase . 'Image' . DS;
 		if (file_exists($imagineBase . $name . '.php')) {
-			require_once ($imagineBase . $name . '.php');
+			require_once $imagineBase . $name . '.php';
 		}
 	}
 

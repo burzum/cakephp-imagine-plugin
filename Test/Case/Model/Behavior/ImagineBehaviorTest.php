@@ -190,7 +190,6 @@ class ImagineBehaviorTest extends CakeTestCase {
 		$result = $this->Model->getImageSize(TMP . 'thumbnail3.jpg');
 		$this->assertEqual($result,
 			array(151, 200, 'x' => 151, 'y' => 200));
-
 	}
 
 /**

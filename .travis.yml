@@ -39,6 +39,11 @@ before_script:
   - echo "CakePlugin::loadAll();
     CakePlugin::load('Imagine', array('bootstrap' => true));
     " >> ../cakephp/app/Config/bootstrap.php
+  - if [ "$PHPCS" != 1 ]; then
+            echo "
+                require_once APP . DS . 'vendor' . DS . 'phpunit' . DS . 'phpunit' . DS . 'PHPUnit' . DS . 'Autoload.php';
+            " >> ../cakephp/app/Config/bootstrap.php;
+    fi
 
 script:
   - ./lib/Cake/Console/cake test Imagine AllImaginePlugin --stderr

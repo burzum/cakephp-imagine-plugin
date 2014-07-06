@@ -57,7 +57,7 @@ class ImagineHelperTest extends CakeTestCase {
 					'width' => 200,
 					'height' => 150)));
 		$expected = '/images/display/1/thumbnail:width%7C200%3Bheight%7C150/hash:69aa9f46cdc5a200dc7539fc10eec00f2ba89023';
-		$this->assertEqual($result, $expected);
+		$this->assertEquals($result, $expected);
 	}
   
 /**
@@ -97,7 +97,7 @@ class ImagineHelperTest extends CakeTestCase {
 				'width' => 200,
 				'height' => 150)));
 		$result = $this->Imagine->hash($options);
-		$this->assertEqual($result, '69aa9f46cdc5a200dc7539fc10eec00f2ba89023');
+		$this->assertEquals($result, '69aa9f46cdc5a200dc7539fc10eec00f2ba89023');
 	}
 
 /**
@@ -121,7 +121,7 @@ class ImagineHelperTest extends CakeTestCase {
 				'width' => 200,
 				'height' => 150)));
 
-		$this->assertEqual($result, array('thumbnail' => 'width|200;height|150'));
+		$this->assertEquals($result, array('thumbnail' => 'width|200;height|150'));
 	}
 
 }

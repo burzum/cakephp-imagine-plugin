@@ -74,7 +74,7 @@ class ImagineBehaviorTest extends CakeTestCase {
 				'width' => 200,
 				'height' => 150));
 		$result = $this->Model->operationsToString($operations);
-		$this->assertEqual($result, '.thumbnail+width-200+height-150');
+		$this->assertEquals($result, '.thumbnail+width-200+height-150');
 	}
 
 /**
@@ -85,7 +85,7 @@ class ImagineBehaviorTest extends CakeTestCase {
 	public function getImageSize() {
 		$image = CakePlugin::path('Imagine') . 'Test' . DS . 'Fixture' . DS . 'cake.icon.png';
 		$result = $this->Model->getImageSize($image);
-		$this->assertEqual($result, array(20, 20));
+		$this->assertEquals($result, array(20, 20));
 	}
 
 /**
@@ -127,7 +127,7 @@ class ImagineBehaviorTest extends CakeTestCase {
 				'width' => 300)));
 
 		$result = $this->Model->getImageSize(TMP . 'thumbnail.jpg');
-		$this->assertEqual($result,
+		$this->assertEquals($result,
 			array(300, 300, 'x' => 300, 'y' => 300));
 
 		$this->Model->processImage($image, TMP . 'thumbnail2.jpg', array(), array(
@@ -137,7 +137,7 @@ class ImagineBehaviorTest extends CakeTestCase {
 				'width' => 300)));
 
 		$result = $this->Model->getImageSize(TMP . 'thumbnail2.jpg');
-		$this->assertEqual($result,
+		$this->assertEquals($result,
 			array(226, 300, 'x' => 226, 'y' => 300));
 	}
 
@@ -156,7 +156,7 @@ class ImagineBehaviorTest extends CakeTestCase {
 	public function testgetImageSize() {
 		$image = CakePlugin::path('Imagine') . 'Test' . DS . 'Fixture' . DS . 'titus.jpg';
 		$result = $this->Model->getImageSize($image);
-		$this->assertEqual($result,
+		$this->assertEquals($result,
 			array(500, 664, 'x' => 500, 'y' => 664));
 	}
 
@@ -170,7 +170,7 @@ class ImagineBehaviorTest extends CakeTestCase {
 		$image = CakePlugin::path('Imagine') . 'Test' . DS . 'Fixture' . DS . 'titus.jpg';
 
 		$result = $this->Model->getImageSize($image);
-		$this->assertEqual($result,
+		$this->assertEquals($result,
 			array(500, 664, 'x' => 500, 'y' => 664));
 
 		// Width
@@ -179,7 +179,7 @@ class ImagineBehaviorTest extends CakeTestCase {
 				'size' => 200)));
 
 		$result = $this->Model->getImageSize(TMP . 'thumbnail2.jpg');
-		$this->assertEqual($result,
+		$this->assertEquals($result,
 			array(200, 266, 'x' => 200, 'y' => 266));
 
 		// Height
@@ -188,7 +188,7 @@ class ImagineBehaviorTest extends CakeTestCase {
 				'size' => 200)));
 
 		$result = $this->Model->getImageSize(TMP . 'thumbnail3.jpg');
-		$this->assertEqual($result,
+		$this->assertEquals($result,
 			array(151, 200, 'x' => 151, 'y' => 200));
 
 	}
@@ -207,7 +207,7 @@ class ImagineBehaviorTest extends CakeTestCase {
 				'factor' => 2)));
 
 		$result = $this->Model->getImageSize(TMP . 'thumbnail4.jpg');
-		$this->assertEqual($result,
+		$this->assertEquals($result,
 			array(1000, 1328, 'x' => 1000, 'y' => 1328));
 
 		// Scale2
@@ -216,7 +216,7 @@ class ImagineBehaviorTest extends CakeTestCase {
 				'factor' => 1.25)));
 
 		$result = $this->Model->getImageSize(TMP . 'thumbnail5.jpg');
-		$this->assertEqual($result,
+		$this->assertEquals($result,
 			array(625, 830, 'x' => 625, 'y' => 830));
 	}
 

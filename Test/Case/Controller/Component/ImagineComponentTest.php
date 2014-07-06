@@ -49,9 +49,10 @@ if (!class_exists('ImagineImagesTestController')) {
 	/**
 	 * 
 	 */
-		public function redirect($url, $status = NULL, $exit = true) {
+		public function redirect($url, $status = null, $exit = true) {
 			$this->redirectUrl = $url;
 		}
+
 	}
 }
 
@@ -69,7 +70,8 @@ class ImagineComponentTest extends CakeTestCase {
  * @var array
  */
 	public $fixtures = array(
-		'plugin.Imagine.Image');
+		'plugin.Imagine.Image'
+	);
 
 /**
  * setUp method
@@ -104,7 +106,7 @@ class ImagineComponentTest extends CakeTestCase {
  * @return void
  */
 	public function testGetHash() {
-		$this->Controller->request->params['named'] = array( 
+		$this->Controller->request->params['named'] = array(
 			'thumbnail' => 'width|200;height|150');
 		$hash = $this->Controller->Imagine->getHash();
 		$this->assertTrue(is_string($hash));
@@ -116,27 +118,33 @@ class ImagineComponentTest extends CakeTestCase {
  * @return void
  */
 	public function testCheckHash() {
-		$this->Controller->request->params['named'] = array( 
+		$this->Controller->request->params['named'] = array(
 			'thumbnail' => 'width|200;height|150',
-			'hash' => '69aa9f46cdc5a200dc7539fc10eec00f2ba89023');
+			'hash' => '69aa9f46cdc5a200dc7539fc10eec00f2ba89023'
+		);
 		$this->Controller->Imagine->checkHash();
 	}
 
 /**
+ * testInvalidHash
+ *
  * @expectedException NotFoundException
  */
 	public function testInvalidHash() {
-		$this->Controller->request->params['named'] = array( 
+		$this->Controller->request->params['named'] = array(
 			'thumbnail' => 'width|200;height|150',
-			'hash' => 'wrong-hash-value');
+			'hash' => 'wrong-hash-value'
+		);
 		$this->Controller->Imagine->checkHash();
 	}
 
 /**
+ * testMissingHash
+ *
  * @expectedException NotFoundException
  */
 	public function testMissingHash() {
-		$this->Controller->request->params['named'] = array( 
+		$this->Controller->request->params['named'] = array(
 			'thumbnail' => 'width|200;height|150');
 		$this->Controller->Imagine->checkHash();
 	}
@@ -147,13 +155,15 @@ class ImagineComponentTest extends CakeTestCase {
  * @return void
  */
 	public function testUnpackParams() {
-		$this->assertEqual($this->Controller->Imagine->operations, array());
+		$this->assertEquals($this->Controller->Imagine->operations, array());
 		$this->Controller->request->params['named']['thumbnail'] = 'width|200;height|150';
 		$this->Controller->Imagine->unpackParams();
-		$this->assertEqual($this->Controller->Imagine->operations, array(
+		$this->assertEquals($this->Controller->Imagine->operations, array(
 			'thumbnail' => array(
 				'width' => 200,
-				'height' => 150)));
+				'height' => 150
+			)
+		));
 	}
 
 }

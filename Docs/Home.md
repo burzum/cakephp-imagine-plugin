@@ -12,6 +12,7 @@ Documentation
 
 **Plugin modules explained**
 
+* [Imagine Lib](Documentation/The-Imagine-Lib.md)
 * [Imagine Component](Documentation/The-Imagine-Component.md)
 * [Imagine Behavior](Documentation/The-Imagine-Behavior.md)
 * [Imagine Helper](Documentation/The-Imagine-Helper.md)

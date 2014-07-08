@@ -6,7 +6,7 @@ use Imagine\Image\ImageInterface;
  * Convenience wrappers for common image operations.
  *
  */
-class Imagine {
+class ImagineLib {
 
 /**
  * Settings array

@@ -10,7 +10,7 @@
  */
 
 App::uses('ImagineUtility', 'Imagine.Lib');
-App::uses('Imagine', 'Imagine.Lib');
+App::uses('ImagineLib', 'Imagine.Lib');
 
 /**
  * CakePHP Imagine Plugin
@@ -50,7 +50,7 @@ class ImagineBehavior extends ModelBehavior {
 	public function setup(Model $Model, $settings = array()) {
 		$this->settings = $settings + $this->_defaults;
 
-		$this->Imagine = new Imagine($this->settings);
+		$this->Imagine = new ImagineLib($this->settings);
 		$this->ImagineObject = $this->Imagine->create();
 	}
 

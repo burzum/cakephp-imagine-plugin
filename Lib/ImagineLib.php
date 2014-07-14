@@ -22,10 +22,6 @@ class ImagineLib {
  */
 	protected $_defaults = array(
 		'engine' => 'Gd',
-		'jpeg_quality' => null,
-		'png_compression_level' => null,
-		'resolution-units' => ImageInterface::RESOLUTION_PIXELSPERINCH,
-		'resampling-filter' => ImageInterface::FILTER_LANCZOS,
 	);
 
 	public function __construct(array $settings = array()) {

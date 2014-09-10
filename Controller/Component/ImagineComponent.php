@@ -67,7 +67,7 @@ class ImagineComponent extends Component {
 	public function startUp(Controller $Controller) {
 		$this->Controller = $Controller;
 		if (!empty($this->settings['actions'])) {
-			if (in_array($this->Controlle->action, $this->settings['actions'])) {
+			if (in_array($this->Controller->action, $this->settings['actions'])) {
 				if ($this->settings['checkHash'] === true) {
 					$this->checkHash();
 				}

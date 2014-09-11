@@ -1,4 +1,5 @@
-# Imagine Component #
+Imagine Component
+=================
 
 The Imagine component does the following:
 

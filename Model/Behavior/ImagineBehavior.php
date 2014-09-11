@@ -126,7 +126,7 @@ class ImagineBehavior extends Behavior {
  * hashImageOperations
  *
  * @param array $imageSizes
- * @param integer $hashLenght
+ * @param int $hashLenght
  * @return string
  */
 	public function hashImageOperations($imageSizes, $hashLenght = 8) {
@@ -336,8 +336,10 @@ class ImagineBehavior extends Behavior {
  * Wrapper for Imagines thumbnail
  *
  * @throws \InvalidArgumentException
- * @param object Imagine Image Object
+ * @param Imagine Image Object
  * @param array Array of options for processing the image
+ * @throws InvalidArgumentException if no height or width was passed
+ * @return void
  */
 	public function thumbnail(&$Image, $options = array()) {
 		if (empty($options['height']) || empty($options['width'])) {

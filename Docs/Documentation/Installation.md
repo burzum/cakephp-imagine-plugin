@@ -1,10 +1,14 @@
-# Installation #
+Installation
+============
 
-## Using Git ##
+Using Git
+---------
 
 You need to init the git submodule of imagine
 
-	git submodule update --init
+```
+git submodule update --init
+```
 
 If you're **not** using the submodule get it from https://github.com/avalanche123/Imagine
 
@@ -16,7 +20,8 @@ Load the imagine plugin in your apps ```app/Config/bootstrap.php``` file includi
 
 The bootstrap.php of the plugin will just register a SPL autoloader for the Imagine namespace. If you didn't put Imagine in the plugins vendor folder you'll have set your own autoloader up to load it.
 
-## Using Composer ##
+Using Composer
+--------------
 
 Assuming you're mostly familiar with the basics of composer just take a look at the ```extra```section. You'll have to define the installer path for the imagine plugin so that composer can put it in the right place with the right name.
 
@@ -38,7 +43,19 @@ Assuming you're mostly familiar with the basics of composer just take a look at 
 }
 ```
 
-### Configure Salt for Imagine ###
+Bootstrap
+---------
+
+If you're not using composer make sure you load the plugin with bootstrap enabled in your apps `bootstrap.php`. Or copy the content from it to your apps bootstrap.php. If you don't do that the vendor libs won't be loaded.
+
+```php
+CakePlugin::load('Imagine', array(
+	'bootstrap' => true
+));
+```
+
+Configure Salt for Imagine
+--------------------------
 
 You need to configure a salt for Imagine security functions.
 

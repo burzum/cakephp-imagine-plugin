@@ -32,7 +32,7 @@ class ImagineUtilityTest extends TestCase {
 			'thumbnail' => array(
 				'width' => 200,
 				'height' => 150));
-		$result = ImagineUtility::operationsToString($operations);
+		$result = \Imagine\ImagineUtility::operationsToString($operations);
 		$this->assertEquals($result, '.thumbnail+width-200+height-150');
 	}
 
@@ -48,7 +48,7 @@ class ImagineUtilityTest extends TestCase {
 					'thumbnail' => array(
 						'width' => 200,
 						'height' => 150))));
-		$result = ImagineUtility::hashImageOperations($operations);
+		$result = \Imagine\ImagineUtility::hashImageOperations($operations);
 		$this->assertEquals($result, array(
 			'SomeModel' => array(
 			't200x150' => '38b1868f')));

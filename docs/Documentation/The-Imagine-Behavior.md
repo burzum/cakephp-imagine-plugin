@@ -11,7 +11,32 @@ class SomeModel extends AppModel {
 }
 ```
 
-## Imagine instance ##
+Image Operations
+----------------
+
+Image manipulation methods:
+
+* **crop**:
+* **squareCenterCrop**:
+* **widen**:
+* **heighten**:
+* **widenAndHeighten**:
+* **scale**:
+* **flip**:
+* **rotate**:
+* **thumbnail**:
+* **resize**:
+
+Utility methods:
+
+* **processImage**:
+* **getImageSize**:
+* **operationsToString:**
+* **hashImageOperations:**
+* **imagineObject:**
+
+Imagine instance
+----------------
 
 The plain  Imagine instance is available through the model. Get it by calling
 

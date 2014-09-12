@@ -12,14 +12,13 @@ namespace Imagine\View\Helper;
 
 use Cake\Core\Configure;
 use Cake\Utility\Security;
-use App\View\Helper\AppHelper;
 
 /**
  * CakePHP Imagine Plugin
  *
  * @package Imagine.View.Helper
  */
-class ImagineHelper extends AppHelper {
+class ImagineHelper extends Helper {
 
 /**
  * Helpers
@@ -27,9 +26,9 @@ class ImagineHelper extends AppHelper {
  * @var array $helpers
  * @access public
  */
-	public $helpers = array(
+	public $helpers = [
 		'Html'
-	);
+	];
 
 /**
  * Finds URL for specified action and sign it.
@@ -45,7 +44,7 @@ class ImagineHelper extends AppHelper {
  * @return string Full translated signed URL with base path and with
  * @access public
  */
-	public function url($url = null, $full = false, $options = array()) {
+	public function url($url = null, $full = false, $options = []) {
 		if (is_string($url)) {
 			$url = array_merge(array('plugin' => 'media', 'admin' => false, 'controller' => 'media', 'action' => 'image'), array($url));
 		}

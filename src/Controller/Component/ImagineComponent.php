@@ -8,10 +8,9 @@
  * Copyright 2011-2014, Florian Krämer
  * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
-namespace Imagine\Controller\Component;
+namespace Burzum\Imagine\Controller\Component;
 
 use Cake\Controller\Component;
-use Cake\Utility\Hash;
 use Cake\Utility\Security;
 use Cake\Controller\ComponentRegistry;
 use Cake\Event\Event;
@@ -26,15 +25,17 @@ use Cake\Error\NotFoundException;
 class ImagineComponent extends Component {
 
 /**
- * Settings
+ * Default config
+ *
+ * These are merged with user-provided config when the component is used.
  *
  * @var array
  */
-	public $settings = array(
+	protected $_defaultConfig = [
 		'hashField' => 'hash',
 		'checkHash' => true,
-		'actions' => array()
-	);
+		'actions' => [],
+	];
 
 /**
  * Controller instance
@@ -50,19 +51,16 @@ class ImagineComponent extends Component {
  *
  * @var array
  */
-	public $operations = array();
+	public $operations = [];
 
 /**
  * Constructor
  *
- * @param ComponentRegistry $collection
- * @param array $settings
- * @return \Cake\Controller\Component\ImagineComponent
+ * @param \Cake\Controller\ComponentRegistry $collection
+ * @param array $config Config options array
  */
-	public function __construct(ComponentRegistry $collection, $settings = array()) {
-		$this->settings = Hash::merge($this->settings, $settings);
-		parent::__construct($collection, $this->settings);
-
+	public function __construct(ComponentRegistry $collection, $config = array()) {
+		parent::__construct($collection, $config);
 		$Controller = $collection->getController();
 		$this->request = $Controller->request;
 		$this->response = $Controller->response;
@@ -77,9 +75,9 @@ class ImagineComponent extends Component {
 	public function startup(Event $Event) {
 		$Controller = $Event->subject();
 		$this->Controller = $Controller;
-		if (!empty($this->settings['actions'])) {
-			if (in_array($this->Controlle->action, $this->settings['actions'])) {
-				if ($this->settings['checkHash'] === true) {
+		if (!empty($this->_config['actions'])) {
+			if (in_array($this->Controlle->action, $this->_config['actions'])) {
+				if ($this->_config['checkHash'] === true) {
 					$this->checkHash();
 				}
 				$this->unpackParams();
@@ -103,9 +101,9 @@ class ImagineComponent extends Component {
 			throw new InvalidArgumentException(__d('imagine', 'Please configure Imagine.salt using Configure::write(\'Imagine.salt\', \'YOUR-SALT-VALUE\')', true));
 		}
 
-		if (!empty($this->Controller->request->params['named'])) {
-			$params = $this->Controller->request->params['named'];
-			unset($params[$this->settings['hashField']]);
+		if (!empty($this->request->query)) {
+			$params = $this->request->query;
+			unset($params[$this->_config['hashField']]);
 			ksort($params);
 			return Security::hash(serialize($params) . $mediaSalt);
 		}
@@ -124,11 +122,11 @@ class ImagineComponent extends Component {
  * @return boolean True if the hashes match
  */
 	public function checkHash($error = true) {
-		if (!isset($this->Controller->request->params['named'][$this->settings['hashField']]) && $error) {
+		if (!isset($this->request->query[$this->_config['hashField']]) && $error) {
 			throw new NotFoundException();
 		}
 
-		$result = $this->Controller->request->params['named'][$this->settings['hashField']] == $this->getHash();
+		$result = $this->request->query[$this->_config['hashField']] == $this->getHash();
 
 		if (!$result && $error) {
 			throw new NotFoundException();
@@ -144,14 +142,14 @@ class ImagineComponent extends Component {
  * @internal param array $params If empty the method tries to get them from Controller->request['named']
  * @return array Array with operation options for imagine, if none found an empty array
  */
-	public function unpackParams($namedParams = array()) {
+	public function unpackParams($namedParams = []) {
 		if (empty($namedParams)) {
-			$namedParams = $this->Controller->request['named'];
+			$namedParams = $this->request->query;
 		}
 
 		foreach ($namedParams as $name => $params) {
 			$tmpParams = explode(';', $params);
-			$resultParams = array();
+			$resultParams = [];
 			foreach ($tmpParams as &$param) {
 				list($key, $value) = explode('|', $param);
 				$resultParams[$key] = $value;
@@ -163,5 +161,4 @@ class ImagineComponent extends Component {
 		$this->operations = $namedParams;
 		return $namedParams;
 	}
-
 }

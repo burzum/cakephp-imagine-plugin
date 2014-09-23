@@ -105,6 +105,6 @@ Log::config([
 	]
 ]);
 
-Plugin::load('Imagine', ['path' => ROOT]);
+Plugin::load('Burzum\Imagine', ['path' => ROOT]);
 
 DispatcherFactory::add('ControllerFactory');

@@ -8,7 +8,7 @@
  * Copyright 2011-2014, Florian Krämer
  * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
-namespace Imagine\Test\TestCase\Model\Behavior;
+namespace Burzum\Imagine\Test\TestCase\Model\Behavior;
 
 use Cake\TestSuite\TestCase;
 use Cake\Orm\Table;
@@ -34,7 +34,9 @@ class ImagineBehaviorTest extends TestCase {
  *
  * @var array
  */
-	public $fixtures = array();
+	public $fixtures = array(
+		'plugin.Burzum\Imagine.Image'
+	);
 
 /**
  * setUp
@@ -43,7 +45,7 @@ class ImagineBehaviorTest extends TestCase {
  */
 	public function setUp() {
 		$this->Model = TableRegistry::get('ImagineTestModel');
-		$this->Model->addBehavior('Imagine.Imagine');
+		$this->Model->addBehavior('Burzum/Imagine.Imagine');
 	}
 
 /**
@@ -86,7 +88,7 @@ class ImagineBehaviorTest extends TestCase {
  * @return void
  */
 	public function getImageSize() {
-		$image = Plugin::path('Imagine') . 'Test' . DS . 'Fixture' . DS . 'cake.icon.png';
+		$image = Plugin::path('Burzum\Imagine') . 'tests' . DS . 'Fixture' . DS . 'cake.icon.png';
 		$result = $this->Model->getImageSize($image);
 		$this->assertEquals($result, array(20, 20));
 	}
@@ -98,7 +100,7 @@ class ImagineBehaviorTest extends TestCase {
  * @return void
  */
 	public function testCropInvalidArgumentException() {
-		$image = Plugin::path('Imagine') . 'Test' . DS . 'Fixture' . DS . 'titus.jpg';
+		$image = Plugin::path('Burzum\Imagine') . 'tests' . DS . 'Fixture' . DS . 'titus.jpg';
 		$this->Model->processImage($image, TMP . 'crop.jpg', array(), array(
 			'crop' => array()));
 	}
@@ -109,7 +111,7 @@ class ImagineBehaviorTest extends TestCase {
  * @return void
  */
 	public function testCrop() {
-		$image = Plugin::path('Imagine') . 'Test' . DS . 'Fixture' . DS . 'titus.jpg';
+		$image = Plugin::path('Burzum\Imagine') . 'tests' . DS . 'Fixture' . DS . 'titus.jpg';
 		$this->Model->processImage($image, TMP . 'crop.jpg', array(), array(
 			'crop' => array(
 				'height' => 300,
@@ -122,7 +124,7 @@ class ImagineBehaviorTest extends TestCase {
  * @return void
  */
 	public function testThumbnail() {
-		$image = Plugin::path('Imagine') . 'Test' . DS . 'Fixture' . DS . 'titus.jpg';
+		$image = Plugin::path('Burzum\Imagine') . 'tests' . DS . 'Fixture' . DS . 'titus.jpg';
 		$this->Model->processImage($image, TMP . 'thumbnail.jpg', array(), array(
 			'thumbnail' => array(
 				'mode' => 'outbound',
@@ -145,7 +147,7 @@ class ImagineBehaviorTest extends TestCase {
 	}
 
 	public function testSquareCenterCrop() {
-		$image = Plugin::path('Imagine') . 'Test' . DS . 'Fixture' . DS . 'titus.jpg';
+		$image = Plugin::path('Burzum\Imagine') . 'tests' . DS . 'Fixture' . DS . 'titus.jpg';
 		$this->Model->processImage($image, TMP . 'testSquareCenterCrop.jpg', array(), array(
 			'squareCenterCrop' => array(
 				'size' => 255)));
@@ -157,7 +159,7 @@ class ImagineBehaviorTest extends TestCase {
  * @return void
  */
 	public function testgetImageSize() {
-		$image = Plugin::path('Imagine') . 'Test' . DS . 'Fixture' . DS . 'titus.jpg';
+		$image = Plugin::path('Burzum\Imagine') . 'tests' . DS . 'Fixture' . DS . 'titus.jpg';
 		$result = $this->Model->getImageSize($image);
 		$this->assertEquals($result,
 			array(500, 664, 'x' => 500, 'y' => 664));
@@ -170,7 +172,7 @@ class ImagineBehaviorTest extends TestCase {
  * @return void
  */
 	public function testWidenAndHeighten() {
-		$image = Plugin::path('Imagine') . 'Test' . DS . 'Fixture' . DS . 'titus.jpg';
+		$image = Plugin::path('Burzum\Imagine') . 'tests' . DS . 'Fixture' . DS . 'titus.jpg';
 
 		$result = $this->Model->getImageSize($image);
 		$this->assertEquals($result,
@@ -201,7 +203,7 @@ class ImagineBehaviorTest extends TestCase {
  * @return void
  */
 	public function testScale() {
-		$image = Plugin::path('Imagine') . 'Test' . DS . 'Fixture' . DS . 'titus.jpg';
+		$image = Plugin::path('Burzum\Imagine') . 'tests' . DS . 'Fixture' . DS . 'titus.jpg';
 
 		// Scale
 		$this->Model->processImage($image, TMP . 'thumbnail4.jpg', array(), array(

@@ -8,11 +8,11 @@
  * Copyright 2011-2014, Florian Krämer
  * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
-namespace Imagine\Model;
+namespace Burzum\Imagine\Model;
 
-use Cake\Core\Model;
+use Cake\ORM\Table;
 
-class Imagine extends AppModel {
+class Imagine extends Table {
 
 /**
  * Name
@@ -37,4 +37,13 @@ class Imagine extends AppModel {
 		'Imagine.Imagine'
 	);
 
+	public function schema($schema = []) {
+		return [
+			'id' => ['type' => 'integer'],
+			'title' => ['type' => 'string', 'null' => false],
+			'_constraints' => [
+				'primary' => ['type' => 'primary', 'columns' => ['id']]
+			]
+		];
+	}
 }

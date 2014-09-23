@@ -8,10 +8,11 @@
  * Copyright 2011-2014, Florian Krämer
  * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
-namespace Imagine\Model\Behavior;
+namespace Burzum\Imagine\Model\Behavior;
 
 use Cake\ORM\Behavior;
 use Cake\ORM\Table;
+use Burzum\Imagine\Lib\ImagineUtility;
 
 /**
  * CakePHP Imagine Plugin
@@ -119,7 +120,7 @@ class ImagineBehavior extends Behavior {
  * @link http://support.microsoft.com/kb/177506
  */
 	public function operationsToString($operations, $separators = array(), $hash = false) {
-		return \Imagine\Lib\ImagineUtility::operationsToString($operations, $separators, $hash);
+		return ImagineUtility::operationsToString($operations, $separators, $hash);
 	}
 
 /**
@@ -130,7 +131,7 @@ class ImagineBehavior extends Behavior {
  * @return string
  */
 	public function hashImageOperations($imageSizes, $hashLenght = 8) {
-		return \Imagine\Lib\ImagineUtility::hashImageOperations($imageSizes, $hashLenght = 8);
+		return ImagineUtility::hashImageOperations($imageSizes, $hashLenght = 8);
 	}
 
 /**

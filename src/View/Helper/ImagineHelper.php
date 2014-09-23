@@ -8,10 +8,12 @@
  * Copyright 2011-2014, Florian Krämer
  * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
-namespace Imagine\View\Helper;
+namespace Burzum\Imagine\View\Helper;
 
 use Cake\Core\Configure;
+use Cake\View\Helper;
 use Cake\Utility\Security;
+use Cake\Routing\Router;
 
 /**
  * CakePHP Imagine Plugin
@@ -19,16 +21,6 @@ use Cake\Utility\Security;
  * @package Imagine.View.Helper
  */
 class ImagineHelper extends Helper {
-
-/**
- * Helpers
- *
- * @var array $helpers
- * @access public
- */
-	public $helpers = [
-		'Html'
-	];
 
 /**
  * Finds URL for specified action and sign it.
@@ -46,7 +38,7 @@ class ImagineHelper extends Helper {
  */
 	public function url($url = null, $full = false, $options = []) {
 		if (is_string($url)) {
-			$url = array_merge(array('plugin' => 'media', 'admin' => false, 'controller' => 'media', 'action' => 'image'), array($url));
+			$url = array_merge(['plugin' => 'media', 'admin' => false, 'controller' => 'media', 'action' => 'image'], [$url]);
 		}
 
 		// backward compatibility check, switches params 2 and 3
@@ -60,7 +52,7 @@ class ImagineHelper extends Helper {
 		$options['hash'] = $this->hash($options);
 
 		$url = array_merge((array)$url, $options + array('base' => false));
-		return $this->Html->url($url, $full);
+		return Router::url($url, $full);
 	}
 
 /**
@@ -100,5 +92,4 @@ class ImagineHelper extends Helper {
 		}
 		return $result;
 	}
-
 }

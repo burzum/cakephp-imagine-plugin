@@ -8,9 +8,9 @@
  * Copyright 2011-2014, Florian Krämer
  * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
-namespace Imagine\Test\TestCase\View\Helper;
+namespace Burzum\Imagine\Test\TestCase\View\Helper;
 
-use Imagine\View\Helper\ImagineHelper;
+use Burzum\Imagine\View\Helper\ImagineHelper;
 use Cake\TestSuite\TestCase;
 use Cake\Core\Configure;
 use Cake\View\View;
@@ -61,7 +61,7 @@ class ImagineHelperTest extends TestCase {
 				]
 			]
 		);
-		$expected = '/images/display/1/thumbnail:width%7C200%3Bheight%7C150/hash:69aa9f46cdc5a200dc7539fc10eec00f2ba89023';
+		$expected = '/images/display/1?thumbnail=width%7C200%3Bheight%7C150&hash=69aa9f46cdc5a200dc7539fc10eec00f2ba89023';
 		$this->assertEquals($result, $expected);
 	}
   

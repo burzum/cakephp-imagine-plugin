@@ -8,10 +8,10 @@
  * Copyright 2011-2014, Florian Krämer
  * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
-namespace Imagine\Test\TestCase\Lib;
+namespace Burzum\Imagine\Test\TestCase\Lib;
 
 use Cake\TestSuite\TestCase;
-use Imagine\Lib\ImagineUtility;
+use Burzum\Imagine\Lib\ImagineUtility;
 
 class ImagineUtilityTest extends TestCase {
 
@@ -32,7 +32,7 @@ class ImagineUtilityTest extends TestCase {
 			'thumbnail' => array(
 				'width' => 200,
 				'height' => 150));
-		$result = \Imagine\ImagineUtility::operationsToString($operations);
+		$result = ImagineUtility::operationsToString($operations);
 		$this->assertEquals($result, '.thumbnail+width-200+height-150');
 	}
 
@@ -48,7 +48,7 @@ class ImagineUtilityTest extends TestCase {
 					'thumbnail' => array(
 						'width' => 200,
 						'height' => 150))));
-		$result = \Imagine\ImagineUtility::hashImageOperations($operations);
+		$result = ImagineUtility::hashImageOperations($operations);
 		$this->assertEquals($result, array(
 			'SomeModel' => array(
 			't200x150' => '38b1868f')));

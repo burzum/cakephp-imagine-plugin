@@ -8,15 +8,15 @@
  * Copyright 2011-2014, Florian Krämer
  * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
-namespace Imagine\Test\TestCase\Controller\Component;
+namespace Burzum\Imagine\Test\TestCase\Controller\Component;
 
 use Cake\TestSuite\TestCase;
 use Cake\Controller\Controller;
 use Cake\Event\Event;
 use Cake\Core\Configure;
 use Cake\Network\Request;
+use Cake\Network\Response;
 
-if (!class_exists('ImagineImagesTestController')) {
 	class ImagineImagesTestController extends Controller {
 
 	/**
@@ -34,7 +34,7 @@ if (!class_exists('ImagineImagesTestController')) {
 	 */
 		public $components = array(
 			'Session',
-			'Imagine.Imagine'
+			'Burzum/Imagine.Imagine'
 		);
 
 	/**
@@ -47,7 +47,7 @@ if (!class_exists('ImagineImagesTestController')) {
 	 * 
 	 */
 		public function beforeFilter(Event $Event) {
-			parent::beforeFilter();
+			parent::beforeFilter($Event);
 			$this->Imagine->userModel = 'UserModel';
 		}
 
@@ -58,7 +58,7 @@ if (!class_exists('ImagineImagesTestController')) {
 			$this->redirectUrl = $url;
 		}
 	}
-}
+
 
 /**
  * Imagine Component Test
@@ -74,7 +74,7 @@ class ImagineComponentTest extends TestCase {
  * @var array
  */
 	public $fixtures = array(
-		'plugin.Imagine.Image'
+		'plugin.Burzum\Imagine.Image'
 	);
 
 /**
@@ -84,11 +84,10 @@ class ImagineComponentTest extends TestCase {
  */
 	public function setUp() {
 		parent::setUp();
-
 		Configure::write('Imagine.salt', 'this-is-a-nice-salt');
 		$request = new Request();
-		$this->Controller = new ImagineImagesTestController($request, $this->getMock('CakeResponse'));
-		$this->Controller->constructClasses();
+		$response = new Response();
+		$this->Controller = new ImagineImagesTestController($request, $response);
 		$this->Controller->Imagine->Controller = $this->Controller;
 	}
 
@@ -108,7 +107,7 @@ class ImagineComponentTest extends TestCase {
  * @return void
  */
 	public function testGetHash() {
-		$this->Controller->request->params['named'] = [
+		$this->Controller->request->query = [
 			'thumbnail' => 'width|200;height|150'
 		];
 		$hash = $this->Controller->Imagine->getHash();
@@ -121,7 +120,7 @@ class ImagineComponentTest extends TestCase {
  * @return void
  */
 	public function testCheckHash() {
-		$this->Controller->request->params['named'] = [
+		$this->Controller->request->query = [
 			'thumbnail' => 'width|200;height|150',
 			'hash' => '69aa9f46cdc5a200dc7539fc10eec00f2ba89023'
 		];
@@ -132,7 +131,7 @@ class ImagineComponentTest extends TestCase {
  * @expectedException Cake\Error\NotFoundException
  */
 	public function testInvalidHash() {
-		$this->Controller->request->params['named'] = [
+		$this->Controller->request->query = [
 			'thumbnail' => 'width|200;height|150',
 			'hash' => 'wrong-hash-value'
 		];
@@ -143,7 +142,7 @@ class ImagineComponentTest extends TestCase {
  * @expectedException Cake\Error\NotFoundException
  */
 	public function testMissingHash() {
-		$this->Controller->request->params['named'] = [
+		$this->Controller->request->query = [
 			'thumbnail' => 'width|200;height|150'
 		];
 		$this->Controller->Imagine->checkHash();
@@ -155,15 +154,15 @@ class ImagineComponentTest extends TestCase {
  * @return void
  */
 	public function testUnpackParams() {
-		$this->assertEquals($this->Controller->Imagine->operations, array());
-		$this->Controller->request->params['named']['thumbnail'] = 'width|200;height|150';
+		$this->assertEquals($this->Controller->Imagine->operations, []);
+		$this->Controller->request->query['thumbnail'] = 'width|200;height|150';
 		$this->Controller->Imagine->unpackParams();
-		$this->assertEquals($this->Controller->Imagine->operations, array(
-				'thumbnail' => array(
+		$this->assertEquals($this->Controller->Imagine->operations, [
+				'thumbnail' => [
 					'width' => 200,
 					'height' => 150
-				)
-			)
+				]
+			]
 		);
 	}
 

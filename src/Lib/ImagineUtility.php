@@ -9,10 +9,9 @@
  * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
 
-namespace Imagine\Lib;
+namespace Burzum\Imagine\Lib;
 
 use Cake\Core\Configure;
-use Cake\Core\Plugin;
 
 class ImagineUtility {
 
@@ -36,11 +35,11 @@ class ImagineUtility {
 	public static function operationsToString($operations, $separators = array(), $hash = false) {
 		ksort($operations);
 
-		$defaultSeparators = array(
+		$defaultSeparators = [
 			'operations' => '.',
 			'params' => '+',
 			'value' => '-'
-		);
+		];
 		$separators = array_merge($defaultSeparators, $separators);
 
 		$result = '';
@@ -74,7 +73,7 @@ class ImagineUtility {
 	public static function hashImageOperations($imageSizes, $hashLenght = 8) {
 		foreach ($imageSizes as $model => $operations) {
 			foreach ($operations as $name => $operation) {
-				$imageSizes[$model][$name] = substr(self::operationsToString($operation, array(), 'md5'), 0, $hashLenght);
+				$imageSizes[$model][$name] = substr(self::operationsToString($operation, [], 'md5'), 0, $hashLenght);
 			}
 		}
 		return $imageSizes;

@@ -4,10 +4,8 @@ Basic Example
 Attach the behavior to the model:
 
 ```php
-Image extends AppModel {
-	public $actsAs = array(
-		'Imagine.Imagine'
-	);
+Class Image extends Table {
+	$this->addBehavior('Imagine.Imagine');
 }
 ```
 

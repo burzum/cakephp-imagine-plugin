@@ -53,7 +53,7 @@ class ImagineUtility {
 			$result = $separators['operations'] . $operation . $separators['params'] . join($separators['params'], $tmp);
 		}
 
-		if ($hash && $result != '') {
+		if ($hash && $result !== '') {
 			if (function_exists($hash)) {
 				return $hash($result);
 			}

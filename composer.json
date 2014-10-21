@@ -17,6 +17,6 @@
 		"composer/installers": "*"
 	},
 	"extra": {
-		"installer-name" : "Imagine"
+		"installer-name" : "Burzum/Imagine"
 	}
 }

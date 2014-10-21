@@ -18,7 +18,7 @@ Assuming you're mostly familiar with the basics of composer just take a look at 
     },
     "extra": {
         "installer-paths": {
-            "app/Plugin/Imagine": ["burzum/cakephp-imagine-plugin"]
+            "plugins/Burzum/Imagine": ["burzum/cakephp-imagine-plugin"]
         }
     }
 }

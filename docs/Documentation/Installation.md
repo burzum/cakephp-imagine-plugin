@@ -8,19 +8,19 @@ Assuming you're mostly familiar with the basics of composer just take a look at 
 
 ```js
 {
-    "config": {
-        "vendor-dir": "app/Vendor/",
-        "preferred-install": "source"
-    },
-    "require": {
-        "burzum/cakephp-imagine-plugin": "dev-master",
-        "imagine/imagine": "dev-master"
-    },
-    "extra": {
-        "installer-paths": {
-            "plugins/Burzum/Imagine": ["burzum/cakephp-imagine-plugin"]
-        }
-    }
+	"config": {
+		"vendor-dir": "app/Vendor/",
+		"preferred-install": "source"
+	},
+	"require": {
+		"burzum/cakephp-imagine-plugin": "dev-master",
+		"imagine/imagine": "dev-master"
+	},
+	"extra": {
+		"installer-paths": {
+			"plugins/Burzum/Imagine": ["burzum/cakephp-imagine-plugin"]
+		}
+	}
 }
 ```
 
@@ -43,7 +43,7 @@ Bootstrap
 Load the plugin as any other plugin:
 
 ```php
-Plugin::load('Burzum\Imagine');
+Plugin::load('Burzum/Imagine');
 ```
 
 Configure Salt for Imagine

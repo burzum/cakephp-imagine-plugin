@@ -6,7 +6,7 @@ The behavior interacts with the component and will process a given image file wi
 ```php
 class SomeTable extends Table {
 	public function initialize(array $config) {
-		$this->addBehavior('Burzum\Imagine.Imagine');
+		$this->addBehavior('Burzum/Imagine.Imagine');
 	}
 }
 ```

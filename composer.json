@@ -16,6 +16,16 @@
 		"imagine/imagine": "*",
 		"composer/installers": "*"
 	},
+	"autoload": {
+		"psr-4": {
+			"Burzum\\Imagine\\": "src"
+		}
+	},
+	"autoload-dev": {
+		"psr-4": {
+			"Burzum\\Imagine\\Test\\": "tests"
+		}
+	},
 	"extra": {
 		"installer-name" : "Burzum/Imagine"
 	}

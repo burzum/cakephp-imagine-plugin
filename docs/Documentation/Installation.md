@@ -6,22 +6,8 @@ Using Composer
 
 Assuming you're mostly familiar with the basics of composer just take a look at the ```extra```section. You'll have to define the installer path for the imagine plugin so that composer can put it in the right place with the right name.
 
-```js
-{
-	"config": {
-		"vendor-dir": "app/Vendor/",
-		"preferred-install": "source"
-	},
-	"require": {
-		"burzum/cakephp-imagine-plugin": "dev-master",
-		"imagine/imagine": "dev-master"
-	},
-	"extra": {
-		"installer-paths": {
-			"plugins/Burzum/Imagine": ["burzum/cakephp-imagine-plugin"]
-		}
-	}
-}
+```bash
+composer require "burzum/cakephp-imagine-plugin":"3.0.x-dev"
 ```
 
 Using Git

@@ -16,6 +16,18 @@
 		"imagine/imagine": "*",
 		"composer/installers": "*"
 	},
+	"autoload": {
+ 		"psr-4": {
+ 			"Burzum\\Imagine\\": "src",
+ 			"Burzum\\Imagine\\Test\\Fixture\\": "tests\\Fixture"
+ 		}
+ 	},
+ 	"autoload-dev": {
+ 		"psr-4": {
+ 			"Cake\\Test\\": "/vendor/cakephp/cakephp/tests",
+ 			"Burzum\\Imagine\\Test\\": "tests"
+ 		}
+ 	},
 	"extra": {
 		"installer-name" : "Burzum/Imagine"
 	}

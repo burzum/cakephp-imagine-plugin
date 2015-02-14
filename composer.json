@@ -14,7 +14,7 @@
 	"require": {
 		"php": ">=5.3.2",
 		"imagine/imagine": "*",
-		"composer/installers": "*"
+		"cakephp/plugin-installer": "*"
 	},
 	"autoload": {
  		"psr-4": {
@@ -28,7 +28,7 @@
  			"Burzum\\Imagine\\Test\\": "tests"
  		}
  	},
-	"extra": {
-		"installer-name" : "Burzum/Imagine"
+	"scripts": {
+		"post-autoload-dump": "Cake\\Composer\\Installer\\PluginInstaller::postAutoloadDump"
 	}
 }

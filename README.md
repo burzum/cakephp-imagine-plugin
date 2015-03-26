@@ -5,9 +5,9 @@ The **Imagine** plugin is a CakePHP wrapper around the [Imagine image manipulati
 Requirements
 ------------
 
- * CakePHP 2.0+
- * PHP 5.3+
- * Imagine Library (included as git submodule or composer dependency)
+ * CakePHP 3.0+
+ * PHP 5.4+
+ * [Imagine](https://github.com/avalanche123/Imagine)
 
 Documentation
 -------------
@@ -24,14 +24,16 @@ Contributing
 
 To contribute to this plugin please follow a few basic rules.
 
+To contribute to this plugin please follow a few basic rules.
+
 * Pull requests must be send to the ```develop``` branch.
-* Contributions must follow the [CakePHP coding standard](http://book.cakephp.org/3.0/en/contributing/cakephp-coding-conventions.html).
+* Contributions must follow the [PSR2-**R** coding standard recommendation](https://github.com/php-fig-rectified/fig-rectified-standards).
 * [Unit tests](http://book.cakephp.org/3.0/en/development/testing.html) are required.
 
 License
 -------
 
-Copyright 2012 - 2014, Florian Krämer
+Copyright 2012 - 2015, Florian Krämer
 
 Licensed under The MIT License
 Redistributions of files must retain the above copyright notice.

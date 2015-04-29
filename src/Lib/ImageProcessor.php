@@ -103,8 +103,13 @@ class ImageProcessor {
 
 		if (is_null($output)) {
 			return $this->_image;
+			$this->_image = null;
 		}
 
+		return $this->save($output, $imagineOptions);
+	}
+
+	public function save($output, array $imagineOptions = []) {
 		$this->_image->save($output, $imagineOptions);
 		$this->_image = null;
 		return true;

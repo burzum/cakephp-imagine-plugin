@@ -33,7 +33,6 @@ use Cake\Network\Response;
 	 * @var array
 	 */
 		public $components = array(
-			'Session',
 			'Burzum/Imagine.Imagine'
 		);
 
@@ -128,7 +127,7 @@ class ImagineComponentTest extends TestCase {
 	}
 
 /**
- * @expectedException Cake\Error\NotFoundException
+ * @expectedException Cake\Network\Exception\NotFoundException
  */
 	public function testInvalidHash() {
 		$this->Controller->request->query = [
@@ -139,7 +138,7 @@ class ImagineComponentTest extends TestCase {
 	}
 
 /**
- * @expectedException Cake\Error\NotFoundException
+ * @expectedException Cake\Network\Exception\NotFoundException
  */
 	public function testMissingHash() {
 		$this->Controller->request->query = [

@@ -79,4 +79,41 @@ class ImagineUtility {
 		return $imageSizes;
 	}
 
+/**
+ * Gets the orientation of an image file.
+ *
+ * @param string $imageFile Image file to get the orientation from.
+ * @return int The degree of orientation.
+ */
+	public static function getImageOrientation($imageFile) {
+		if (!file_exists($imageFile)) {
+			throw new \RuntimeException(sprintf('File %s not found!', $imageFile));
+		}
+		$exif = exif_read_data($imageFile);
+		if ($exif === false) {
+			return false;
+		}
+		$angle = 0;
+		if (!empty($exif['Orientation'])) {
+			switch ($exif['Orientation']) {
+				case 0:
+					$angle = 0;
+					break;
+				case 3:
+					$angle = 180;
+					break;
+				case 6:
+					$angle = -90;
+					break;
+				case 8:
+					$angle = 90;
+					break;
+				default:
+					$angle = 0;
+					break;
+			}
+			return $angle;
+		}
+		return $angle;
+	}
 }

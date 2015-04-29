@@ -15,7 +15,7 @@ use Cake\Utility\Security;
 use Cake\Controller\ComponentRegistry;
 use Cake\Event\Event;
 use Cake\Core\Configure;
-use Cake\Error\NotFoundException;
+use Cake\Network\Exception\NotFoundException;
 
 /**
  * CakePHP Imagine Plugin

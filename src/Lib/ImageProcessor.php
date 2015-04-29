@@ -82,7 +82,6 @@ class ImageProcessor {
  *
  * Caching and taking care of the file storage is NOT the purpose of this method!
  *
- * @param $ImageObject
  * @param null $output
  * @param array $imagineOptions
  * @param array $operations
@@ -92,12 +91,12 @@ class ImageProcessor {
  * @internal param \Imagine $array image objects save() 2nd parameter options
  * @return boolean
  */
-	public function batchProcess($output = null, $imagineOptions = array(), $operations = array()) {
+	public function batchProcess($output = null, $operations = [], $imagineOptions = []) {
 		foreach ($operations as $operation => $params) {
 			if (method_exists($this, $operation)) {
 				$this->{$operation}($params);
 			} else {
-				throw new \BadMethodCallException(__d('imagine', 'Unsupported image operation %s!', $operation));
+				throw new \BadMethodCallException(sprintf('Unsupported image operation %s!', $operation));
 			}
 		}
 
@@ -109,14 +108,26 @@ class ImageProcessor {
 		return $this->save($output, $imagineOptions);
 	}
 
-	public function save($output, array $imagineOptions = []) {
-		$this->_image->save($output, $imagineOptions);
+/**
+ * Saves an image.
+ *
+ * @param string $output Output filename.
+ * @param array $options Imagine image saving options.
+ * @return boolean
+ */
+	public function save($output, array $options = []) {
+		$this->_image->save($output, $options);
 		$this->_image = null;
 		return true;
 	}
 
-	public function processImage($output = null, $imagineOptions = array(), $operations = array()) {
-		return $this->batchProcess($output, $imagineOptions, $operations);
+/**
+ * Compatibility method for legacy reasons.
+ *
+ * @deprecated Use batchProcess() instead.
+ */
+	public function processImage($output = null, $imagineOptions = [], $operations = []) {
+		return $this->batchProcess($output, $operations, $imagineOptions);
 	}
 
 /**
@@ -155,7 +166,7 @@ class ImageProcessor {
  *
  * @param array Array of options for processing the image
  * @throws \InvalidArgumentException
- * @return void
+ * @return $this
  */
 	public function crop(array $options = []) {
 		if (empty($options['height']) || empty($options['width'])) {
@@ -179,10 +190,9 @@ class ImageProcessor {
 /**
  * Crops an image based on its widht or height, crops it to a square and resizes it to the given size
  *
- * @param $Image
- * @param array Array of options for processing the image
+ * @param array Array of options for processing the image.
  * @throws \InvalidArgumentException
- * @return void
+ * @return $this
  */
 	public function squareCenterCrop(array $options = []) {
 		if (empty($options['size'])) {
@@ -214,8 +224,7 @@ class ImageProcessor {
 /**
  * Widen
  *
- * @param $Image
- * @param array $options
+ * @param array Array of options for processing the image.
  * @throws \InvalidArgumentException
  * @return void
  */
@@ -230,10 +239,9 @@ class ImageProcessor {
 /**
  * Heighten
  *
- * @param $Image
- * @param array $options
+ * @param array Array of options for processing the image.
  * @throws \InvalidArgumentException
- * @return void
+ * @return $this
  */
 	public function heighten(array $options = []) {
 		if (empty($options['size'])) {
@@ -245,10 +253,9 @@ class ImageProcessor {
 /**
  * WidenAndHeighten
  *
- * @param $Image
- * @param array $options
+ * @param array Array of options for processing the image.
  * @throws \InvalidArgumentException
- * @return void
+ * @return $this
  */
 	public function widenAndHeighten(array $options = []) {
 		if (empty($options['height']) && empty($options['width']) && empty($options['size'])) {
@@ -281,7 +288,7 @@ class ImageProcessor {
 				}
 			} elseif ('heighten') {
 				if ($size > $height) {
-					throw new \InvalidArgumentException('Imagine', 'You can not scale up!');
+					throw new \InvalidArgumentException('You can not scale up!');
 				}
 			}
 		}
@@ -332,7 +339,7 @@ class ImageProcessor {
  *
  * @param array Array of options for processing the image.
  * @throws \InvalidArgumentException
- * @return this
+ * @return $this
  */
 	public function flip(array $options = []) {
 		if (!isset($options['direction'])) {
@@ -350,7 +357,7 @@ class ImageProcessor {
  * Wrapper for rotate
  *
  * @param array Array of options for processing the image.
- * @return this
+ * @return $this
  */
 	public function rotate(array $options = []) {
 		$this->_image->rotate($options['degree']);
@@ -363,7 +370,7 @@ class ImageProcessor {
  * @throws \InvalidArgumentException
  * @param array Array of options for processing the image.
  * @throws InvalidArgumentException if no height or width was passed
- * @return this
+ * @return $this
  */
 	public function thumbnail(array $options = []) {
 		if (empty($options['height']) || empty($options['width'])) {
@@ -384,7 +391,7 @@ class ImageProcessor {
  *
  * @param array Array of options for processing the image
  * @throws \InvalidArgumentException
- * @return this
+ * @return $this
  */
 	public function resize($Image, array $options = []) {
 		if (empty($options['height']) || empty($options['width'])) {

@@ -16,16 +16,11 @@ use Burzum\Imagine\Lib\ImagineUtility;
 use Burzum\Imagine\Lib\ImageProcessor;
 
 /**
- * CakePHP Imagine Plugin
+ * Imagine Image processing Behavior
+ *
+ * @deprecated Use the Burzum\Imagine\Lib\ImageProcessor class directly.
  */
 class ImagineBehavior extends Behavior {
-
-/**
- * Settings array
- *
- * @var array
- */
-	public $settings = array();
 
 /**
  * Default settings array
@@ -79,7 +74,7 @@ class ImagineBehavior extends Behavior {
  */
 	public function processImage($ImageObject, $output = null, $imagineOptions = array(), $operations = array()) {
 		$this->_processor->open($ImageObject);
-		return $this->_processor->batchProcess($output, $imagineOptions, $operations);
+		return $this->_processor->processImage($output, $imagineOptions, $operations);
 	}
 
 /**

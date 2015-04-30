@@ -12,6 +12,9 @@ namespace Burzum\Imagine\Model;
 
 use Cake\ORM\Table;
 
+/**
+ * @deprecated Use the ImageProcessor class instead.
+ */
 class Imagine extends Table {
 
 /**

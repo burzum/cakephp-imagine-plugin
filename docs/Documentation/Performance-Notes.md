@@ -1,7 +1,7 @@
 Performance Notes
 =================
 
-**You should not generate images on the fly**, especially not on high traffic sites, it might get your server locked up because of the amount of simultaneous requests. The first request will hit your server and start generating the image while others try to do that at the same time, causing the site become locked up in the worst case. There is *no need* to generate images on each request, in fact it would be bad practice because it will just put load on you servers CPU and consume memory.
+**You should not generate images on the fly**, especially not on high traffic sites, it might get your server locked up in the worst case because of the amount of simultaneous requests. The first request will hit your server and start generating the image while others try to do that at the same time, causing the site become locked up in the worst case. There is *no need* to generate images on each request, in fact **it is bad practice** because it will just put load on you servers CPU and consume memory.
 
 **It's better to generate the needed versions directly after an image was uploaded** and if other versions are needed later, generate them by a shell script. For this purpose there is a method in the ImagineComponent that will turn the image operation array into a string, see ```ImagineComponent::getHash()```;
 

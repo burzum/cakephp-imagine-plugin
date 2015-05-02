@@ -49,7 +49,7 @@ class ImagineHelperTest extends TestCase {
 	public function testUrl() {
 		$result = $this->Imagine->url(
 			[
-				'controller' => 'images',
+				'controller' => 'Images',
 				'action' => 'display',
 				1
 			],
@@ -72,7 +72,7 @@ class ImagineHelperTest extends TestCase {
  */
 	public function testUrlBackwardCompatibility() {
 		$param1 = [
-			'controller' => 'images',
+			'controller' => 'Images',
 			'action' => 'display',
 			1
 		];

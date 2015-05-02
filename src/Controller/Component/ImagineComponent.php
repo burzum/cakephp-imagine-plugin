@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright 2011-2014, Florian Krämer
+ * Copyright 2011-2015, Florian Krämer
  *
  * Licensed under The MIT License
  * Redistributions of files must retain the above copyright notice.
  *
- * Copyright 2011-2014, Florian Krämer
+ * Copyright 2011-2015, Florian Krämer
  * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
 namespace Burzum\Imagine\Controller\Component;
@@ -16,6 +16,7 @@ use Cake\Controller\ComponentRegistry;
 use Cake\Event\Event;
 use Cake\Core\Configure;
 use Cake\Network\Exception\NotFoundException;
+use InvalidArgumentException;
 
 /**
  * CakePHP Imagine Plugin
@@ -98,7 +99,7 @@ class ImagineComponent extends Component {
 	public function getHash() {
 		$mediaSalt = Configure::read('Imagine.salt');
 		if (empty($mediaSalt)) {
-			throw new InvalidArgumentException(__d('imagine', 'Please configure Imagine.salt using Configure::write(\'Imagine.salt\', \'YOUR-SALT-VALUE\')', true));
+			throw new InvalidArgumentException('Please configure Imagine.salt using Configure::write(\'Imagine.salt\', \'YOUR-SALT-VALUE\')');
 		}
 
 		if (!empty($this->request->query)) {

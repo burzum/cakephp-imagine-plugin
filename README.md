@@ -2,6 +2,8 @@
 
 The **Imagine** plugin is a CakePHP wrapper around the [Imagine image manipulation library](https://github.com/avalanche123/Imagine). It makes it very easy to manipulate image data like resize, thumbnail, crop or even to do more complex tasks like creating a photo collage. Also it abstracts the different ways, GD, Imagick, Imagick Shell to work with image data in php.
 
+**If you're upgrading from CakePHP 2.x please read [the migration guide](docs/Documentation/Migrating-from-CakePHP-2.0.md).**
+
 Requirements
 ------------
 

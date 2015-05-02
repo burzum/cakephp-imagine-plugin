@@ -49,7 +49,7 @@ class ImagineHelperTest extends TestCase {
 	public function testUrl() {
 		$result = $this->Imagine->url(
 			[
-				'controller' => 'Images',
+				'controller' => 'images',
 				'action' => 'display',
 				1
 			],

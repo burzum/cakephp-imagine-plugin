@@ -98,7 +98,7 @@ class ImagineBehaviorTest extends TestCase {
 /**
  * testCropInvalidArgumentException
  *
- * @expectedException InvalidArgumentException
+ * @expectedException \InvalidArgumentException
  * @return void
  */
 	public function testCropInvalidArgumentException() {
@@ -139,6 +139,7 @@ class ImagineBehaviorTest extends TestCase {
 		));
 
 		$result = $this->Model->getImageSize(TMP . 'thumbnail.jpg');
+
 		$this->assertEquals($result,
 			array(300, 300, 'x' => 300, 'y' => 300
 		));
@@ -147,7 +148,9 @@ class ImagineBehaviorTest extends TestCase {
 			'thumbnail' => array(
 				'mode' => 'inset',
 				'height' => 300,
-				'width' => 300)));
+				'width' => 300)
+			)
+		);
 
 		$result = $this->Model->getImageSize(TMP . 'thumbnail2.jpg');
 		$this->assertEquals($result,

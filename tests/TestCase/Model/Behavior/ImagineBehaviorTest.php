@@ -11,8 +11,8 @@
 namespace Burzum\Imagine\Test\TestCase\Model\Behavior;
 
 use Cake\TestSuite\TestCase;
-use Cake\Orm\Table;
-use Cake\Orm\TableRegistry;
+use Cake\ORM\Table;
+use Cake\ORM\TableRegistry;
 use Cake\Core\Plugin;
 
 class ImagineTestModel extends Table {

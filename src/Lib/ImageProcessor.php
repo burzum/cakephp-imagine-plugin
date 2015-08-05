@@ -382,7 +382,7 @@ class ImageProcessor {
 			$mode = ImageInterface::THUMBNAIL_OUTBOUND;
 		}
 
-		$this->_image->thumbnail(new Box($options['width'], $options['height']), $mode);
+		$this->_image = $this->_image->thumbnail(new Box($options['width'], $options['height']), $mode);
 		return $this;
 	}
 

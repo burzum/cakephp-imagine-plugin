@@ -88,7 +88,7 @@ class ImagineHelper extends Helper {
 					$tmp[] = "$key|$value";
 				}
 			}
-			$result[$operation] = join(';', $tmp);
+			$result[$operation] = implode(';', $tmp);
 		}
 		return $result;
 	}

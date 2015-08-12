@@ -18,13 +18,6 @@ use Cake\ORM\Table;
 class Imagine extends Table {
 
 /**
- * Name
- *
- * @var string
- */
-	public $name = 'Imagine';
-
-/**
  * Table
  *
  * @var boolean|string

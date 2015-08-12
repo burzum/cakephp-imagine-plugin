@@ -20,18 +20,11 @@ use Burzum\Imagine\Lib\ImagineUtility;
 class ImagineBehavior extends Behavior {
 
 /**
- * Settings array
- *
- * @var array
- */
-	public $settings = array();
-
-/**
  * Default settings array
  *
  * @var array
  */
-	protected $_defaults = array(
+	protected $_defaultConfig = array(
 		'engine' => 'Gd'
 	);
 
@@ -51,8 +44,8 @@ class ImagineBehavior extends Behavior {
  */
 	public function __construct(Table $table, array $settings = []) {
 		parent::__construct($table, $settings);
-		$this->settings = array_merge($this->_defaults, $settings);
-		$class = '\Imagine\\' . $this->settings['engine'] . '\Imagine';
+
+		$class = '\Imagine\\' . $this->config('engine') . '\Imagine';
 		$this->Imagine = new $class();
 		$this->_table = $table;
 	}
@@ -110,8 +103,8 @@ class ImagineBehavior extends Behavior {
  * The intended usage of this is to store the files as my_horse.thumbnail+width-100-height+100.jpg for example.
  *
  * So after upload store your image meta data in a db, give the filename the id of the record and suffix it
- * with this string and store the string also in the db. In the views, if no further control over the image access is needd,
- * you can simply direct linke the image like $this->Html->image('/images/05/04/61/my_horse.thumbnail+width-100-height+100.jpg');
+ * with this string and store the string also in the db. In the views, if no further control over the image access is needed,
+ * you can simply direct-link the image like $this->Html->image('/images/05/04/61/my_horse.thumbnail+width-100-height+100.jpg');
  *
  * @param array $operations Imagine image operations
  * @param array $separators Optional
@@ -127,11 +120,11 @@ class ImagineBehavior extends Behavior {
  * hashImageOperations
  *
  * @param array $imageSizes
- * @param int $hashLenght
+ * @param int $hashLength
  * @return string
  */
-	public function hashImageOperations($imageSizes, $hashLenght = 8) {
-		return ImagineUtility::hashImageOperations($imageSizes, $hashLenght = 8);
+	public function hashImageOperations($imageSizes, $hashLength = 8) {
+		return ImagineUtility::hashImageOperations($imageSizes, $hashLength = 8);
 	}
 
 /**
@@ -316,8 +309,8 @@ class ImagineBehavior extends Behavior {
 		if (!isset($options['direction'])) {
 			$options['direction'] = 'vertically';
 		}
-		if (!in_array($options['direction'], array('vertically', 'horizontall'))) {
-			throw new \InvalidArgumentException(__d('Imagine', 'Invalid direction, use verticall or horizontall'));
+		if (!in_array($options['direction'], array('vertically', 'horizontally'))) {
+			throw new \InvalidArgumentException(__d('Imagine', 'Invalid direction, use vertically or horizontally'));
 		}
 		$method = 'flip' . $options['direction'];
 		$Image->{$method}();
@@ -348,7 +341,7 @@ class ImagineBehavior extends Behavior {
 		}
 
 		$mode = \Imagine\Image\ImageInterface::THUMBNAIL_INSET;
-		if (isset($options['mode']) && $options['mode'] == 'outbound') {
+		if (isset($options['mode']) && $options['mode'] === 'outbound') {
 			$mode = \Imagine\Image\ImageInterface::THUMBNAIL_OUTBOUND;
 		}
 

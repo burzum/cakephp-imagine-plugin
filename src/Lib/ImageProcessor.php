@@ -154,11 +154,11 @@ class ImageProcessor {
  * hashImageOperations
  *
  * @param array $imageSizes
- * @param int $hashLenght
+ * @param int $hashLength
  * @return string
  */
-	public function hashImageOperations($imageSizes, $hashLenght = 8) {
-		return ImagineUtility::hashImageOperations($imageSizes, $hashLenght = 8);
+	public function hashImageOperations($imageSizes, $hashLength = 8) {
+		return ImagineUtility::hashImageOperations($imageSizes, $hashLength = 8);
 	}
 
 /**
@@ -345,8 +345,8 @@ class ImageProcessor {
 		if (!isset($options['direction'])) {
 			$options['direction'] = 'vertically';
 		}
-		if (!in_array($options['direction'], array('vertically', 'horizontall'))) {
-			throw new \InvalidArgumentException(__d('Imagine', 'Invalid direction, use verticall or horizontall'));
+		if (!in_array($options['direction'], array('vertically', 'horizontally'))) {
+			throw new \InvalidArgumentException(__d('Imagine', 'Invalid direction, use vertically or horizontally'));
 		}
 		$method = 'flip' . $options['direction'];
 		$this->_image->{$method}();

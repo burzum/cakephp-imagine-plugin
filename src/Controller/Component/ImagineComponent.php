@@ -60,7 +60,7 @@ class ImagineComponent extends Component {
  * @param \Cake\Controller\ComponentRegistry $collection
  * @param array $config Config options array
  */
-	public function __construct(ComponentRegistry $collection, $config = array()) {
+	public function __construct(ComponentRegistry $collection, $config = []) {
 		parent::__construct($collection, $config);
 		$Controller = $collection->getController();
 		$this->request = $Controller->request;

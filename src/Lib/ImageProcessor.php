@@ -146,7 +146,7 @@ class ImageProcessor {
  * @return string Filename compatible String representation of the operations
  * @link http://support.microsoft.com/kb/177506
  */
-	public function operationsToString($operations, $separators = array(), $hash = false) {
+	public function operationsToString($operations, $separators = [], $hash = false) {
 		return ImagineUtility::operationsToString($operations, $separators, $hash);
 	}
 
@@ -232,7 +232,7 @@ class ImageProcessor {
 		if (empty($options['size'])) {
 			throw new \InvalidArgumentException(__d('Imagine', 'You must pass a size value!'));
 		}
-		$this->widenAndHeighten(array('width' => $options['size']));
+		$this->widenAndHeighten(['width' => $options['size']]);
 		return $this;
 	}
 
@@ -247,7 +247,7 @@ class ImageProcessor {
 		if (empty($options['size'])) {
 			throw new \InvalidArgumentException(__d('Imagine', 'You must pass a size value!'));
 		}
-		$this->widenAndHeighten(array('height' => $options['size']));
+		$this->widenAndHeighten(['height' => $options['size']]);
 	}
 
 /**
@@ -345,7 +345,7 @@ class ImageProcessor {
 		if (!isset($options['direction'])) {
 			$options['direction'] = 'vertically';
 		}
-		if (!in_array($options['direction'], array('vertically', 'horizontally'))) {
+		if (!in_array($options['direction'], ['vertically', 'horizontally'])) {
 			throw new \InvalidArgumentException(__d('Imagine', 'Invalid direction, use vertically or horizontally'));
 		}
 		$method = 'flip' . $options['direction'];

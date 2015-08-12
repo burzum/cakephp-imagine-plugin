@@ -29,9 +29,9 @@ class Imagine extends Table {
  *
  * @var array
  */
-	public $actsAs = array(
+	public $actsAs = [
 		'Imagine.Imagine'
-	);
+	];
 
 	public function schema($schema = []) {
 		return [

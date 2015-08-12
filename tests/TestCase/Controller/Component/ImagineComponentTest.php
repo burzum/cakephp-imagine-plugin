@@ -27,14 +27,14 @@ use Cake\Network\Response;
 	/**
 	 * @var array
 	 */
-		public $uses = array('Images');
+		public $uses = ['Images'];
 
 	/**
 	 * @var array
 	 */
-		public $components = array(
+		public $components = [
 			'Burzum/Imagine.Imagine'
-		);
+		];
 
 	/**
 	 * Redirect url
@@ -72,9 +72,9 @@ class ImagineComponentTest extends TestCase {
  *
  * @var array
  */
-	public $fixtures = array(
+	public $fixtures = [
 		'plugin.Burzum\Imagine.Image'
-	);
+	];
 
 /**
  * setUp method

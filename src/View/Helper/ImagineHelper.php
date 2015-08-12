@@ -51,7 +51,7 @@ class ImagineHelper extends Helper {
 		$options = $this->pack($options);
 		$options['hash'] = $this->hash($options);
 
-		$url = array_merge((array)$url, $options + array('base' => false));
+		$url = array_merge((array)$url, $options + ['base' => false]);
 		return Router::url($url, $full);
 	}
 
@@ -80,9 +80,9 @@ class ImagineHelper extends Helper {
  * @access public
  */
 	public function pack($options) {
-		$result = array();
+		$result = [];
 		foreach ($options as $operation => $data) {
-			$tmp = array();
+			$tmp = [];
 			foreach ($data as $key => $value) {
 				if (is_string($value) || is_numeric($value)) {
 					$tmp[] = "$key|$value";

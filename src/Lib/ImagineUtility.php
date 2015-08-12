@@ -32,7 +32,7 @@ class ImagineUtility {
  * @return string Filename compatible String representation of the operations
  * @link http://support.microsoft.com/kb/177506
  */
-	public static function operationsToString($operations, $separators = array(), $hash = false) {
+	public static function operationsToString($operations, $separators = [], $hash = false) {
 		ksort($operations);
 
 		$defaultSeparators = [
@@ -44,7 +44,7 @@ class ImagineUtility {
 
 		$result = '';
 		foreach ($operations as $operation => $data) {
-			$tmp = array();
+			$tmp = [];
 			foreach ($data as $key => $value) {
 				if (is_string($value) || is_numeric($value)) {
 					$tmp[] = $key . $separators['value'] . $value;

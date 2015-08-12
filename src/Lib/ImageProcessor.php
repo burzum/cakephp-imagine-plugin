@@ -410,22 +410,32 @@ class ImageProcessor {
  * @see Imagine\Image\ImageInterface::getSize()
  */
 	public function getImageSize($Image = null) {
-		if (is_string($Image)) {
-			$class = 'Imagine\\' . $this->config('engine') . '\Imagine';
-			$Imagine = new $class();
-			$Image = $Imagine->open($Image);
-		}
-		if (!empty($this->_image)) {
-			$Image = $this->_image;
-		}
-
+		$Image = $this->_getImage($Image);
 		$BoxInterface = $Image->getSize($Image);
-
-		return array(
+		return [
 			$BoxInterface->getWidth(),
 			$BoxInterface->getHeight(),
 			'x' => $BoxInterface->getWidth(),
 			'y' => $BoxInterface->getHeight()
-		);
+		];
+	}
+
+/**
+ * Gets an image from a file string or returns the image object that is
+ * loaded in the ImageProcessor::_image property.
+ *
+ * @param string|null $Image
+ * @return \Imagine\Image\
+ */
+	protected function _getImage($Image = null) {
+		if (is_string($Image)) {
+			$class = 'Imagine\\' . $this->config('engine') . '\Imagine';
+			$Imagine = new $class();
+			return $Imagine->open($Image);
+		}
+		if (!empty($this->_image)) {
+			return $this->_image;
+		}
+		throw new \RuntimeException('Could not get the image object!');
 	}
 }

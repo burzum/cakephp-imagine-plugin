@@ -60,7 +60,7 @@ class ImagineComponent extends Component {
  * @param \Cake\Controller\ComponentRegistry $collection
  * @param array $config Config options array
  */
-	public function __construct(ComponentRegistry $collection, $config = array()) {
+	public function __construct(ComponentRegistry $collection, $config = []) {
 		parent::__construct($collection, $config);
 		$Controller = $collection->getController();
 		$this->request = $Controller->request;
@@ -118,9 +118,9 @@ class ImagineComponent extends Component {
  * This is done to avoid that people can randomly generate tons of images by
  * just incrementing the width and height for example in the url.
  *
- * @param boolean $error If set to false no 404 page will be rendered if the hash is wrong
+ * @param bool $error If set to false no 404 page will be rendered if the hash is wrong
  * @throws NotFoundException if the hash was not present
- * @return boolean True if the hashes match
+ * @return bool True if the hashes match
  */
 	public function checkHash($error = true) {
 		if (!isset($this->request->query[$this->_config['hashField']]) && $error) {

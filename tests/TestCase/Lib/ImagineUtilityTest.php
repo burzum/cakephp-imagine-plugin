@@ -22,7 +22,7 @@ class ImagineUtilityTest extends TestCase {
  *
  * @var array
  */
-	public $fixtures = array();
+	public $fixtures = [];
 
 /**
  * testOperationsToString
@@ -30,12 +30,12 @@ class ImagineUtilityTest extends TestCase {
  * @return void
  */
 	public function testOperationsToString() {
-		$operations = array(
-			'thumbnail' => array(
+		$operations = [
+			'thumbnail' => [
 				'width' => 200,
 				'height' => 150
-			)
-		);
+			]
+		];
 		$result = ImagineUtility::operationsToString($operations);
 		$this->assertEquals($result, '.thumbnail+width-200+height-150');
 	}
@@ -46,16 +46,16 @@ class ImagineUtilityTest extends TestCase {
  * @return void
  */
 	public function testHashImageOperations() {
-		$operations = array(
-			'SomeModel' => array(
-				't200x150' => array(
-					'thumbnail' => array(
+		$operations = [
+			'SomeModel' => [
+				't200x150' => [
+					'thumbnail' => [
 						'width' => 200,
 						'height' => 150
-					)
-				)
-			)
-		);
+					]
+				]
+			]
+		];
 		$result = ImagineUtility::hashImageOperations($operations);
 		$this->assertEquals($result, [
 			'SomeModel' => ['t200x150' => '38b1868f']

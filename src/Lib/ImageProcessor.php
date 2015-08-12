@@ -36,7 +36,7 @@ class ImageProcessor {
 /**
  * Constructor
  *
- * @var array $config
+ * @var array
  */
 	public function __construct(array $config = []) {
 		$this->config($config);
@@ -64,7 +64,7 @@ class ImageProcessor {
  */
 	public function open($image) {
 		if (!file_exists($image)) {
-			throw new \RuntimeException(sprintf('File %s does not exist!', $image));
+			throw new \RuntimeException(sprintf('File {0} does not exist!', $image));
 		}
 		$this->_image = $this->imagine()->open($image);
 		return $this;
@@ -89,18 +89,18 @@ class ImageProcessor {
  * @internal param string $image source image path
  * @internal param $mixed
  * @internal param \Imagine $array image objects save() 2nd parameter options
- * @return boolean
+ * @return bool
  */
 	public function batchProcess($output = null, $operations = [], $imagineOptions = []) {
 		foreach ($operations as $operation => $params) {
 			if (method_exists($this, $operation)) {
 				$this->{$operation}($params);
 			} else {
-				throw new \BadMethodCallException(sprintf('Unsupported image operation %s!', $operation));
+				throw new \BadMethodCallException(sprintf('Unsupported image operation {0}!', $operation));
 			}
 		}
 
-		if (is_null($output)) {
+		if ($output === null) {
 			return $this->_image;
 			$this->_image = null;
 		}
@@ -113,7 +113,7 @@ class ImageProcessor {
  *
  * @param string $output Output filename.
  * @param array $options Imagine image saving options.
- * @return boolean
+ * @return bool
  */
 	public function save($output, array $options = []) {
 		$this->_image->save($output, $options);
@@ -146,7 +146,7 @@ class ImageProcessor {
  * @return string Filename compatible String representation of the operations
  * @link http://support.microsoft.com/kb/177506
  */
-	public function operationsToString($operations, $separators = array(), $hash = false) {
+	public function operationsToString($operations, $separators = [], $hash = false) {
 		return ImagineUtility::operationsToString($operations, $separators, $hash);
 	}
 
@@ -154,11 +154,11 @@ class ImageProcessor {
  * hashImageOperations
  *
  * @param array $imageSizes
- * @param int $hashLenght
+ * @param int $hashLength
  * @return string
  */
-	public function hashImageOperations($imageSizes, $hashLenght = 8) {
-		return ImagineUtility::hashImageOperations($imageSizes, $hashLenght = 8);
+	public function hashImageOperations($imageSizes, $hashLength = 8) {
+		return ImagineUtility::hashImageOperations($imageSizes, $hashLength = 8);
 	}
 
 /**
@@ -196,7 +196,7 @@ class ImageProcessor {
  */
 	public function squareCenterCrop(array $options = []) {
 		if (empty($options['size'])) {
-			throw new \InvalidArgumentException(__d('Imagine', 'You have to pass size in the options!'));
+			throw new \InvalidArgumentException(__d('imagine', 'You have to pass size in the options!'));
 		}
 
 		$imageSize = $this->getImageSize($this->_image);
@@ -230,9 +230,9 @@ class ImageProcessor {
  */
 	public function widen(array $options = []) {
 		if (empty($options['size'])) {
-			throw new \InvalidArgumentException(__d('Imagine', 'You must pass a size value!'));
+			throw new \InvalidArgumentException(__d('imagine', 'You must pass a size value!'));
 		}
-		$this->widenAndHeighten(array('width' => $options['size']));
+		$this->widenAndHeighten(['width' => $options['size']]);
 		return $this;
 	}
 
@@ -245,9 +245,9 @@ class ImageProcessor {
  */
 	public function heighten(array $options = []) {
 		if (empty($options['size'])) {
-			throw new \InvalidArgumentException(__d('Imagine', 'You must pass a size value!'));
+			throw new \InvalidArgumentException(__d('imagine', 'You must pass a size value!'));
 		}
-		$this->widenAndHeighten(array('height' => $options['size']));
+		$this->widenAndHeighten(['height' => $options['size']]);
 	}
 
 /**
@@ -259,11 +259,11 @@ class ImageProcessor {
  */
 	public function widenAndHeighten(array $options = []) {
 		if (empty($options['height']) && empty($options['width']) && empty($options['size'])) {
-			throw new \InvalidArgumentException(__d('Imagine', 'You have to pass a height, width or size!'));
+			throw new \InvalidArgumentException(__d('imagine', 'You have to pass a height, width or size!'));
 		}
 
 		if (!empty($options['height']) && !empty($options['width'])) {
-			throw new \InvalidArgumentException(__d('Imagine', 'You can only scale by width or height!'));
+			throw new \InvalidArgumentException(__d('imagine', 'You can only scale by width or height!'));
 		}
 
 		if (isset($options['width'])) {
@@ -282,7 +282,7 @@ class ImageProcessor {
 		$height = $imageSize[1];
 
 		if (isset($options['noUpScale'])) {
-			if ($method == 'widen') {
+			if ($method === 'widen') {
 				if ($size > $width) {
 					throw new \InvalidArgumentException('You can not scale up!');
 				}
@@ -294,7 +294,7 @@ class ImageProcessor {
 		}
 
 		if (isset($options['noDownScale'])) {
-			if ($method == 'widen') {
+			if ($method === 'widen') {
 				if ($size < $width) {
 					throw new \InvalidArgumentException('You can not scale down!');
 				}
@@ -321,7 +321,7 @@ class ImageProcessor {
  */
 	public function scale(array $options = []) {
 		if (empty($options['factor'])) {
-			throw new \InvalidArgumentException(__d('Imagine', 'You must pass a factor value!'));
+			throw new \InvalidArgumentException(__d('imagine', 'You must pass a factor value!'));
 		}
 
 		$imageSize = $this->getImageSize();
@@ -345,8 +345,8 @@ class ImageProcessor {
 		if (!isset($options['direction'])) {
 			$options['direction'] = 'vertically';
 		}
-		if (!in_array($options['direction'], array('vertically', 'horizontall'))) {
-			throw new \InvalidArgumentException(__d('Imagine', 'Invalid direction, use verticall or horizontall'));
+		if (!in_array($options['direction'], ['vertically', 'horizontally'])) {
+			throw new \InvalidArgumentException(__d('imagine', 'Invalid direction, use vertically or horizontally'));
 		}
 		$method = 'flip' . $options['direction'];
 		$this->_image->{$method}();
@@ -378,7 +378,7 @@ class ImageProcessor {
 		}
 
 		$mode = ImageInterface::THUMBNAIL_INSET;
-		if (isset($options['mode']) && $options['mode'] == 'outbound') {
+		if (isset($options['mode']) && $options['mode'] === 'outbound') {
 			$mode = ImageInterface::THUMBNAIL_OUTBOUND;
 		}
 
@@ -395,7 +395,7 @@ class ImageProcessor {
  */
 	public function resize($Image, array $options = []) {
 		if (empty($options['height']) || empty($options['width'])) {
-			throw new \InvalidArgumentException(__d('Imagine', 'You have to pass height and width in the options!'));
+			throw new \InvalidArgumentException(__d('imagine', 'You have to pass height and width in the options!'));
 		}
 
 		$this->_image = $Image->resize(new Box($options['width'], $options['height']));

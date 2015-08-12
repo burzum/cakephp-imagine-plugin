@@ -18,16 +18,9 @@ use Cake\ORM\Table;
 class Imagine extends Table {
 
 /**
- * Name
- *
- * @var string
- */
-	public $name = 'Imagine';
-
-/**
  * Table
  *
- * @var boolean|string
+ * @var bool|string
  */
 	public $useTable = false;
 
@@ -36,9 +29,9 @@ class Imagine extends Table {
  *
  * @var array
  */
-	public $actsAs = array(
+	public $actsAs = [
 		'Imagine.Imagine'
-	);
+	];
 
 	public function schema($schema = []) {
 		return [

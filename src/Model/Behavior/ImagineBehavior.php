@@ -72,7 +72,7 @@ class ImagineBehavior extends Behavior {
  * @internal param string $image source image path
  * @internal param $mixed
  * @internal param \Imagine $array image objects save() 2nd parameter options
- * @return boolean
+ * @return bool
  */
 	public function processImage($ImageObject, $output = null, $imagineOptions = [], $operations = []) {
 		if (is_string($ImageObject)) {
@@ -89,7 +89,7 @@ class ImagineBehavior extends Behavior {
 			}
 		}
 
-		if (is_null($output)) {
+		if ($output === null) {
 			return $ImageObject;
 		}
 
@@ -247,7 +247,7 @@ class ImagineBehavior extends Behavior {
 		$height = $imageSize[1];
 
 		if (isset($options['noUpScale'])) {
-			if ($method == 'widen') {
+			if ($method === 'widen') {
 				if ($size > $width) {
 					throw new \InvalidArgumentException(__d('imagine', 'You can not scale up!'));
 				}
@@ -259,7 +259,7 @@ class ImagineBehavior extends Behavior {
 		}
 
 		if (isset($options['noDownScale'])) {
-			if ($method == 'widen') {
+			if ($method === 'widen') {
 				if ($size < $width) {
 					throw new \InvalidArgumentException(__d('imagine', 'You can not scale down!'));
 				}

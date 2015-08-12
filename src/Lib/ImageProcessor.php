@@ -36,7 +36,7 @@ class ImageProcessor {
 /**
  * Constructor
  *
- * @var array $config
+ * @var array
  */
 	public function __construct(array $config = []) {
 		$this->config($config);
@@ -89,7 +89,7 @@ class ImageProcessor {
  * @internal param string $image source image path
  * @internal param $mixed
  * @internal param \Imagine $array image objects save() 2nd parameter options
- * @return boolean
+ * @return bool
  */
 	public function batchProcess($output = null, $operations = [], $imagineOptions = []) {
 		foreach ($operations as $operation => $params) {
@@ -100,7 +100,7 @@ class ImageProcessor {
 			}
 		}
 
-		if (is_null($output)) {
+		if ($output === null) {
 			return $this->_image;
 			$this->_image = null;
 		}
@@ -113,7 +113,7 @@ class ImageProcessor {
  *
  * @param string $output Output filename.
  * @param array $options Imagine image saving options.
- * @return boolean
+ * @return bool
  */
 	public function save($output, array $options = []) {
 		$this->_image->save($output, $options);
@@ -282,7 +282,7 @@ class ImageProcessor {
 		$height = $imageSize[1];
 
 		if (isset($options['noUpScale'])) {
-			if ($method == 'widen') {
+			if ($method === 'widen') {
 				if ($size > $width) {
 					throw new \InvalidArgumentException('You can not scale up!');
 				}
@@ -294,7 +294,7 @@ class ImageProcessor {
 		}
 
 		if (isset($options['noDownScale'])) {
-			if ($method == 'widen') {
+			if ($method === 'widen') {
 				if ($size < $width) {
 					throw new \InvalidArgumentException('You can not scale down!');
 				}
@@ -378,7 +378,7 @@ class ImageProcessor {
 		}
 
 		$mode = ImageInterface::THUMBNAIL_INSET;
-		if (isset($options['mode']) && $options['mode'] == 'outbound') {
+		if (isset($options['mode']) && $options['mode'] === 'outbound') {
 			$mode = ImageInterface::THUMBNAIL_OUTBOUND;
 		}
 

@@ -67,7 +67,7 @@ class ImagineUtility {
  * This method expects an array of Model.configName => operationsArray
  *
  * @param array $imageSizes
- * @param integer $hashLength
+ * @param int $hashLength
  * @return array Model.configName => hashValue
  */
 	public static function hashImageOperations($imageSizes, $hashLength = 8) {

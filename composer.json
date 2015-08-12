@@ -16,6 +16,9 @@
 		"imagine/imagine": "*",
 		"cakephp/plugin-installer": "*"
 	},
+	"require-dev": {
+		"phpunit/phpunit": "*"
+	},
 	"autoload": {
  		"psr-4": {
  			"Burzum\\Imagine\\": "src",

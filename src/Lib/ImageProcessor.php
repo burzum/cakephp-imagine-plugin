@@ -64,7 +64,7 @@ class ImageProcessor {
  */
 	public function open($image) {
 		if (!file_exists($image)) {
-			throw new \RuntimeException(sprintf('File %s does not exist!', $image));
+			throw new \RuntimeException(sprintf('File {0} does not exist!', $image));
 		}
 		$this->_image = $this->imagine()->open($image);
 		return $this;
@@ -96,7 +96,7 @@ class ImageProcessor {
 			if (method_exists($this, $operation)) {
 				$this->{$operation}($params);
 			} else {
-				throw new \BadMethodCallException(sprintf('Unsupported image operation %s!', $operation));
+				throw new \BadMethodCallException(sprintf('Unsupported image operation {0}!', $operation));
 			}
 		}
 

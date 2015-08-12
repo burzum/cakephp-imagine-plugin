@@ -85,7 +85,7 @@ class ImagineBehavior extends Behavior {
 			} elseif (method_exists($this, $operation)) {
 				$this->{$operation}($ImageObject, $params);
 			} else {
-				throw new \BadMethodCallException(__d('imagine', 'Unsupported image operation %s!', $operation));
+				throw new \BadMethodCallException(__d('imagine', 'Unsupported image operation {0}!', $operation));
 			}
 		}
 

@@ -137,7 +137,7 @@ class ImagineBehavior extends Behavior {
  */
 	public function crop($Image, $options = []) {
 		if (empty($options['height']) || empty($options['width'])) {
-			throw new \InvalidArgumentException(__d('Imagine', 'You have to pass height and width in the options!'));
+			throw new \InvalidArgumentException(__d('imagine', 'You have to pass height and width in the options!'));
 		}
 
 		$defaults = [
@@ -160,7 +160,7 @@ class ImagineBehavior extends Behavior {
  */
 	public function squareCenterCrop($Image, $options = []) {
 		if (empty($options['size'])) {
-			throw new \InvalidArgumentException(__d('Imagine', 'You have to pass size in the options!'));
+			throw new \InvalidArgumentException(__d('imagine', 'You have to pass size in the options!'));
 		}
 
 		$imageSize = $this->getImageSize($Image);
@@ -194,7 +194,7 @@ class ImagineBehavior extends Behavior {
  */
 	public function widen($Image, $options = []) {
 		if (empty($options['size'])) {
-			throw new \InvalidArgumentException(__d('Imagine', 'You must pass a size value!'));
+			throw new \InvalidArgumentException(__d('imagine', 'You must pass a size value!'));
 		}
 		$this->widenAndHeighten($Image, ['width' => $options['size']]);
 	}
@@ -209,7 +209,7 @@ class ImagineBehavior extends Behavior {
  */
 	public function heighten($Image, $options = []) {
 		if (empty($options['size'])) {
-			throw new \InvalidArgumentException(__d('Imagine', 'You must pass a size value!'));
+			throw new \InvalidArgumentException(__d('imagine', 'You must pass a size value!'));
 		}
 		$this->widenAndHeighten($Image, ['height' => $options['size']]);
 	}
@@ -224,11 +224,11 @@ class ImagineBehavior extends Behavior {
  */
 	public function widenAndHeighten($Image, $options = []) {
 		if (empty($options['height']) && empty($options['width']) && empty($options['size'])) {
-			throw new \InvalidArgumentException(__d('Imagine', 'You have to pass a height, width or size!'));
+			throw new \InvalidArgumentException(__d('imagine', 'You have to pass a height, width or size!'));
 		}
 
 		if (!empty($options['height']) && !empty($options['width'])) {
-			throw new \InvalidArgumentException(__d('Imagine', 'You can only scale by width or height!'));
+			throw new \InvalidArgumentException(__d('imagine', 'You can only scale by width or height!'));
 		}
 
 		if (isset($options['width'])) {
@@ -249,11 +249,11 @@ class ImagineBehavior extends Behavior {
 		if (isset($options['noUpScale'])) {
 			if ($method == 'widen') {
 				if ($size > $width) {
-					throw new \InvalidArgumentException(__d('Imagine', 'You can not scale up!'));
+					throw new \InvalidArgumentException(__d('imagine', 'You can not scale up!'));
 				}
 			} elseif ('heighten') {
 				if ($size > $height) {
-					throw new \InvalidArgumentException(__d('Imagine', 'You can not scale up!'));
+					throw new \InvalidArgumentException(__d('imagine', 'You can not scale up!'));
 				}
 			}
 		}
@@ -261,11 +261,11 @@ class ImagineBehavior extends Behavior {
 		if (isset($options['noDownScale'])) {
 			if ($method == 'widen') {
 				if ($size < $width) {
-					throw new \InvalidArgumentException(__d('Imagine', 'You can not scale down!'));
+					throw new \InvalidArgumentException(__d('imagine', 'You can not scale down!'));
 				}
 			} elseif ('heighten') {
 				if ($size < $height) {
-					throw new \InvalidArgumentException(__d('Imagine', 'You can not scale down!'));
+					throw new \InvalidArgumentException(__d('imagine', 'You can not scale down!'));
 				}
 			}
 		}
@@ -285,7 +285,7 @@ class ImagineBehavior extends Behavior {
  */
 	public function scale($Image, $options = []) {
 		if (empty($options['factor'])) {
-			throw new \InvalidArgumentException(__d('Imagine', 'You must pass a factor value!'));
+			throw new \InvalidArgumentException(__d('imagine', 'You must pass a factor value!'));
 		}
 
 		$imageSize = $this->getImageSize($Image);
@@ -310,7 +310,7 @@ class ImagineBehavior extends Behavior {
 			$options['direction'] = 'vertically';
 		}
 		if (!in_array($options['direction'], ['vertically', 'horizontally'])) {
-			throw new \InvalidArgumentException(__d('Imagine', 'Invalid direction, use vertically or horizontally'));
+			throw new \InvalidArgumentException(__d('imagine', 'Invalid direction, use vertically or horizontally'));
 		}
 		$method = 'flip' . $options['direction'];
 		$Image->{$method}();
@@ -337,7 +337,7 @@ class ImagineBehavior extends Behavior {
  */
 	public function thumbnail(&$Image, $options = []) {
 		if (empty($options['height']) || empty($options['width'])) {
-			throw new \InvalidArgumentException(__d('Imagine', 'You have to pass height and width in the options!'));
+			throw new \InvalidArgumentException(__d('imagine', 'You have to pass height and width in the options!'));
 		}
 
 		$mode = \Imagine\Image\ImageInterface::THUMBNAIL_INSET;
@@ -358,7 +358,7 @@ class ImagineBehavior extends Behavior {
  */
 	public function resize($Image, $options = []) {
 		if (empty($options['height']) || empty($options['width'])) {
-			throw new \InvalidArgumentException(__d('Imagine', 'You have to pass height and width in the options!'));
+			throw new \InvalidArgumentException(__d('imagine', 'You have to pass height and width in the options!'));
 		}
 
 		$Image->resize(new \Imagine\Image\Box($options['width'], $options['height']));

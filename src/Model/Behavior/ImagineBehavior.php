@@ -373,7 +373,7 @@ class ImagineBehavior extends Behavior {
  */
 	public function getImageSize($Image) {
 		if (is_string($Image)) {
-			$class = 'Imagine\\' . $this->settings['engine'] . '\Imagine';
+			$class = 'Imagine\\' . $this->config('engine') . '\Imagine';
 			$Imagine = new $class();
 			$Image = $Imagine->open($Image);
 		}

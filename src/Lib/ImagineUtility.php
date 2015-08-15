@@ -87,7 +87,7 @@ class ImagineUtility {
  */
 	public static function getImageOrientation($imageFile) {
 		if (!file_exists($imageFile)) {
-			throw new \RuntimeException(sprintf('File {0} not found!', $imageFile));
+			throw new \RuntimeException(sprintf('File %s not found!', $imageFile));
 		}
 		$exif = exif_read_data($imageFile);
 		if ($exif === false) {

@@ -6,12 +6,8 @@ Using Composer
 
 Assuming you're mostly familiar with the basics of composer, you'll only have to add the plugin to your `required` section of `composer.json`.
 
-```js
-{
-	"require": {
-		"burzum/cakephp-imagine-plugin": "3.0.*@dev",
-	}
-}
+```sh
+composer require burzum/cakephp-imagine-plugin:2.*
 ```
 
 Using Git

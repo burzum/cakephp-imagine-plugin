@@ -13,6 +13,7 @@ namespace Burzum\Imagine\Model\Behavior;
 use Burzum\Imagine\Lib\ImagineUtility;
 use Cake\ORM\Behavior;
 use Cake\ORM\Table;
+use Imagine\Image\AbstractImage;
 
 /**
  * CakePHP Imagine Plugin
@@ -64,6 +65,7 @@ class ImagineBehavior extends Behavior {
 	/**
 	 * Get the imagine object
 	 *
+	 * @deprecated Call ImagineBehavior->getImageProcessor()->imagine() instead.
 	 * @return Imagine object
 	 */
 	public function imagineObject() {
@@ -92,19 +94,36 @@ class ImagineBehavior extends Behavior {
 	 * @param string $output
 	 * @param array $imagineOptions
 	 * @param array $operations
-	 * @throws \BadMethodCallException
+	 * @throws \InvalidArgumentException
 	 * @return bool
 	 */
-	public function processImage($ImageObject, $output = null, $imagineOptions = [], $operations = []) {
-		if (is_string($ImageObject)) {
-			$this->_processor->open($ImageObject);
-			$ImageObject = $this->_processor->image();
+	public function processImage($image, $output = null, $imagineOptions = [], $operations = []) {
+		if (is_string($image)) {
+			$this->_processor->open($image);
+			$image = $this->_processor->image();
+		}
+		if (!$image instanceof AbstractImage) {
+			throw new \InvalidArgumentException('An instance of `\Imagine\Image\AbstractImage` is required, you passed `%s`!', get_class($image));
 		}
 
-		$this->_applyOperations($operations, $ImageObject);
+		$event = $this->_table->dispatchEvent('ImagineBehavior.beforeApplyOperations', compact('image', 'operations'));
+		if ($event->isStopped()) {
+			return $event->result;
+		}
+
+		$data = $event->data();
+		$this->_applyOperations(
+			$data['operations'],
+			$data['image']
+		);
+
+		$event = $this->_table->dispatchEvent('ImagineBehavior.afterApplyOperations', $data);
+		if ($event->isStopped()) {
+			return $event->result;
+		}
 
 		if ($output === null) {
-			return $ImageObject;
+			return $image;
 		}
 
 		return $this->_processor->save($output, $imagineOptions);
@@ -114,17 +133,22 @@ class ImagineBehavior extends Behavior {
 	 * Applies the actual image operations to the image.
 	 *
 	 * @param array $operations
-	 * @param array $ImageObject
+	 * @param array $image
+	 * @throws \BadMethodCallException
 	 * @return void
 	 */
-	protected function _applyOperations($operations, $ImageObject) {
+	protected function _applyOperations($operations, $image) {
 		foreach ($operations as $operation => $params) {
+			$event = $this->_table->dispatchEvent('ImagineBehavior.applyOperation', compact('image', 'operations'));
+			if ($event->isStopped()) {
+				continue;
+			}
 			if (method_exists($this->_table, $operation)) {
-				$this->_table->{$operation}($ImageObject, $params);
+				$this->_table->{$operation}($image, $params);
 			} elseif (method_exists($this->_processor, $operation)) {
 				$this->_processor->{$operation}($params);
 			} else {
-				throw new \BadMethodCallException(__d('imagine', 'Unsupported image operation {0}!', $operation));
+				throw new \BadMethodCallException(__d('imagine', 'Unsupported image operation `{0}`!', $operation));
 			}
 		}
 	}

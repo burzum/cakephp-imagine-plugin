@@ -404,13 +404,13 @@ class ImageProcessor {
 		$Image = $Image->thumbnail(new Box($options['width'], $options['height']), $mode);
 	}
 
-/**
- * Wrapper for Imagines resize
- *
- * @param array Array of options for processing the image
- * @throws \InvalidArgumentException
- * @return $this
- */
+	/**
+	 * Wrapper for Imagines resize
+	 *
+	 * @param array Array of options for processing the image
+	 * @throws \InvalidArgumentException
+	 * @return $this
+	 */
 	public function resize(array $options = []) {
 		if (empty($options['height']) || empty($options['width'])) {
 			throw new \InvalidArgumentException(__d('imagine', 'You have to pass height and width in the options!'));

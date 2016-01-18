@@ -112,6 +112,23 @@ class ImagineBehaviorTest extends TestCase {
 	 *
 	 * @return void
 	 */
+	public function testResize() {
+		$image = Plugin::path('Burzum/Imagine') . 'tests' . DS . 'Fixture' . DS . 'titus.jpg';
+		$this->Model->processImage($image, TMP . 'resize.jpg', [], [
+			'resize' => [
+				'height' => 150,
+				'width' => 200
+			]
+		]);
+		$result = $this->Model->getImageSize(TMP . 'resize.jpg');
+		$this->assertEquals($result, [200, 150, 'x' => 200, 'y' => 150]);
+	}
+
+	/**
+	 * testCrop
+	 *
+	 * @return void
+	 */
 	public function testCrop() {
 		$image = Plugin::path('Burzum/Imagine') . 'tests' . DS . 'Fixture' . DS . 'titus.jpg';
 		$this->Model->processImage($image, TMP . 'crop.jpg', [], [
@@ -120,6 +137,8 @@ class ImagineBehaviorTest extends TestCase {
 				'width' => 300
 			]
 		]);
+		$result = $this->Model->getImageSize(TMP . 'crop.jpg');
+		$this->assertEquals($result, [300, 300, 'x' => 300, 'y' => 300]);
 	}
 
 	/**
@@ -139,7 +158,6 @@ class ImagineBehaviorTest extends TestCase {
 		]);
 
 		$result = $this->Model->getImageSize(TMP . 'thumbnail.jpg');
-
 		$this->assertEquals($result, [300, 300, 'x' => 300, 'y' => 300]);
 
 		$this->Model->processImage($image, TMP . 'thumbnail2.jpg', [], [
@@ -167,6 +185,8 @@ class ImagineBehaviorTest extends TestCase {
 				'size' => 255
 			]
 		]);
+		$result = $this->Model->getImageSize(TMP . 'testSquareCenterCrop.jpg');
+		$this->assertEquals($result, [255, 255, 'x' => 255, 'y' => 255]);
 	}
 
 	/**
@@ -174,7 +194,7 @@ class ImagineBehaviorTest extends TestCase {
 	 *
 	 * @return void
 	 */
-	public function testgetImageSize() {
+	public function testGetImageSize() {
 		$image = Plugin::path('Burzum/Imagine') . 'tests' . DS . 'Fixture' . DS . 'titus.jpg';
 		$result = $this->Model->getImageSize($image);
 		$this->assertEquals($result, [500, 664, 'x' => 500, 'y' => 664]);
@@ -192,17 +212,17 @@ class ImagineBehaviorTest extends TestCase {
 		$this->assertEquals($result, [500, 664, 'x' => 500, 'y' => 664]);
 
 		// Width
-		$this->Model->processImage($image, TMP . 'thumbnail2.jpg', [], [
+		$this->Model->processImage($image, TMP . 'widen.jpg', [], [
 			'widen' => [
 				'size' => 200
 			]
 		]);
 
-		$result = $this->Model->getImageSize(TMP . 'thumbnail2.jpg');
+		$result = $this->Model->getImageSize(TMP . 'widen.jpg');
 		$this->assertEquals($result, [200, 266, 'x' => 200, 'y' => 266]);
 
 		// Height
-		$this->Model->processImage($image, TMP . 'thumbnail3.jpg', [], [
+		$this->Model->processImage($image, TMP . 'heighten.jpg', [], [
 				'heighten' => [
 					'size' => 200
 				]

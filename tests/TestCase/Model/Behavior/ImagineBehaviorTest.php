@@ -229,7 +229,7 @@ class ImagineBehaviorTest extends TestCase {
 			]
 		);
 
-		$result = $this->Model->getImageSize(TMP . 'thumbnail3.jpg');
+		$result = $this->Model->getImageSize(TMP . 'heighten.jpg');
 		$this->assertEquals($result, [151, 200, 'x' => 151, 'y' => 200]);
 	}
 
@@ -242,23 +242,23 @@ class ImagineBehaviorTest extends TestCase {
 		$image = Plugin::path('Burzum/Imagine') . 'tests' . DS . 'Fixture' . DS . 'titus.jpg';
 
 		// Scale
-		$this->Model->processImage($image, TMP . 'thumbnail4.jpg', [], [
+		$this->Model->processImage($image, TMP . 'scale-factor2.jpg', [], [
 			'scale' => [
 				'factor' => 2
 			]
 		]);
 
-		$result = $this->Model->getImageSize(TMP . 'thumbnail4.jpg');
+		$result = $this->Model->getImageSize(TMP . 'scale-factor2.jpg');
 		$this->assertEquals($result, [1000, 1328, 'x' => 1000, 'y' => 1328]);
 
 		// Scale2
-		$this->Model->processImage($image, TMP . 'thumbnail5.jpg', [], [
+		$this->Model->processImage($image, TMP . 'scale-factor1.25.jpg', [], [
 			'scale' => [
 				'factor' => 1.25
 			]
 		]);
 
-		$result = $this->Model->getImageSize(TMP . 'thumbnail5.jpg');
+		$result = $this->Model->getImageSize(TMP . 'scale-factor1.25.jpg');
 		$this->assertEquals($result, [625, 830, 'x' => 625, 'y' => 830]);
 	}
 }

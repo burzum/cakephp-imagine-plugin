@@ -13,7 +13,7 @@
 	],
 	"require": {
 		"cakephp/cakephp": "3.*",
-		"imagine/imagine": "*",
+		"imagine/imagine": "0.6.*",
 		"cakephp/plugin-installer": "*"
 	},
 	"require-dev": {

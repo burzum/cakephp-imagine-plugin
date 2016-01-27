@@ -61,7 +61,7 @@ class ImagineHelperTest extends TestCase {
 				]
 			]
 		);
-		$expected = '/images/display/1?thumbnail=width%7C200%3Bheight%7C150&hash=69aa9f46cdc5a200dc7539fc10eec00f2ba89023';
+		$expected = '/Images/display/1?thumbnail=width%7C200%3Bheight%7C150&hash=69aa9f46cdc5a200dc7539fc10eec00f2ba89023';
 		$this->assertEquals($result, $expected);
 	}
 

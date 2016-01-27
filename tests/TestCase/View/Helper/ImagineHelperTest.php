@@ -20,11 +20,11 @@ use Cake\View\View;
  */
 class ImagineHelperTest extends TestCase {
 
-/**
- * setUp method
- *
- * @return void
- */
+	/**
+	 * setUp method
+	 *
+	 * @return void
+	 */
 	public function setUp() {
 		Configure::write('Imagine.salt', 'this-is-a-nice-salt');
 		$controller = null;
@@ -32,24 +32,24 @@ class ImagineHelperTest extends TestCase {
 		$this->Imagine = new ImagineHelper($View);
 	}
 
-/**
- * tearDown method
- *
- * @return void
- */
+	/**
+	 * tearDown method
+	 *
+	 * @return void
+	 */
 	public function tearDown() {
 		unset($this->Imagine);
 	}
 
-/**
- * testUrl method
- *
- * @return void
- */
+	/**
+	 * testUrl method
+	 *
+	 * @return void
+	 */
 	public function testUrl() {
 		$result = $this->Imagine->url(
 			[
-				'controller' => 'images',
+				'controller' => 'Images',
 				'action' => 'display',
 				1
 			],
@@ -64,12 +64,12 @@ class ImagineHelperTest extends TestCase {
 		$expected = '/images/display/1?thumbnail=width%7C200%3Bheight%7C150&hash=69aa9f46cdc5a200dc7539fc10eec00f2ba89023';
 		$this->assertEquals($result, $expected);
 	}
-  
-/**
- * testUrl method for backward compatibility
- *
- * @return void
- */
+
+	/**
+	 * testUrl method for backward compatibility
+	 *
+	 * @return void
+	 */
 	public function testUrlBackwardCompatibility() {
 		$param1 = [
 			'controller' => 'Images',
@@ -89,11 +89,11 @@ class ImagineHelperTest extends TestCase {
 		$this->assertEquals($result1, $result2);
 	}
 
-/**
- * testHash method
- *
- * @return void
- */
+	/**
+	 * testHash method
+	 *
+	 * @return void
+	 */
 	public function testHash() {
 		$options = $this->Imagine->pack([
 				'thumbnail' => [
@@ -106,22 +106,22 @@ class ImagineHelperTest extends TestCase {
 		$this->assertEquals($result, '69aa9f46cdc5a200dc7539fc10eec00f2ba89023');
 	}
 
-/**
- * testHash method
- *
- * @expectedException Exception
- * @return void
- */
+	/**
+	 * testHash method
+	 *
+	 * @expectedException Exception
+	 * @return void
+	 */
 	public function testMissingSaltForHash() {
 		Configure::write('Imagine.salt', null);
 		$this->Imagine->hash('foo');
 	}
 
-/**
- * testUrl method
- *
- * @return void
- */
+	/**
+	 * testUrl method
+	 *
+	 * @return void
+	 */
 	public function testPack() {
 		$result = $this->Imagine->pack([
 				'thumbnail' => [
@@ -133,5 +133,4 @@ class ImagineHelperTest extends TestCase {
 
 		$this->assertEquals($result, ['thumbnail' => 'width|200;height|150']);
 	}
-
 }

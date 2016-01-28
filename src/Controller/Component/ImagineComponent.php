@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright 2011-2015, Florian Krämer
+ * Copyright 2011-2016, Florian Krämer
  *
  * Licensed under The MIT License
  * Redistributions of files must retain the above copyright notice.
  *
- * Copyright 2011-2015, Florian Krämer
+ * Copyright 2011-2016, Florian Krämer
  * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
 namespace Burzum\Imagine\Controller\Component;
@@ -25,41 +25,41 @@ use InvalidArgumentException;
  */
 class ImagineComponent extends Component {
 
-/**
- * Default config
- *
- * These are merged with user-provided config when the component is used.
- *
- * @var array
- */
+	/**
+	 * Default config
+	 *
+	 * These are merged with user-provided config when the component is used.
+	 *
+	 * @var array
+	 */
 	protected $_defaultConfig = [
 		'hashField' => 'hash',
 		'checkHash' => true,
 		'actions' => [],
 	];
 
-/**
- * Controller instance
- *
- * @var object
- */
+	/**
+	 * Controller instance
+	 *
+	 * @var object
+	 */
 	public $Controller;
 
-/**
- * Image processing operations taken by ImagineBehavior::processImage()
- *
- * This property is auto populated by ImagineComponent::unpackParams()
- *
- * @var array
- */
+	/**
+	 * Image processing operations taken by ImagineBehavior::processImage()
+	 *
+	 * This property is auto populated by ImagineComponent::unpackParams()
+	 *
+	 * @var array
+	 */
 	public $operations = [];
 
-/**
- * Constructor
- *
- * @param \Cake\Controller\ComponentRegistry $collection
- * @param array $config Config options array
- */
+	/**
+	 * Constructor
+	 *
+	 * @param \Cake\Controller\ComponentRegistry $collection
+	 * @param array $config Config options array
+	 */
 	public function __construct(ComponentRegistry $collection, $config = []) {
 		parent::__construct($collection, $config);
 		$Controller = $collection->getController();
@@ -67,12 +67,12 @@ class ImagineComponent extends Component {
 		$this->response = $Controller->response;
 	}
 
-/**
- * Start Up
- *
- * @param Event $Event
- * @return void
- */
+	/**
+	 * Start Up
+	 *
+	 * @param Event $Event
+	 * @return void
+	 */
 	public function startup(Event $Event) {
 		$Controller = $Event->subject();
 		$this->Controller = $Controller;
@@ -86,16 +86,16 @@ class ImagineComponent extends Component {
 		}
 	}
 
-/**
- * Creates a hash based on the named params but ignores the hash field
- *
- * The hash can also be used to determine if there is already a cached version
- * of the requested image that was processed with these params. How you do that
- * is up to you.
- *
- * @throws InvalidArgumentException
- * @return mixed String if a hash could be retrieved, false if not
- */
+	/**
+	 * Creates a hash based on the named params but ignores the hash field
+	 *
+	 * The hash can also be used to determine if there is already a cached version
+	 * of the requested image that was processed with these params. How you do that
+	 * is up to you.
+	 *
+	 * @throws InvalidArgumentException
+	 * @return mixed String if a hash could be retrieved, false if not
+	 */
 	public function getHash() {
 		$mediaSalt = Configure::read('Imagine.salt');
 		if (empty($mediaSalt)) {
@@ -111,17 +111,17 @@ class ImagineComponent extends Component {
 		return false;
 	}
 
-/**
- * Compares the hash passed within the named args with the hash calculated based
- * on the other named args and the imagine salt
- *
- * This is done to avoid that people can randomly generate tons of images by
- * just incrementing the width and height for example in the url.
- *
- * @param bool $error If set to false no 404 page will be rendered if the hash is wrong
- * @throws NotFoundException if the hash was not present
- * @return bool True if the hashes match
- */
+	/**
+	 * Compares the hash passed within the named args with the hash calculated based
+	 * on the other named args and the imagine salt
+	 *
+	 * This is done to avoid that people can randomly generate tons of images by
+	 * just incrementing the width and height for example in the url.
+	 *
+	 * @param bool $error If set to false no 404 page will be rendered if the hash is wrong
+	 * @throws NotFoundException if the hash was not present
+	 * @return bool True if the hashes match
+	 */
 	public function checkHash($error = true) {
 		if (!isset($this->request->query[$this->_config['hashField']]) && $error) {
 			throw new NotFoundException();
@@ -136,13 +136,13 @@ class ImagineComponent extends Component {
 		return $result;
 	}
 
-/**
- * Unpacks the strings into arrays that were packed with ImagineHelper::pack()
- *
- * @param array $namedParams
- * @internal param array $params If empty the method tries to get them from Controller->request['named']
- * @return array Array with operation options for imagine, if none found an empty array
- */
+	/**
+	 * Unpacks the strings into arrays that were packed with ImagineHelper::pack()
+	 *
+	 * @param array $namedParams
+	 * @internal param array $params If empty the method tries to get them from Controller->request['named']
+	 * @return array Array with operation options for imagine, if none found an empty array
+	 */
 	public function unpackParams($namedParams = []) {
 		if (empty($namedParams)) {
 			$namedParams = $this->request->query;

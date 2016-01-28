@@ -369,39 +369,74 @@ class ImageProcessor {
 	/**
 	 * Wrapper for Imagines thumbnail.
 	 *
+	 * This method had a bunch of issues and the code inside the method is a
+	 * workaround! Please see:
+	 *
+	 * @link https://github.com/burzum/cakephp-imagine-plugin/issues/42
+	 * @link https://github.com/avalanche123/Imagine/issues/478
+	 *
 	 * @throws \InvalidArgumentException
 	 * @param array Array of options for processing the image.
 	 * @throws InvalidArgumentException if no height or width was passed
 	 * @return $this
 	 */
 	public function thumbnail(array $options = []) {
-		$this->_thumbnail($this->_image, $options);
-		return $this;
-	}
-
-	/**
-	 * Workaround method...
-	 *
-	 * Seriously, I have NO IDEA why this only works when passed through a
-	 * method as reference... If you use the very same code in the thumbnail()
-	 * method directly it doesn't resize. I think there is weird bug with the
-	 * references or something in Imagine itself going on. Their own example is
-	 * not working properly. See https://github.com/avalanche123/Imagine/issues/478
-	 *
-	 * @link https://github.com/avalanche123/Imagine/issues/478
-	 * @param \Imagine\Image\AbstractImage
-	 * @throws InvalidArgumentException if no height or width was passed
-	 * @return void
-	 */
-	protected function _thumbnail(&$Image, $options) {
 		if (empty($options['height']) || empty($options['width'])) {
 			throw new \InvalidArgumentException(__d('imagine', 'You have to pass height and width in the options!'));
 		}
+
 		$mode = ImageInterface::THUMBNAIL_INSET;
 		if (isset($options['mode']) && $options['mode'] === 'outbound') {
 			$mode = ImageInterface::THUMBNAIL_OUTBOUND;
 		}
-		$Image = $Image->thumbnail(new Box($options['width'], $options['height']), $mode);
+
+		$filter = ImageInterface::FILTER_UNDEFINED;
+		if (isset($options['filter'])) {
+			$filter = $options['filter'];
+		}
+
+		$size = new Box($options['width'], $options['height']);
+		$imageSize = $this->_image->getSize();
+		$ratios = array(
+			$size->getWidth() / $imageSize->getWidth(),
+			$size->getHeight() / $imageSize->getHeight()
+		);
+
+		// if target width is larger than image width
+		// AND target height is longer than image height
+		if ($size->contains($imageSize)) {
+			return $this->_image;
+		}
+		if ($mode === ImageInterface::THUMBNAIL_INSET) {
+			$ratio = min($ratios);
+		} else {
+			$ratio = max($ratios);
+		}
+		if ($mode === ImageInterface::THUMBNAIL_OUTBOUND) {
+			if (!$imageSize->contains($size)) {
+				$size = new Box(
+					min($imageSize->getWidth(), $size->getWidth()),
+					min($imageSize->getHeight(), $size->getHeight())
+				);
+			} else {
+				$imageSize = $this->_image->getSize()->scale($ratio);
+				$this->_image->resize($imageSize, $filter);
+			}
+			$this->_image->crop(new Point(
+				max(0, round(($imageSize->getWidth() - $size->getWidth()) / 2)),
+				max(0, round(($imageSize->getHeight() - $size->getHeight()) / 2))
+			), $size);
+		} else {
+			if (!$imageSize->contains($size)) {
+				$imageSize = $imageSize->scale($ratio);
+				$this->_image->resize($imageSize, $filter);
+			} else {
+				$imageSize = $this->_image->getSize()->scale($ratio);
+				$this->_image->resize($imageSize, $filter);
+			}
+		}
+
+		return $this;
 	}
 
 	/**
@@ -416,7 +451,7 @@ class ImageProcessor {
 			throw new \InvalidArgumentException(__d('imagine', 'You have to pass height and width in the options!'));
 		}
 
-		$this->_image = $this->_image->resize(new Box($options['width'], $options['height']));
+		$this->_image->resize(new Box($options['width'], $options['height']));
 		return $this;
 	}
 

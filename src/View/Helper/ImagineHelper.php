@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright 2011-2015, Florian Krämer
+ * Copyright 2011-2016, Florian Krämer
  *
  * Licensed under The MIT License
  * Redistributions of files must retain the above copyright notice.
  *
- * Copyright 2011-2015, Florian Krämer
+ * Copyright 2011-2016, Florian Krämer
  * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
 namespace Burzum\Imagine\View\Helper;
@@ -22,19 +22,19 @@ use Cake\Routing\Router;
  */
 class ImagineHelper extends Helper {
 
-/**
- * Finds URL for specified action and sign it.
- *
- * Returns an URL pointing to a combination of controller and action. Param
- *
- * @param  mixed  $url    Cake-relative URL, like "/products/edit/92" or "/presidents/elect/4"
- *                        or an array specifying any of the following: 'controller', 'action',
- *                        and/or 'plugin', in addition to named arguments (keyed array elements),
- *                        and standard URL arguments (indexed array elements)
- * @param bool $full If true, the full base URL will be prepended to the result
- * @param array $options List of named arguments that need to sign
- * @return string Full translated signed URL with base path and with
- */
+	/**
+	 * Finds URL for specified action and sign it.
+	 *
+	 * Returns an URL pointing to a combination of controller and action. Param
+	 *
+	 * @param  mixed  $url    Cake-relative URL, like "/products/edit/92" or "/presidents/elect/4"
+	 *                        or an array specifying any of the following: 'controller', 'action',
+	 *                        and/or 'plugin', in addition to named arguments (keyed array elements),
+	 *                        and standard URL arguments (indexed array elements)
+	 * @param bool $full If true, the full base URL will be prepended to the result
+	 * @param array $options List of named arguments that need to sign
+	 * @return string Full translated signed URL with base path and with
+	 */
 	public function url($url = null, $full = false, $options = []) {
 		if (is_string($url)) {
 			$url = array_merge(['plugin' => 'media', 'admin' => false, 'controller' => 'media', 'action' => 'image'], [$url]);
@@ -54,13 +54,13 @@ class ImagineHelper extends Helper {
 		return Router::url($url, $full);
 	}
 
-/**
- * Signs the url with a salted hash
- *
- * @throws \RuntimeException
- * @param array $options
- * @return string
- */
+	/**
+	 * Signs the url with a salted hash
+	 *
+	 * @throws \RuntimeException
+	 * @param array $options
+	 * @return string
+	 */
 	public function hash($options) {
 		$mediaSalt = Configure::read('Imagine.salt');
 		if (empty($mediaSalt)) {

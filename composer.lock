@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "6e22cc825ebf39380860130833d60351",
-    "content-hash": "6afa4227db44e38c50ad5abf96ba7c75",
+    "hash": "63c3e1d202179f42da650927ad75be3b",
+    "content-hash": "efc2f7ec1fa3fa9a4166b2a2c723d3aa",
     "packages": [
         {
             "name": "aura/installer-default",
@@ -128,16 +128,16 @@
         },
         {
             "name": "cakephp/cakephp",
-            "version": "3.1.7",
+            "version": "3.1.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/cakephp/cakephp.git",
-                "reference": "a91f654a19802cb4f6cd60ff91bb062b782bc99c"
+                "reference": "72db96b63022e5b9bcafe960c039315d128f9649"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/cakephp/cakephp/zipball/a91f654a19802cb4f6cd60ff91bb062b782bc99c",
-                "reference": "a91f654a19802cb4f6cd60ff91bb062b782bc99c",
+                "url": "https://api.github.com/repos/cakephp/cakephp/zipball/72db96b63022e5b9bcafe960c039315d128f9649",
+                "reference": "72db96b63022e5b9bcafe960c039315d128f9649",
                 "shasum": ""
             },
             "require": {
@@ -194,7 +194,7 @@
             "keywords": [
                 "framework"
             ],
-            "time": "2016-01-09 23:14:54"
+            "time": "2016-01-24 02:07:15"
         },
         {
             "name": "cakephp/plugin-installer",

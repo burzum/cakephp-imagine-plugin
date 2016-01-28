@@ -149,7 +149,18 @@ class ImagineBehaviorTest extends TestCase {
 	public function testThumbnail() {
 		$image = Plugin::path('Burzum/Imagine') . 'tests' . DS . 'Fixture' . DS . 'titus.jpg';
 
-		$this->Model->processImage($image, TMP . 'thumbnail.jpg', [], [
+		$this->Model->processImage($image, TMP . 'thumbnailInbound.jpg', [], [
+			'thumbnail' => [
+				'mode' => 'inbound',
+				'height' => 300,
+				'width' => 300
+			]
+		]);
+
+		$result = $this->Model->getImageSize(TMP . 'thumbnailInbound.jpg');
+		$this->assertEquals($result, [226, 300, 'x' => 226, 'y' => 300]);
+
+		$this->Model->processImage($image, TMP . 'thumbnailOutbound.jpg', [], [
 			'thumbnail' => [
 				'mode' => 'outbound',
 				'height' => 300,
@@ -157,7 +168,7 @@ class ImagineBehaviorTest extends TestCase {
 			]
 		]);
 
-		$result = $this->Model->getImageSize(TMP . 'thumbnail.jpg');
+		$result = $this->Model->getImageSize(TMP . 'thumbnailOutbound.jpg');
 		$this->assertEquals($result, [300, 300, 'x' => 300, 'y' => 300]);
 
 		$this->Model->processImage($image, TMP . 'thumbnail2.jpg', [], [

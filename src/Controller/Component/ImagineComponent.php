@@ -77,7 +77,7 @@ class ImagineComponent extends Component {
 		$Controller = $Event->subject();
 		$this->Controller = $Controller;
 		if (!empty($this->_config['actions'])) {
-			if (in_array($this->Controlle->action, $this->_config['actions'])) {
+			if (in_array($this->Controller->action, $this->_config['actions'])) {
 				if ($this->_config['checkHash'] === true) {
 					$this->checkHash();
 				}

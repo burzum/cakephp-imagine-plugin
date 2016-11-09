@@ -372,7 +372,7 @@ class ImagineBehavior extends ModelBehavior {
 			throw new InvalidArgumentException(__d('Imagine', 'You have to pass height and width in the options!'));
 		}
 
-		$imageSize = $this->getImageSize($Image);
+		$imageSize = $this->getImageSize($Model, $Image);
 		if (isset($options['preventUpscale']) && $options['preventUpscale'] === true) {
 			if (isset($options['height']) && $options['height'] > $imageSize['y']) {
 				return;

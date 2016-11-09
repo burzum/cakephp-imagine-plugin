@@ -214,7 +214,7 @@ class ImageProcessor {
 		$width = $imageSize['x'];
 		$height = $imageSize['y'];
 
-		if (isset($options['preventUpscaling']) && $options['preventUpscaling'] === true) {
+		if (isset($options['preventUpscale']) && $options['preventUpscale'] === true) {
 			if ($options['size'] > $width || $options['size'] > $height) {
 				return;
 			}
@@ -253,9 +253,9 @@ class ImageProcessor {
 			throw new \InvalidArgumentException(__d('imagine', 'You must pass a size value!'));
 		}
 
-		if (isset($options['preventUpscaling']) && $options['preventUpscaling'] === true) {
-			$imageSize = $this->getImageSize($Model, $Image);
-			if ($imageSize['x'] > $options['size']) {
+		if (isset($options['preventUpscale']) && $options['preventUpscale'] === true) {
+			$imageSize = $this->getImageSize();
+			if ($options['size'] > $imageSize['x']) {
 				return;
 			}
 		}
@@ -277,9 +277,9 @@ class ImageProcessor {
 			throw new \InvalidArgumentException(__d('imagine', 'You must pass a size value!'));
 		}
 
-		if (isset($options['preventUpscaling']) && $options['preventUpscaling'] === true) {
+		if (isset($options['preventUpscale']) && $options['preventUpscale'] === true) {
 			$imageSize = $this->getImageSize();
-			if ($imageSize['y'] > $options['size']) {
+			if ($options['size'] > $imageSize['y']) {
 				return;
 			}
 		}
@@ -361,7 +361,7 @@ class ImageProcessor {
 			throw new \InvalidArgumentException(__d('imagine', 'You must pass a factor value!'));
 		}
 
-		if (isset($options['preventUpscaling']) && $options['preventUpscaling'] === true && $options['factor'] > 1.0) {
+		if (isset($options['preventUpscale']) && $options['preventUpscale'] === true && $options['factor'] > 1.0) {
 			return;
 		}
 
@@ -430,7 +430,7 @@ class ImageProcessor {
 		}
 
 		$imageSize = $this->getImageSize();
-		if (isset($options['preventUpscaling']) && $options['preventUpscaling'] === true) {
+		if (isset($options['preventUpscale']) && $options['preventUpscale'] === true) {
 			if (isset($options['height']) && $options['height'] > $imageSize['y']) {
 				return;
 			}
@@ -450,6 +450,7 @@ class ImageProcessor {
 		}
 
 		$size = new Box($options['width'], $options['height']);
+		$imageSize = $this->_image->getSize();
 		$ratios = array(
 			$size->getWidth() / $imageSize->getWidth(),
 			$size->getHeight() / $imageSize->getHeight()

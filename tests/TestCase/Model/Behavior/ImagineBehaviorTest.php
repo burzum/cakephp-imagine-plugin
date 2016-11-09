@@ -245,6 +245,50 @@ class ImagineBehaviorTest extends TestCase {
 	}
 
 	/**
+	 * testPreventUpscale
+	 *
+	 * @return void
+	 */
+	public function testPreventUpscale() {
+		$image = Plugin::path('Burzum/Imagine') . 'tests' . DS . 'Fixture' . DS . 'titus.jpg';
+
+		// Height
+		$this->Model->processImage($image, TMP . 'heighten-upscale.jpg', [], [
+				'heighten' => [
+					'size' => 2000,
+					'preventUpscale' => true
+				],
+			]
+		);
+
+		$result = $this->Model->getImageSize(TMP . 'heighten-upscale.jpg');
+		$this->assertEquals($result, [500, 664, 'x' => 500, 'y' => 664]);
+
+		// Width
+		$this->Model->processImage($image, TMP . 'widen-upscale.jpg', [], [
+			'widen' => [
+				'size' => 2000,
+				'preventUpscale' => true
+			]
+		]);
+
+		$result = $this->Model->getImageSize(TMP . 'widen-upscale.jpg');
+		$this->assertEquals($result, [500, 664, 'x' => 500, 'y' => 664]);
+
+		// Thumbnail
+		$this->Model->processImage($image, TMP . 'thumbnail-upscale.jpg', [], [
+			'thumbnail' => [
+				'height' => 2000,
+				'width' => 2000,
+				'preventUpscale' => true
+			]
+		]);
+
+		$result = $this->Model->getImageSize(TMP . 'thumbnail-upscale.jpg');
+		$this->assertEquals($result, [500, 664, 'x' => 500, 'y' => 664]);
+	}
+
+	/**
 	 * testScale
 	 *
 	 * @return void

@@ -120,6 +120,7 @@ class ImageProcessor {
 	public function save($output, array $options = []) {
 		$this->_image->save($output, $options);
 		$this->_image = null;
+
 		return true;
 	}
 
@@ -130,6 +131,7 @@ class ImageProcessor {
 	 */
 	public function processImage($output = null, $imagineOptions = [], $operations = []) {
 		user_error('processImage() is deprecated, use batchProcess() instead!', E_NOTICE);
+
 		return $this->batchProcess($output, $operations, $imagineOptions);
 	}
 
@@ -187,6 +189,7 @@ class ImageProcessor {
 			new Point($options['cropX'], $options['cropY']),
 			new Box($options['width'], $options['height'])
 		);
+
 		return $this;
 	}
 
@@ -203,6 +206,15 @@ class ImageProcessor {
 		}
 
 		$imageSize = $this->getImageSize($this->_image);
+
+		$width = $imageSize['x'];
+		$height = $imageSize['y'];
+
+		if (isset($options['preventUpscaling']) && $options['preventUpscaling'] === true) {
+			if ($options['size'] > $width || $options['size'] > $height) {
+				return;
+			}
+		}
 
 		$width = $imageSize[0];
 		$height = $imageSize[1];
@@ -221,6 +233,7 @@ class ImageProcessor {
 
 		$this->_image->crop(new \Imagine\Image\Point($x, $y), new \Imagine\Image\Box($x2, $y2));
 		$this->_image->resize(new \Imagine\Image\Box($options['size'], $options['size']));
+
 		return $this;
 	}
 
@@ -235,7 +248,16 @@ class ImageProcessor {
 		if (empty($options['size'])) {
 			throw new \InvalidArgumentException(__d('imagine', 'You must pass a size value!'));
 		}
+
+		if (isset($options['preventUpscaling']) && $options['preventUpscaling'] === true) {
+			$imageSize = $this->getImageSize($Model, $Image);
+			if ($imageSize['x'] > $options['size']) {
+				return;
+			}
+		}
+
 		$this->widenAndHeighten(['width' => $options['size']]);
+
 		return $this;
 	}
 
@@ -250,6 +272,14 @@ class ImageProcessor {
 		if (empty($options['size'])) {
 			throw new \InvalidArgumentException(__d('imagine', 'You must pass a size value!'));
 		}
+
+		if (isset($options['preventUpscaling']) && $options['preventUpscaling'] === true) {
+			$imageSize = $this->getImageSize();
+			if ($imageSize['y'] > $options['size']) {
+				return;
+			}
+		}
+
 		$this->widenAndHeighten(['height' => $options['size']]);
 	}
 
@@ -311,6 +341,7 @@ class ImageProcessor {
 		$Box = new Box($width, $height);
 		$Box = $Box->{$method}($size);
 		$this->_image->resize($Box);
+
 		return $this;
 	}
 
@@ -326,6 +357,10 @@ class ImageProcessor {
 			throw new \InvalidArgumentException(__d('imagine', 'You must pass a factor value!'));
 		}
 
+		if (isset($options['preventUpscaling']) && $options['preventUpscaling'] === true && $options['factor'] > 1.0) {
+			return;
+		}
+
 		$imageSize = $this->getImageSize();
 		$width = $imageSize[0];
 		$height = $imageSize[1];
@@ -333,6 +368,7 @@ class ImageProcessor {
 		$Box = new Box($width, $height);
 		$Box = $Box->scale($options['factor']);
 		$this->_image->resize($Box);
+
 		return $this;
 	}
 
@@ -347,11 +383,14 @@ class ImageProcessor {
 		if (!isset($options['direction'])) {
 			$options['direction'] = 'vertically';
 		}
+
 		if (!in_array($options['direction'], ['vertically', 'horizontally'])) {
 			throw new \InvalidArgumentException(__d('imagine', 'Invalid direction, use vertically or horizontally'));
 		}
+
 		$method = 'flip' . $options['direction'];
 		$this->_image->{$method}();
+
 		return $this;
 	}
 
@@ -363,6 +402,7 @@ class ImageProcessor {
 	 */
 	public function rotate(array $options = []) {
 		$this->_image->rotate($options['degree']);
+
 		return $this;
 	}
 
@@ -385,6 +425,16 @@ class ImageProcessor {
 			throw new \InvalidArgumentException(__d('imagine', 'You have to pass height and width in the options!'));
 		}
 
+		$imageSize = $this->getImageSize();
+		if (isset($options['preventUpscaling']) && $options['preventUpscaling'] === true) {
+			if (isset($options['height']) && $options['height'] > $imageSize['y']) {
+				return;
+			}
+			if (isset($options['width']) && $options['width'] > $imageSize['x']) {
+				return;
+			}
+		}
+
 		$mode = ImageInterface::THUMBNAIL_INSET;
 		if (isset($options['mode']) && $options['mode'] === 'outbound') {
 			$mode = ImageInterface::THUMBNAIL_OUTBOUND;
@@ -396,7 +446,6 @@ class ImageProcessor {
 		}
 
 		$size = new Box($options['width'], $options['height']);
-		$imageSize = $this->_image->getSize();
 		$ratios = array(
 			$size->getWidth() / $imageSize->getWidth(),
 			$size->getHeight() / $imageSize->getHeight()
@@ -407,11 +456,13 @@ class ImageProcessor {
 		if ($size->contains($imageSize)) {
 			return $this->_image;
 		}
+
 		if ($mode === ImageInterface::THUMBNAIL_INSET) {
 			$ratio = min($ratios);
 		} else {
 			$ratio = max($ratios);
 		}
+
 		if ($mode === ImageInterface::THUMBNAIL_OUTBOUND) {
 			if (!$imageSize->contains($size)) {
 				$size = new Box(
@@ -460,7 +511,7 @@ class ImageProcessor {
 	 *
 	 * @param mixed Imagine Image object or string of a file name
 	 * @return array first value is width, second height
-	 * @see Imagine\Image\ImageInterface::getSize()
+	 * @see \Imagine\Image\ImageInterface::getSize()
 	 */
 	public function getImageSize($Image = null) {
 		$Image = $this->_getImage($Image);

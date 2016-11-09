@@ -76,6 +76,7 @@ class ImagineComponent extends Component {
 	public function startup(Event $Event) {
 		$Controller = $Event->subject();
 		$this->Controller = $Controller;
+
 		if (!empty($this->_config['actions'])) {
 			if (in_array($this->Controller->action, $this->_config['actions'])) {
 				if ($this->_config['checkHash'] === true) {
@@ -108,6 +109,7 @@ class ImagineComponent extends Component {
 			ksort($params);
 			return Security::hash(serialize($params) . $mediaSalt);
 		}
+
 		return false;
 	}
 
@@ -160,6 +162,16 @@ class ImagineComponent extends Component {
 		}
 
 		$this->operations = $namedParams;
+
 		return $namedParams;
+	}
+
+	/**
+	 * Gets the image operations extracted from the request.
+	 *
+	 * @return array An array of image operations to perform
+	 */
+	public function getOperations() {
+		return $this->operations;
 	}
 }

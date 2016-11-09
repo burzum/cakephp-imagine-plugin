@@ -11,7 +11,8 @@
 
 namespace Burzum\Imagine\Lib;
 
-use Cake\Core\Configure;
+use RuntimeException;
+use BadFunctionCallException;
 
 class ImagineUtility {
 
@@ -28,7 +29,7 @@ class ImagineUtility {
 	 * @param array $operations
 	 * @param array $separators
 	 * @param mixed $hash
-	 * @throws BadFunctionCallException
+	 * @throws \BadFunctionCallException
 	 * @return string Filename compatible String representation of the operations
 	 * @link http://support.microsoft.com/kb/177506
 	 */
@@ -57,7 +58,7 @@ class ImagineUtility {
 			if (function_exists($hash)) {
 				return $hash($result);
 			}
-			throw new \BadFunctionCallException();
+			throw new BadFunctionCallException();
 		}
 
 		return $result;
@@ -76,6 +77,7 @@ class ImagineUtility {
 				$imageSizes[$model][$name] = substr(self::operationsToString($operation, [], 'md5'), 0, $hashLength);
 			}
 		}
+
 		return $imageSizes;
 	}
 
@@ -87,12 +89,14 @@ class ImagineUtility {
 	 */
 	public static function getImageOrientation($imageFile) {
 		if (!file_exists($imageFile)) {
-			throw new \RuntimeException(sprintf('File %s not found!', $imageFile));
+			throw new RuntimeException(sprintf('File %s not found!', $imageFile));
 		}
+
 		$exif = exif_read_data($imageFile);
 		if ($exif === false) {
 			return false;
 		}
+
 		$angle = 0;
 		if (!empty($exif['Orientation'])) {
 			switch ($exif['Orientation']) {
@@ -114,6 +118,7 @@ class ImagineUtility {
 			}
 			return $angle;
 		}
+
 		return $angle;
 	}
 }

@@ -70,12 +70,12 @@ class ImagineHelper extends Helper {
 		return urlencode(Security::hash(serialize($options) . $mediaSalt));
 	}
 
-/**
- * Packs the image options array into an array of named arguments that can be used in a cake url
- *
- * @param array $options
- * @return array
- */
+	/**
+	 * Packs the image options array into an array of named arguments that can be used in a cake url
+	 *
+	 * @param array $options
+	 * @return array
+	 */
 	public function pack($options) {
 		$result = [];
 		foreach ($options as $operation => $data) {
@@ -87,6 +87,7 @@ class ImagineHelper extends Helper {
 			}
 			$result[$operation] = implode(';', $tmp);
 		}
+
 		return $result;
 	}
 }

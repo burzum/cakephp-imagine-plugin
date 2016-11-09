@@ -170,7 +170,7 @@ class ImagineBehavior extends ModelBehavior {
 		$width = $imageSize['x'];
 		$height = $imageSize['y'];
 
-		if (isset($options['preventUpscaling']) && $options['preventUpscaling'] === true) {
+		if (isset($options['preventUpscale']) && $options['preventUpscale'] === true) {
 			if ($options['size'] > $width || $options['size'] > $height) {
 				return;
 			}
@@ -205,9 +205,9 @@ class ImagineBehavior extends ModelBehavior {
 		if (empty($options['size'])) {
 			throw new InvalidArgumentException(__d('Imagine', 'You must pass a size value!'));
 		}
-		if (isset($options['preventUpscaling']) && $options['preventUpscaling'] === true) {
+		if (isset($options['preventUpscale']) && $options['preventUpscale'] === true) {
 			$imageSize = $this->getImageSize($Model, $Image);
-			if ($imageSize['x'] > $options['size']) {
+			if ($options['size'] > $imageSize['x']) {
 				return;
 			}
 		}
@@ -227,9 +227,9 @@ class ImagineBehavior extends ModelBehavior {
 		if (empty($options['size'])) {
 			throw new InvalidArgumentException(__d('Imagine', 'You must pass a size value!'));
 		}
-		if (isset($options['preventUpscaling']) && $options['preventUpscaling'] === true) {
+		if (isset($options['preventUpscale']) && $options['preventUpscale'] === true) {
 			$imageSize = $this->getImageSize($Model, $Image);
-			if ($imageSize['y'] > $options['size']) {
+			if ($options['size'] > $imageSize['y']) {
 				return;
 			}
 		}
@@ -312,7 +312,7 @@ class ImagineBehavior extends ModelBehavior {
 			throw new InvalidArgumentException(__d('Imagine', 'You must pass a factor value!'));
 		}
 
-		if (isset($options['preventUpscaling']) && $options['preventUpscaling'] === true && $options['factor'] > 1.0) {
+		if (isset($options['preventUpscale']) && $options['preventUpscale'] === true && $options['factor'] > 1.0) {
 			return;
 		}
 
@@ -373,7 +373,7 @@ class ImagineBehavior extends ModelBehavior {
 		}
 
 		$imageSize = $this->getImageSize($Image);
-		if (isset($options['preventUpscaling']) && $options['preventUpscaling'] === true) {
+		if (isset($options['preventUpscale']) && $options['preventUpscale'] === true) {
 			if (isset($options['height']) && $options['height'] > $imageSize['y']) {
 				return;
 			}

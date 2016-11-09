@@ -167,8 +167,14 @@ class ImagineBehavior extends ModelBehavior {
 
 		$imageSize = $this->getImageSize($Model, $Image);
 
-		$width = $imageSize[0];
-		$height = $imageSize[1];
+		$width = $imageSize['x'];
+		$height = $imageSize['y'];
+
+		if (isset($options['preventUpscaling']) && $options['preventUpscaling'] === true) {
+			if ($options['size'] > $width || $options['size'] > $height) {
+				return;
+			}
+		}
 
 		if ($width > $height) {
 			$x2 = $height;
@@ -199,6 +205,12 @@ class ImagineBehavior extends ModelBehavior {
 		if (empty($options['size'])) {
 			throw new InvalidArgumentException(__d('Imagine', 'You must pass a size value!'));
 		}
+		if (isset($options['preventUpscaling']) && $options['preventUpscaling'] === true) {
+			$imageSize = $this->getImageSize($Model, $Image);
+			if ($imageSize['x'] > $options['size']) {
+				return;
+			}
+		}
 		$this->widenAndHeighten($Model, $Image, array('width' => $options['size']));
 	}
 
@@ -214,6 +226,12 @@ class ImagineBehavior extends ModelBehavior {
 	public function heighten(Model $Model, $Image, $options = array()) {
 		if (empty($options['size'])) {
 			throw new InvalidArgumentException(__d('Imagine', 'You must pass a size value!'));
+		}
+		if (isset($options['preventUpscaling']) && $options['preventUpscaling'] === true) {
+			$imageSize = $this->getImageSize($Model, $Image);
+			if ($imageSize['y'] > $options['size']) {
+				return;
+			}
 		}
 		$this->widenAndHeighten($Model, $Image, array('height' => $options['size']));
 	}
@@ -294,6 +312,10 @@ class ImagineBehavior extends ModelBehavior {
 			throw new InvalidArgumentException(__d('Imagine', 'You must pass a factor value!'));
 		}
 
+		if (isset($options['preventUpscaling']) && $options['preventUpscaling'] === true && $options['factor'] > 1.0) {
+			return;
+		}
+
 		$imageSize = $this->getImageSize($Model, $Image);
 		$width = $imageSize[0];
 		$height = $imageSize[1];
@@ -350,6 +372,16 @@ class ImagineBehavior extends ModelBehavior {
 			throw new InvalidArgumentException(__d('Imagine', 'You have to pass height and width in the options!'));
 		}
 
+		$imageSize = $this->getImageSize($Image);
+		if (isset($options['preventUpscaling']) && $options['preventUpscaling'] === true) {
+			if (isset($options['height']) && $options['height'] > $imageSize['y']) {
+				return;
+			}
+			if (isset($options['width']) && $options['width'] > $imageSize['x']) {
+				return;
+			}
+		}
+
 		$mode = Imagine\Image\ImageInterface::THUMBNAIL_INSET;
 		if (isset($options['mode']) && $options['mode'] == 'outbound') {
 			$mode = Imagine\Image\ImageInterface::THUMBNAIL_OUTBOUND;
@@ -398,5 +430,4 @@ class ImagineBehavior extends ModelBehavior {
 			'y' => $BoxInterface->getHeight()
 		);
 	}
-
 }

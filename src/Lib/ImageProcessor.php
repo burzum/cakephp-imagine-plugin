@@ -5,6 +5,7 @@ use Cake\Core\InstanceConfigTrait;
 use Imagine\Image\ImageInterface;
 use Imagine\Image\Point;
 use Imagine\Image\Box;
+use RuntimeException;
 
 class ImageProcessor {
 
@@ -49,10 +50,23 @@ class ImageProcessor {
 	 */
 	public function imagine($renew = false) {
 		if (empty($this->_imagine) || $renew === true) {
+			$engine = $this->config('engine');
+
+			if (($engine === 'Imagick' || $engine === 'imagick') && !extension_loaded('imagick')) {
+				throw new RuntimeException('Imagick php extension is not loaded! Please see http://php.net/manual/en/imagick.installation.php');
+			}
+
 			$class = '\Imagine\\' . $this->config('engine') . '\Imagine';
+
+			if (!class_exists($class)) {
+				throw new RuntimeException(sprintf('Imagine engine `%s` does not exist!', $class));
+			}
+
 			$this->_imagine = new $class();
+
 			return $this->_imagine;
 		}
+
 		return $this->_imagine;
 	}
 

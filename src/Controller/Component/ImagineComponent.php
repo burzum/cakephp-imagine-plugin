@@ -55,19 +55,6 @@ class ImagineComponent extends Component {
 	public $operations = [];
 
 	/**
-	 * Constructor
-	 *
-	 * @param \Cake\Controller\ComponentRegistry $collection
-	 * @param array $config Config options array
-	 */
-	public function __construct(ComponentRegistry $collection, $config = []) {
-		parent::__construct($collection, $config);
-		$Controller = $collection->getController();
-		$this->request = $Controller->request;
-		$this->response = $Controller->response;
-	}
-
-	/**
 	 * Start Up
 	 *
 	 * @param Event $Event
@@ -103,8 +90,9 @@ class ImagineComponent extends Component {
 			throw new InvalidArgumentException('Please configure Imagine.salt using Configure::write(\'Imagine.salt\', \'YOUR-SALT-VALUE\')');
 		}
 
-		if (!empty($this->request->query)) {
-			$params = $this->request->query;
+		$request = $this->getController()->request;
+		$params = $request->getQueryParams();
+		if (!empty($params)) {
 			unset($params[$this->_config['hashField']]);
 			ksort($params);
 			return Security::hash(serialize($params) . $mediaSalt);
@@ -125,7 +113,8 @@ class ImagineComponent extends Component {
 	 * @return bool True if the hashes match
 	 */
 	public function checkHash($error = true) {
-		$hashField = $this->request->getQuery($this->_config['hashField']);
+		$request = $this->getController()->request;
+		$hashField = $request->getQuery($this->_config['hashField']);
 		if (empty($hashField) && $error) {
 			throw new NotFoundException();
 		}
@@ -147,8 +136,10 @@ class ImagineComponent extends Component {
 	 * @return array Array with operation options for imagine, if none found an empty array
 	 */
 	public function unpackParams($namedParams = []) {
+		$request = $this->getController()->request;
+
 		if (empty($namedParams)) {
-			$namedParams = $this->request->getQueryParams();
+			$namedParams = $request->getQueryParams();
 		}
 
 		foreach ($namedParams as $name => $params) {

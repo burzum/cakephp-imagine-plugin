@@ -13,8 +13,8 @@ matrix:
         - COVERALLS=1
 
 before_script:
-  - pecl install imagick
-  - pecl install gd
+  - printf "\n" | pecl install imagick
+  - printf "\n" | pecl install gd
   - composer self-update
   - composer global require hirak/prestissimo
   - composer install --prefer-dist --no-interaction

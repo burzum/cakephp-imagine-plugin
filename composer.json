@@ -17,7 +17,7 @@
 		"cakephp/plugin-installer": "*"
 	},
 	"require-dev": {
-		"phpunit/phpunit": "*"
+		"phpunit/phpunit": "5.7.*"
 	},
 	"autoload": {
  		"psr-4": {

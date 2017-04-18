@@ -1,16 +1,17 @@
 <?php
 /**
- * Copyright 2011-2015, Florian Krämer
+ * Copyright 2011-2017, Florian Krämer
  *
  * Licensed under The MIT License
  * Redistributions of files must retain the above copyright notice.
  *
- * Copyright 2011-2015, Florian Krämer
+ * Copyright 2011-2017, Florian Krämer
  * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
 namespace Burzum\Imagine\Test\TestCase\View\Helper;
 
 use Burzum\Imagine\View\Helper\ImagineHelper;
+use Cake\Routing\Router;
 use Cake\TestSuite\TestCase;
 use Cake\Core\Configure;
 use Cake\View\View;
@@ -26,6 +27,10 @@ class ImagineHelperTest extends TestCase {
 	 * @return void
 	 */
 	public function setUp() {
+		Router::reload();
+		Router::connect('/:controller/:action');
+		Router::connect('/:controller/:action/*');
+
 		Configure::write('Imagine.salt', 'this-is-a-nice-salt');
 		$controller = null;
 		$View = new View($controller);

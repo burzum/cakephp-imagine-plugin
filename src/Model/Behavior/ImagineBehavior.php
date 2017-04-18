@@ -1,19 +1,21 @@
 <?php
 /**
- * Copyright 2011-2016, Florian Krämer
+ * Copyright 2011-2017, Florian Krämer
  *
  * Licensed under The MIT License
  * Redistributions of files must retain the above copyright notice.
  *
- * Copyright 2011-2016, Florian Krämer
+ * Copyright 2011-2017, Florian Krämer
  * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
 namespace Burzum\Imagine\Model\Behavior;
 
+use BadMethodCallException;
 use Burzum\Imagine\Lib\ImagineUtility;
 use Cake\ORM\Behavior;
 use Cake\ORM\Table;
 use Imagine\Image\AbstractImage;
+use InvalidArgumentException;
 
 /**
  * CakePHP Imagine Plugin
@@ -38,6 +40,13 @@ class ImagineBehavior extends Behavior {
 	protected $_processorClass;
 
 	/**
+	 * Image processor instance
+	 *
+	 * @var null|\Imagine
+	 */
+	protected $_processor;
+
+	/**
 	 * Constructor
 	 *
 	 * @param Table $table The table this behavior is attached to.
@@ -46,11 +55,11 @@ class ImagineBehavior extends Behavior {
 	public function __construct(Table $table, array $settings = []) {
 		parent::__construct($table, $settings);
 
-		$class = '\Imagine\\' . $this->config('engine') . '\Imagine';
+		$class = '\Imagine\\' . $this->getConfig('engine') . '\Imagine';
 		$this->Imagine = new $class();
 		$this->_table = $table;
-		$processorClass = $this->config('processorClass');
-		$this->_processor = new $processorClass($this->config());
+		$processorClass = $this->getConfig('processorClass');
+		$this->_processor = new $processorClass($this->getConfig());
 	}
 
 	/**
@@ -103,7 +112,10 @@ class ImagineBehavior extends Behavior {
 			$image = $this->_processor->image();
 		}
 		if (!$image instanceof AbstractImage) {
-			throw new \InvalidArgumentException('An instance of `\Imagine\Image\AbstractImage` is required, you passed `%s`!', get_class($image));
+			throw new InvalidArgumentException(sprintf(
+				'An instance of `\Imagine\Image\AbstractImage` is required, you passed `%s`!',
+				get_class($image)
+			));
 		}
 
 		$event = $this->_table->dispatchEvent('ImagineBehavior.beforeApplyOperations', compact('image', 'operations'));
@@ -143,12 +155,16 @@ class ImagineBehavior extends Behavior {
 			if ($event->isStopped()) {
 				continue;
 			}
+
 			if (method_exists($this->_table, $operation)) {
 				$this->_table->{$operation}($image, $params);
 			} elseif (method_exists($this->_processor, $operation)) {
 				$this->_processor->{$operation}($params);
 			} else {
-				throw new \BadMethodCallException(__d('imagine', 'Unsupported image operation `{0}`!', $operation));
+				throw new BadMethodCallException(sprintf(
+					'Unsupported image operation `%s`!',
+					$operation
+				));
 			}
 		}
 	}
@@ -181,11 +197,17 @@ class ImagineBehavior extends Behavior {
 	 * @return string
 	 */
 	public function hashImageOperations($imageSizes, $hashLength = 8) {
-		return ImagineUtility::hashImageOperations($imageSizes, $hashLength = 8);
+		return ImagineUtility::hashImageOperations($imageSizes, $hashLength);
 	}
 
-	public function getImageSize($Image) {
-		return $this->_processor->getImageSize($Image);
+	/**
+	 * Gets the image size of an image
+	 *
+	 * @param string
+	 * @return array
+	 */
+	public function getImageSize($image) {
+		return $this->_processor->getImageSize($image);
 	}
 
 }

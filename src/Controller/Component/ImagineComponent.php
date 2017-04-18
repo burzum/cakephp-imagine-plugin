@@ -1,11 +1,11 @@
 <?php
 /**
- * Copyright 2011-2016, Florian Krämer
+ * Copyright 2011-2017, Florian Krämer
  *
  * Licensed under The MIT License
  * Redistributions of files must retain the above copyright notice.
  *
- * Copyright 2011-2016, Florian Krämer
+ * Copyright 2011-2017, Florian Krämer
  * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
 namespace Burzum\Imagine\Controller\Component;
@@ -125,11 +125,12 @@ class ImagineComponent extends Component {
 	 * @return bool True if the hashes match
 	 */
 	public function checkHash($error = true) {
-		if (!isset($this->request->query[$this->_config['hashField']]) && $error) {
+		$hashField = $this->request->getQuery($this->_config['hashField']);
+		if (empty($hashField) && $error) {
 			throw new NotFoundException();
 		}
 
-		$result = $this->request->query[$this->_config['hashField']] == $this->getHash();
+		$result = $hashField === $this->getHash();
 
 		if (!$result && $error) {
 			throw new NotFoundException();
@@ -147,7 +148,7 @@ class ImagineComponent extends Component {
 	 */
 	public function unpackParams($namedParams = []) {
 		if (empty($namedParams)) {
-			$namedParams = $this->request->query;
+			$namedParams = $this->request->getQueryParams();
 		}
 
 		foreach ($namedParams as $name => $params) {

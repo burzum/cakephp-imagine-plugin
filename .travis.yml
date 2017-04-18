@@ -14,7 +14,6 @@ matrix:
 
 before_script:
   - printf "\n" | pecl install imagick
-  - printf "\n" | pecl install gd2
   - composer self-update
   - composer global require hirak/prestissimo
   - composer install --prefer-dist --no-interaction

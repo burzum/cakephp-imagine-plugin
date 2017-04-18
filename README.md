@@ -11,8 +11,8 @@ The **Imagine** plugin is a CakePHP wrapper around the [Imagine image manipulati
 Requirements
 ------------
 
- * CakePHP 3.0+
- * PHP 5.4+
+ * CakePHP 3.4 since v2.2
+   * Use v2.1 for older CakePHP versions 
  * [Imagine](https://github.com/avalanche123/Imagine)
 
 Documentation

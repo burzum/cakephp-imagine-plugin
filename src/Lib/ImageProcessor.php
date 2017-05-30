@@ -84,6 +84,16 @@ class ImageProcessor {
 		return $this;
 	}
 
+	public function load($image) {
+		$this->_image = $this->imagine()->load($image);
+		return $this;
+	}
+
+	public function read($image) {
+		$this->_image = $this->imagine()->read($image);
+		return $this;
+	}
+
 	/**
 	 * Gets the image object.
 	 *

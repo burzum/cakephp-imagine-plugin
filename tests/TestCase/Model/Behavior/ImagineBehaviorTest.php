@@ -9,11 +9,10 @@
  */
 namespace Burzum\Imagine\Test\TestCase\Model\Behavior;
 
-use Cake\TestSuite\TestCase;
+use Cake\Core\Plugin;
 use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
-use Cake\Core\Plugin;
-use Imagine\Filter\Transformation;
+use Cake\TestSuite\TestCase;
 
 class ImagineTestModel extends Table {
 	public $name = 'ImagineTestModel';
@@ -177,8 +176,7 @@ class ImagineBehaviorTest extends TestCase {
 					'height' => 300,
 					'width' => 300
 				]
-			]
-		);
+			]);
 
 		$result = $this->Model->getImageSize(TMP . 'thumbnail2.jpg');
 		$this->assertEquals($result, [226, 300, 'x' => 226, 'y' => 300]);
@@ -237,8 +235,7 @@ class ImagineBehaviorTest extends TestCase {
 				'heighten' => [
 					'size' => 200
 				]
-			]
-		);
+			]);
 
 		$result = $this->Model->getImageSize(TMP . 'heighten.jpg');
 		$this->assertEquals($result, [151, 200, 'x' => 151, 'y' => 200]);
@@ -258,8 +255,7 @@ class ImagineBehaviorTest extends TestCase {
 					'size' => 2000,
 					'preventUpscale' => true
 				],
-			]
-		);
+			]);
 
 		$result = $this->Model->getImageSize(TMP . 'heighten-upscale.jpg');
 		$this->assertEquals($result, [500, 664, 'x' => 500, 'y' => 664]);

@@ -22,11 +22,11 @@ use InvalidArgumentException;
  */
 class ImagineBehavior extends Behavior {
 
-/**
- * Default settings array
- *
- * @var array
- */
+	/**
+	 * Default settings array
+	 *
+	 * @var array
+	 */
 	protected $_defaultConfig = [
 		'engine' => 'Gd',
 		'processorClass' => '\Burzum\Imagine\Lib\ImageProcessor'
@@ -84,8 +84,8 @@ class ImagineBehavior extends Behavior {
 	/**
 	 * Delegate the calls to the image processor lib.
 	 *
-	 * @param string $method
-	 * @param array $args
+	 * @param string $method Method name
+	 * @param array $args Arguments
 	 * @return mixed
 	 */
 	public function __call($method, $args) {
@@ -99,10 +99,10 @@ class ImagineBehavior extends Behavior {
 	 *
 	 * Caching and taking care of the file storage is NOT the purpose of this method!
 	 *
-	 * @param string|\Imagine\Image\AbstractImage $ImageObject
-	 * @param string $output
-	 * @param array $imagineOptions
-	 * @param array $operations
+	 * @param \Imagine\Image\AbstractImage|string $image Image instance or a file to open
+	 * @param string|null $output File to write
+	 * @param array $imagineOptions Image Options
+	 * @param array $operations Image operations
 	 * @throws \InvalidArgumentException
 	 * @return bool
 	 */
@@ -144,8 +144,8 @@ class ImagineBehavior extends Behavior {
 	/**
 	 * Applies the actual image operations to the image.
 	 *
-	 * @param array $operations
-	 * @param array $image
+	 * @param array $operations Operations
+	 * @param array $image Image
 	 * @throws \BadMethodCallException
 	 * @return void
 	 */
@@ -181,7 +181,7 @@ class ImagineBehavior extends Behavior {
 	 *
 	 * @param array $operations Imagine image operations
 	 * @param array $separators Optional
-	 * @param bool $hash
+	 * @param bool $hash Has the operations to a string, default is false
 	 * @return string Filename compatible String representation of the operations
 	 * @link http://support.microsoft.com/kb/177506
 	 */
@@ -192,8 +192,8 @@ class ImagineBehavior extends Behavior {
 	/**
 	 * hashImageOperations
 	 *
-	 * @param array $imageSizes
-	 * @param int $hashLength
+	 * @param array $imageSizes Array of image versions
+	 * @param int $hashLength Hash length, default is 8
 	 * @return string
 	 */
 	public function hashImageOperations($imageSizes, $hashLength = 8) {
@@ -203,7 +203,7 @@ class ImagineBehavior extends Behavior {
 	/**
 	 * Gets the image size of an image
 	 *
-	 * @param string
+	 * @param string $image Image file
 	 * @return array
 	 */
 	public function getImageSize($image) {

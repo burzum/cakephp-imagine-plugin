@@ -11,9 +11,14 @@
 
 namespace Burzum\Imagine\Lib;
 
-use RuntimeException;
 use BadFunctionCallException;
+use RuntimeException;
 
+/**
+ * Imagine Utility class
+ *
+ * A collection of utility functions
+ */
 class ImagineUtility {
 
 	/**
@@ -26,9 +31,9 @@ class ImagineUtility {
 	 * with this string and store the string also in the db. In the views, if no further control over the image access is needed,
 	 * you can simply direct-link the image like $this->Html->image('/images/05/04/61/my_horse.thumbnail+width-100-height+100.jpg');
 	 *
-	 * @param array $operations
-	 * @param array $separators
-	 * @param mixed $hash
+	 * @param array $operations Operations
+	 * @param array $separators Separators
+	 * @param bool $hash Hash the string, default is false
 	 * @throws \BadFunctionCallException
 	 * @return string Filename compatible String representation of the operations
 	 * @link http://support.microsoft.com/kb/177506
@@ -55,7 +60,7 @@ class ImagineUtility {
 		}
 
 		if ($hash && $result !== '') {
-			if (function_exists($hash)) {
+			if (function_exists($hash) || is_callable($hash)) {
 				return $hash($result);
 			}
 			throw new BadFunctionCallException();
@@ -67,8 +72,8 @@ class ImagineUtility {
 	/**
 	 * This method expects an array of Model.configName => operationsArray
 	 *
-	 * @param array $imageSizes
-	 * @param int $hashLength
+	 * @param array $imageSizes Image sizes
+	 * @param int $hashLength Hash length, default is 8
 	 * @return array Model.configName => hashValue
 	 */
 	public static function hashImageOperations($imageSizes, $hashLength = 8) {
@@ -116,6 +121,7 @@ class ImagineUtility {
 					$angle = 0;
 					break;
 			}
+
 			return $angle;
 		}
 

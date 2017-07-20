@@ -11,11 +11,10 @@
 namespace Burzum\Imagine\Controller\Component;
 
 use Cake\Controller\Component;
-use Cake\Utility\Security;
-use Cake\Controller\ComponentRegistry;
-use Cake\Event\Event;
 use Cake\Core\Configure;
+use Cake\Event\Event;
 use Cake\Network\Exception\NotFoundException;
+use Cake\Utility\Security;
 use InvalidArgumentException;
 
 /**
@@ -57,11 +56,11 @@ class ImagineComponent extends Component {
 	/**
 	 * Start Up
 	 *
-	 * @param Event $Event
+	 * @param \Cake\Event\Event $event Event instance
 	 * @return void
 	 */
-	public function startup(Event $Event) {
-		$Controller = $Event->subject();
+	public function startup(Event $event) {
+		$Controller = $event->subject();
 		$this->Controller = $Controller;
 
 		if (!empty($this->_config['actions'])) {
@@ -95,6 +94,7 @@ class ImagineComponent extends Component {
 		if (!empty($params)) {
 			unset($params[$this->_config['hashField']]);
 			ksort($params);
+
 			return Security::hash(serialize($params) . $mediaSalt);
 		}
 
@@ -131,11 +131,11 @@ class ImagineComponent extends Component {
 	/**
 	 * Unpacks the strings into arrays that were packed with ImagineHelper::pack()
 	 *
-	 * @param array $namedParams
+	 * @param array $namedParams List of named params to unpack
 	 * @internal param array $params If empty the method tries to get them from Controller->request['named']
 	 * @return array Array with operation options for imagine, if none found an empty array
 	 */
-	public function unpackParams($namedParams = []) {
+	public function unpackParams(array $namedParams = []) {
 		$request = $this->getController()->request;
 
 		if (empty($namedParams)) {

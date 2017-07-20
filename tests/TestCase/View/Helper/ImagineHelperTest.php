@@ -11,9 +11,9 @@
 namespace Burzum\Imagine\Test\TestCase\View\Helper;
 
 use Burzum\Imagine\View\Helper\ImagineHelper;
+use Cake\Core\Configure;
 use Cake\Routing\Router;
 use Cake\TestSuite\TestCase;
-use Cake\Core\Configure;
 use Cake\View\View;
 
 /**
@@ -105,8 +105,7 @@ class ImagineHelperTest extends TestCase {
 					'width' => 200,
 					'height' => 150
 				]
-			]
-		);
+			]);
 		$result = $this->Imagine->hash($options);
 		$this->assertEquals($result, '69aa9f46cdc5a200dc7539fc10eec00f2ba89023');
 	}
@@ -133,8 +132,7 @@ class ImagineHelperTest extends TestCase {
 					'width' => 200,
 					'height' => 150
 				]
-			]
-		);
+			]);
 
 		$this->assertEquals($result, ['thumbnail' => 'width|200;height|150']);
 	}

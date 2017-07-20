@@ -11,9 +11,9 @@
 namespace Burzum\Imagine\View\Helper;
 
 use Cake\Core\Configure;
-use Cake\View\Helper;
-use Cake\Utility\Security;
 use Cake\Routing\Router;
+use Cake\Utility\Security;
+use Cake\View\Helper;
 use RuntimeException;
 
 /**
@@ -59,6 +59,7 @@ class ImagineHelper extends Helper {
 		$options['hash'] = $this->hash($options);
 
 		$url = array_merge((array)$url, $options + ['base' => false]);
+
 		return Router::url($url, $full);
 	}
 
@@ -66,7 +67,7 @@ class ImagineHelper extends Helper {
 	 * Signs the url with a salted hash
 	 *
 	 * @throws \RuntimeException
-	 * @param array $options
+	 * @param array $options Options to hash
 	 * @return string
 	 */
 	public function hash($options) {
@@ -79,13 +80,14 @@ class ImagineHelper extends Helper {
 			));
 		}
 		ksort($options);
+
 		return urlencode(Security::hash(serialize($options) . $mediaSalt));
 	}
 
 	/**
 	 * Packs the image options array into an array of named arguments that can be used in a cake url
 	 *
-	 * @param array $options
+	 * @param array $options Options to pack
 	 * @return array
 	 */
 	public function pack($options) {

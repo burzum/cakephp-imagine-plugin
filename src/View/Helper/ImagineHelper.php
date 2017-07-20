@@ -1,19 +1,20 @@
 <?php
 /**
- * Copyright 2011-2016, Florian Krämer
+ * Copyright 2011-2017, Florian Krämer
  *
  * Licensed under The MIT License
  * Redistributions of files must retain the above copyright notice.
  *
- * Copyright 2011-2016, Florian Krämer
+ * Copyright 2011-2017, Florian Krämer
  * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
 namespace Burzum\Imagine\View\Helper;
 
 use Cake\Core\Configure;
-use Cake\View\Helper;
-use Cake\Utility\Security;
 use Cake\Routing\Router;
+use Cake\Utility\Security;
+use Cake\View\Helper;
+use RuntimeException;
 
 /**
  * CakePHP Imagine Plugin
@@ -37,7 +38,14 @@ class ImagineHelper extends Helper {
 	 */
 	public function url($url = null, $full = false, $options = []) {
 		if (is_string($url)) {
-			$url = array_merge(['plugin' => 'media', 'admin' => false, 'controller' => 'media', 'action' => 'image'], [$url]);
+			$url = array_merge([
+				'plugin' => 'media',
+				'admin' => false,
+				'controller' => 'media',
+				'action' => 'image'
+			], [
+				$url
+			]);
 		}
 
 		// backward compatibility check, switches params 2 and 3
@@ -51,6 +59,7 @@ class ImagineHelper extends Helper {
 		$options['hash'] = $this->hash($options);
 
 		$url = array_merge((array)$url, $options + ['base' => false]);
+
 		return Router::url($url, $full);
 	}
 
@@ -58,24 +67,29 @@ class ImagineHelper extends Helper {
 	 * Signs the url with a salted hash
 	 *
 	 * @throws \RuntimeException
-	 * @param array $options
+	 * @param array $options Options to hash
 	 * @return string
 	 */
 	public function hash($options) {
 		$mediaSalt = Configure::read('Imagine.salt');
 		if (empty($mediaSalt)) {
-			throw new \RuntimeException(__d('imagine', 'Please configure {0} using {1}', 'Imagine.salt', 'Configure::write(\'Imagine.salt\', \'YOUR-SALT-VALUE\')'));
+			throw new RuntimeException(sprintf(
+				'Please configure `%s` using `%s`',
+				'Imagine.salt',
+				'Configure::write(\'Imagine.salt\', \'YOUR-SALT-VALUE\')'
+			));
 		}
 		ksort($options);
+
 		return urlencode(Security::hash(serialize($options) . $mediaSalt));
 	}
 
-/**
- * Packs the image options array into an array of named arguments that can be used in a cake url
- *
- * @param array $options
- * @return array
- */
+	/**
+	 * Packs the image options array into an array of named arguments that can be used in a cake url
+	 *
+	 * @param array $options Options to pack
+	 * @return array
+	 */
 	public function pack($options) {
 		$result = [];
 		foreach ($options as $operation => $data) {
@@ -87,6 +101,7 @@ class ImagineHelper extends Helper {
 			}
 			$result[$operation] = implode(';', $tmp);
 		}
+
 		return $result;
 	}
 }

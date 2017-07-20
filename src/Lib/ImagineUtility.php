@@ -1,18 +1,24 @@
 <?php
 /**
- * Copyright 2011-2016, Florian Krämer
+ * Copyright 2011-2017, Florian Krämer
  *
  * Licensed under The MIT License
  * Redistributions of files must retain the above copyright notice.
  *
- * Copyright 2011-2016, Florian Krämer
+ * Copyright 2011-2017, Florian Krämer
  * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
 
 namespace Burzum\Imagine\Lib;
 
-use Cake\Core\Configure;
+use BadFunctionCallException;
+use RuntimeException;
 
+/**
+ * Imagine Utility class
+ *
+ * A collection of utility functions
+ */
 class ImagineUtility {
 
 	/**
@@ -25,10 +31,10 @@ class ImagineUtility {
 	 * with this string and store the string also in the db. In the views, if no further control over the image access is needed,
 	 * you can simply direct-link the image like $this->Html->image('/images/05/04/61/my_horse.thumbnail+width-100-height+100.jpg');
 	 *
-	 * @param array $operations
-	 * @param array $separators
-	 * @param mixed $hash
-	 * @throws BadFunctionCallException
+	 * @param array $operations Operations
+	 * @param array $separators Separators
+	 * @param bool $hash Hash the string, default is false
+	 * @throws \BadFunctionCallException
 	 * @return string Filename compatible String representation of the operations
 	 * @link http://support.microsoft.com/kb/177506
 	 */
@@ -54,10 +60,10 @@ class ImagineUtility {
 		}
 
 		if ($hash && $result !== '') {
-			if (function_exists($hash)) {
+			if (function_exists($hash) || is_callable($hash)) {
 				return $hash($result);
 			}
-			throw new \BadFunctionCallException();
+			throw new BadFunctionCallException();
 		}
 
 		return $result;
@@ -66,8 +72,8 @@ class ImagineUtility {
 	/**
 	 * This method expects an array of Model.configName => operationsArray
 	 *
-	 * @param array $imageSizes
-	 * @param int $hashLength
+	 * @param array $imageSizes Image sizes
+	 * @param int $hashLength Hash length, default is 8
 	 * @return array Model.configName => hashValue
 	 */
 	public static function hashImageOperations($imageSizes, $hashLength = 8) {
@@ -76,6 +82,7 @@ class ImagineUtility {
 				$imageSizes[$model][$name] = substr(self::operationsToString($operation, [], 'md5'), 0, $hashLength);
 			}
 		}
+
 		return $imageSizes;
 	}
 
@@ -87,12 +94,14 @@ class ImagineUtility {
 	 */
 	public static function getImageOrientation($imageFile) {
 		if (!file_exists($imageFile)) {
-			throw new \RuntimeException(sprintf('File %s not found!', $imageFile));
+			throw new RuntimeException(sprintf('File %s not found!', $imageFile));
 		}
+
 		$exif = exif_read_data($imageFile);
 		if ($exif === false) {
 			return false;
 		}
+
 		$angle = 0;
 		if (!empty($exif['Orientation'])) {
 			switch ($exif['Orientation']) {
@@ -112,8 +121,10 @@ class ImagineUtility {
 					$angle = 0;
 					break;
 			}
+
 			return $angle;
 		}
+
 		return $angle;
 	}
 }

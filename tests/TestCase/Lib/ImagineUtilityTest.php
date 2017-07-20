@@ -1,34 +1,33 @@
 <?php
 /**
- * Copyright 2011-2015, Florian Krämer
- *
+ * Copyright 2011-2017, Florian Krämer
  * Licensed under The MIT License
  * Redistributions of files must retain the above copyright notice.
+ * Copyright 2011-2017, Florian Krämer
  *
- * Copyright 2011-2015, Florian Krämer
  * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
+
 namespace Burzum\Imagine\Test\TestCase\Lib;
 
-use Burzum\Imagine\Lib\ImageProcessor;
+use Burzum\Imagine\Lib\ImagineUtility;
 use Cake\Core\Plugin;
 use Cake\TestSuite\TestCase;
-use Burzum\Imagine\Lib\ImagineUtility;
 
 class ImagineUtilityTest extends TestCase {
 
-/**
- * Fixtures
- *
- * @var array
- */
+	/**
+	 * Fixtures
+	 *
+	 * @var array
+	 */
 	public $fixtures = [];
 
-/**
- * testOperationsToString
- *
- * @return void
- */
+	/**
+	 * testOperationsToString
+	 *
+	 * @return void
+	 */
 	public function testOperationsToString() {
 		$operations = [
 			'thumbnail' => [
@@ -40,11 +39,11 @@ class ImagineUtilityTest extends TestCase {
 		$this->assertEquals($result, '.thumbnail+width-200+height-150');
 	}
 
-/**
- * testHashImageOperations
- *
- * @return void
- */
+	/**
+	 * testHashImageOperations
+	 *
+	 * @return void
+	 */
 	public function testHashImageOperations() {
 		$operations = [
 			'SomeModel' => [
@@ -62,11 +61,11 @@ class ImagineUtilityTest extends TestCase {
 		]);
 	}
 
-/**
- * testGetImageOrientation
- *
- * @return void
- */
+	/**
+	 * testGetImageOrientation
+	 *
+	 * @return void
+	 */
 	public function testGetImageOrientation() {
 		$image = Plugin::path('Burzum/Imagine') . 'tests' . DS . 'Fixture' . DS . 'titus.jpg';
 		$result = ImagineUtility::getImageOrientation($image);
@@ -82,4 +81,5 @@ class ImagineUtilityTest extends TestCase {
 		} catch (\RuntimeException $e) {
 		}
 	}
+
 }

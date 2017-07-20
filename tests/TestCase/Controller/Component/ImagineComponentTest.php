@@ -1,63 +1,62 @@
 <?php
 /**
- * Copyright 2011-2015, Florian Krämer
+ * Copyright 2011-2017, Florian Krämer
  *
  * Licensed under The MIT License
  * Redistributions of files must retain the above copyright notice.
  *
- * Copyright 2011-2015, Florian Krämer
+ * Copyright 2011-2017, Florian Krämer
  * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
 namespace Burzum\Imagine\Test\TestCase\Controller\Component;
 
-use Cake\TestSuite\TestCase;
 use Cake\Controller\Controller;
-use Cake\Event\Event;
 use Cake\Core\Configure;
+use Cake\Event\Event;
 use Cake\Network\Request;
 use Cake\Network\Response;
+use Cake\TestSuite\TestCase;
 
-	class ImagineImagesTestController extends Controller {
+class ImagineImagesTestController extends Controller {
 
 	/**
 	 * @var string
 	 */
-		public $name = 'Images';
+	public $name = 'Images';
 
 	/**
 	 * @var array
 	 */
-		public $uses = ['Images'];
+	public $uses = ['Images'];
 
 	/**
 	 * @var array
 	 */
-		public $components = [
-			'Burzum/Imagine.Imagine'
-		];
+	public $components = [
+		'Burzum/Imagine.Imagine'
+	];
 
 	/**
 	 * Redirect url
 	 * @var mixed
 	 */
-		public $redirectUrl = null;
+	public $redirectUrl = null;
 
 	/**
-	 * 
+	 *
 	 */
-		public function beforeFilter(Event $Event) {
-			parent::beforeFilter($Event);
-			$this->Imagine->userModel = 'UserModel';
-		}
-
-	/**
-	 * 
-	 */
-		public function redirect($url, $status = NULL, $exit = true) {
-			$this->redirectUrl = $url;
-		}
+	public function beforeFilter(Event $Event) {
+		parent::beforeFilter($Event);
+		$this->Imagine->userModel = 'UserModel';
 	}
 
+	/**
+	 *
+	 */
+	public function redirect($url, $status = null, $exit = true) {
+		$this->redirectUrl = $url;
+	}
+}
 
 /**
  * Imagine Component Test
@@ -67,20 +66,20 @@ use Cake\Network\Response;
  */
 class ImagineComponentTest extends TestCase {
 
-/**
- * Fixtures
- *
- * @var array
- */
+	/**
+	 * Fixtures
+	 *
+	 * @var array
+	 */
 	public $fixtures = [
 		'plugin.Burzum\Imagine.Image'
 	];
 
-/**
- * setUp method
- *
- * @return void
- */
+	/**
+	 * setUp method
+	 *
+	 * @return void
+	 */
 	public function setUp() {
 		parent::setUp();
 		Configure::write('Imagine.salt', 'this-is-a-nice-salt');
@@ -90,21 +89,21 @@ class ImagineComponentTest extends TestCase {
 		$this->Controller->Imagine->Controller = $this->Controller;
 	}
 
-/**
- * tearDown method
- *
- * @return void
- */
+	/**
+	 * tearDown method
+	 *
+	 * @return void
+	 */
 	public function tearDown() {
 		parent::tearDown();
 		unset($this->Controller);
 	}
 
-/**
- * testGetHash method
- *
- * @return void
- */
+	/**
+	 * testGetHash method
+	 *
+	 * @return void
+	 */
 	public function testGetHash() {
 		$this->Controller->request->query = [
 			'thumbnail' => 'width|200;height|150'
@@ -113,11 +112,11 @@ class ImagineComponentTest extends TestCase {
 		$this->assertTrue(is_string($hash));
 	}
 
-/**
- * testCheckHash method
- *
- * @return void
- */
+	/**
+	 * testCheckHash method
+	 *
+	 * @return void
+	 */
 	public function testCheckHash() {
 		$this->Controller->request->query = [
 			'thumbnail' => 'width|200;height|150',
@@ -126,9 +125,9 @@ class ImagineComponentTest extends TestCase {
 		$this->Controller->Imagine->checkHash();
 	}
 
-/**
- * @expectedException Cake\Network\Exception\NotFoundException
- */
+	/**
+	 * @expectedException \Cake\Network\Exception\NotFoundException
+	 */
 	public function testInvalidHash() {
 		$this->Controller->request->query = [
 			'thumbnail' => 'width|200;height|150',
@@ -137,9 +136,9 @@ class ImagineComponentTest extends TestCase {
 		$this->Controller->Imagine->checkHash();
 	}
 
-/**
- * @expectedException Cake\Network\Exception\NotFoundException
- */
+	/**
+	 * @expectedException \Cake\Network\Exception\NotFoundException
+	 */
 	public function testMissingHash() {
 		$this->Controller->request->query = [
 			'thumbnail' => 'width|200;height|150'
@@ -147,11 +146,11 @@ class ImagineComponentTest extends TestCase {
 		$this->Controller->Imagine->checkHash();
 	}
 
-/**
- * testCheckHash method
- *
- * @return void
- */
+	/**
+	 * testCheckHash method
+	 *
+	 * @return void
+	 */
 	public function testUnpackParams() {
 		$this->assertEquals($this->Controller->Imagine->operations, []);
 		$this->Controller->request->query['thumbnail'] = 'width|200;height|150';
@@ -161,8 +160,7 @@ class ImagineComponentTest extends TestCase {
 					'width' => 200,
 					'height' => 150
 				]
-			]
-		);
+			]);
 	}
 
 }

@@ -1,18 +1,19 @@
 <?php
 /**
- * Copyright 2011-2015, Florian Krämer
+ * Copyright 2011-2017, Florian Krämer
  *
  * Licensed under The MIT License
  * Redistributions of files must retain the above copyright notice.
  *
- * Copyright 2011-2015, Florian Krämer
+ * Copyright 2011-2017, Florian Krämer
  * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
 namespace Burzum\Imagine\Test\TestCase\View\Helper;
 
 use Burzum\Imagine\View\Helper\ImagineHelper;
-use Cake\TestSuite\TestCase;
 use Cake\Core\Configure;
+use Cake\Routing\Router;
+use Cake\TestSuite\TestCase;
 use Cake\View\View;
 
 /**
@@ -26,6 +27,10 @@ class ImagineHelperTest extends TestCase {
 	 * @return void
 	 */
 	public function setUp() {
+		Router::reload();
+		Router::connect('/:controller/:action');
+		Router::connect('/:controller/:action/*');
+
 		Configure::write('Imagine.salt', 'this-is-a-nice-salt');
 		$controller = null;
 		$View = new View($controller);
@@ -100,8 +105,7 @@ class ImagineHelperTest extends TestCase {
 					'width' => 200,
 					'height' => 150
 				]
-			]
-		);
+			]);
 		$result = $this->Imagine->hash($options);
 		$this->assertEquals($result, '69aa9f46cdc5a200dc7539fc10eec00f2ba89023');
 	}
@@ -128,8 +132,7 @@ class ImagineHelperTest extends TestCase {
 					'width' => 200,
 					'height' => 150
 				]
-			]
-		);
+			]);
 
 		$this->assertEquals($result, ['thumbnail' => 'width|200;height|150']);
 	}

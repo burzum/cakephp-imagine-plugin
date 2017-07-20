@@ -1,19 +1,18 @@
 <?php
 /**
- * Copyright 2011-2015, Florian Krämer
+ * Copyright 2011-2017, Florian Krämer
  * Licensed under The MIT License
  * Redistributions of files must retain the above copyright notice.
- * Copyright 2011-2015, Florian Krämer
+ * Copyright 2011-2017, Florian Krämer
  *
  * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
 namespace Burzum\Imagine\Test\TestCase\Model\Behavior;
 
-use Cake\TestSuite\TestCase;
+use Cake\Core\Plugin;
 use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
-use Cake\Core\Plugin;
-use Imagine\Filter\Transformation;
+use Cake\TestSuite\TestCase;
 
 class ImagineTestModel extends Table {
 	public $name = 'ImagineTestModel';
@@ -177,8 +176,7 @@ class ImagineBehaviorTest extends TestCase {
 					'height' => 300,
 					'width' => 300
 				]
-			]
-		);
+			]);
 
 		$result = $this->Model->getImageSize(TMP . 'thumbnail2.jpg');
 		$this->assertEquals($result, [226, 300, 'x' => 226, 'y' => 300]);
@@ -237,11 +235,53 @@ class ImagineBehaviorTest extends TestCase {
 				'heighten' => [
 					'size' => 200
 				]
-			]
-		);
+			]);
 
 		$result = $this->Model->getImageSize(TMP . 'heighten.jpg');
 		$this->assertEquals($result, [151, 200, 'x' => 151, 'y' => 200]);
+	}
+
+	/**
+	 * testPreventUpscale
+	 *
+	 * @return void
+	 */
+	public function testPreventUpscale() {
+		$image = Plugin::path('Burzum/Imagine') . 'tests' . DS . 'Fixture' . DS . 'titus.jpg';
+
+		// Height
+		$this->Model->processImage($image, TMP . 'heighten-upscale.jpg', [], [
+				'heighten' => [
+					'size' => 2000,
+					'preventUpscale' => true
+				],
+			]);
+
+		$result = $this->Model->getImageSize(TMP . 'heighten-upscale.jpg');
+		$this->assertEquals($result, [500, 664, 'x' => 500, 'y' => 664]);
+
+		// Width
+		$this->Model->processImage($image, TMP . 'widen-upscale.jpg', [], [
+			'widen' => [
+				'size' => 2000,
+				'preventUpscale' => true
+			]
+		]);
+
+		$result = $this->Model->getImageSize(TMP . 'widen-upscale.jpg');
+		$this->assertEquals($result, [500, 664, 'x' => 500, 'y' => 664]);
+
+		// Thumbnail
+		$this->Model->processImage($image, TMP . 'thumbnail-upscale.jpg', [], [
+			'thumbnail' => [
+				'height' => 2000,
+				'width' => 2000,
+				'preventUpscale' => true
+			]
+		]);
+
+		$result = $this->Model->getImageSize(TMP . 'thumbnail-upscale.jpg');
+		$this->assertEquals($result, [500, 664, 'x' => 500, 'y' => 664]);
 	}
 
 	/**

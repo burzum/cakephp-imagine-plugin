@@ -2,30 +2,28 @@ language: php
 sudo: false
 
 php:
-  - 5.5
   - 5.6
   - 7.0
+  - 7.1
 
 matrix:
-  allow_failures:
-    - php: 7.0
-
   fast_finish: true
-
   include:
-    - php: 5.6
+    - php: 7.1
       env:
         - COVERALLS=1
 
 before_script:
+  - printf "\n" | pecl install imagick
   - composer self-update
+  - composer global require hirak/prestissimo
   - composer install --prefer-dist --no-interaction
   - sh -c "if [ '$COVERALLS' = '1' ]; then composer require --dev satooshi/php-coveralls:dev-master; fi"
   - sh -c "if [ '$COVERALLS' = '1' ]; then mkdir -p build/logs; fi"
 
 script:
-  - phpunit
-  - sh -c "if [ '$COVERALLS' = '1' ]; then phpunit --stderr --coverage-clover build/logs/clover.xml; fi"
+  - vendor/bin/phpunit
+  - sh -c "if [ '$COVERALLS' = '1' ]; then vendor/bin/phpunit --stderr --coverage-clover build/logs/clover.xml; fi"
   - sh -c "if [ '$COVERALLS' = '1' ]; then php vendor/bin/coveralls -c .coveralls.yml -v; fi"
 
 notifications:

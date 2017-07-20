@@ -38,7 +38,7 @@ class ImageProcessor {
 	protected $_imagine = null;
 
 	/**
-	 * Image object instace
+	 * Image object instance
 	 *
 	 * @var \Imagine\Image\AbstractImage
 	 */
@@ -579,7 +579,7 @@ class ImageProcessor {
 	/**
 	 * Gets the size of an image
 	 *
-	 * @param mixed $Image Image object or string of a file name
+	 * @param string|null $Image Image object or string of a file name
 	 * @return array first value is width, second height
 	 * @see \Imagine\Image\ImageInterface::getSize()
 	 */

@@ -13,7 +13,7 @@ namespace Burzum\Imagine\Controller\Component;
 use Cake\Controller\Component;
 use Cake\Core\Configure;
 use Cake\Event\Event;
-use Cake\Network\Exception\NotFoundException;
+use Cake\Http\Exception\NotFoundException;
 use Cake\Utility\Security;
 use InvalidArgumentException;
 
@@ -60,7 +60,7 @@ class ImagineComponent extends Component {
 	 * @return void
 	 */
 	public function startup(Event $event) {
-		$Controller = $event->subject();
+		$Controller = $event->getSubject();
 		$this->Controller = $Controller;
 
 		if (!empty($this->_config['actions'])) {
@@ -89,7 +89,7 @@ class ImagineComponent extends Component {
 			throw new InvalidArgumentException('Please configure Imagine.salt using Configure::write(\'Imagine.salt\', \'YOUR-SALT-VALUE\')');
 		}
 
-		$request = $this->getController()->request;
+		$request = $this->getController()->getRequest();
 		$params = $request->getQueryParams();
 		if (!empty($params)) {
 			unset($params[$this->_config['hashField']]);
@@ -113,7 +113,7 @@ class ImagineComponent extends Component {
 	 * @return bool True if the hashes match
 	 */
 	public function checkHash($error = true) {
-		$request = $this->getController()->request;
+		$request = $this->getController()->getRequest();
 		$hashField = $request->getQuery($this->_config['hashField']);
 		if (empty($hashField) && $error) {
 			throw new NotFoundException();
@@ -136,7 +136,7 @@ class ImagineComponent extends Component {
 	 * @return array Array with operation options for imagine, if none found an empty array
 	 */
 	public function unpackParams(array $namedParams = []) {
-		$request = $this->getController()->request;
+		$request = $this->getController()->getRequest();
 
 		if (empty($namedParams)) {
 			$namedParams = $request->getQueryParams();
@@ -149,7 +149,7 @@ class ImagineComponent extends Component {
 				list($key, $value) = explode('|', $param);
 				$resultParams[$key] = $value;
 			}
-			$resultParams;
+
 			$namedParams[$name] = $resultParams;
 		}
 

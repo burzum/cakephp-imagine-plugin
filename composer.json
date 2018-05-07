@@ -12,12 +12,12 @@
 		}
 	],
 	"require": {
-		"cakephp/cakephp": "^3.4",
+		"cakephp/cakephp": "^3.6",
 		"imagine/imagine": "0.6.*",
 		"cakephp/plugin-installer": "*"
 	},
 	"require-dev": {
-		"phpunit/phpunit": "5.7.*",
+		"phpunit/phpunit": "6.*",
 		"cakephp/cakephp-codesniffer": "^3.0"
 	},
 	"autoload": {

@@ -1,4 +1,6 @@
 <?php
+declare(strict_types = 1);
+
 /**
  * Copyright 2011-2017, Florian Krämer
  *
@@ -97,7 +99,10 @@ class ImagineUtility {
 			throw new RuntimeException(sprintf('File %s not found!', $imageFile));
 		}
 
-		$exif = exif_read_data($imageFile);
+		// God damn php bug...
+		// * https://stackoverflow.com/questions/37352371/php-exif-read-data-illegal-ifd-size
+		// * https://bugs.php.net/bug.php?id=74956
+		$exif = @exif_read_data($imageFile);
 		if ($exif === false) {
 			return false;
 		}

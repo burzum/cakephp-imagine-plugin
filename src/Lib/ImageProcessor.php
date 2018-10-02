@@ -1,4 +1,6 @@
 <?php
+declare(strict_types = 1);
+
 /**
  * Copyright 2011-2017, Florian Krämer
  *
@@ -17,6 +19,9 @@ use Imagine\Image\Point;
 use InvalidArgumentException;
 use RuntimeException;
 
+/**
+ * Image Processor
+ */
 class ImageProcessor {
 
 	use InstanceConfigTrait;
@@ -50,7 +55,7 @@ class ImageProcessor {
 	 * @param array $config Configuration options
 	 */
 	public function __construct(array $config = []) {
-		$this->config($config);
+		$this->setConfig($config);
 	}
 
 	/**
@@ -61,13 +66,13 @@ class ImageProcessor {
 	 */
 	public function imagine($renew = false) {
 		if (empty($this->_imagine) || $renew === true) {
-			$engine = $this->config('engine');
+			$engine = $this->getConfig('engine');
 
 			if (($engine === 'Imagick' || $engine === 'imagick') && !extension_loaded('imagick')) {
 				throw new RuntimeException('Imagick php extension is not loaded! Please see http://php.net/manual/en/imagick.installation.php');
 			}
 
-			$class = '\Imagine\\' . $this->config('engine') . '\Imagine';
+			$class = '\Imagine\\' . $this->getConfig('engine') . '\Imagine';
 
 			if (!class_exists($class)) {
 				throw new RuntimeException(sprintf('Imagine engine `%s` does not exist!', $class));
@@ -604,7 +609,7 @@ class ImageProcessor {
 	 */
 	protected function _getImage($Image = null) {
 		if (is_string($Image)) {
-			$class = 'Imagine\\' . $this->config('engine') . '\Imagine';
+			$class = 'Imagine\\' . $this->getConfig('engine') . '\Imagine';
 			$Imagine = new $class();
 
 			return $Imagine->open($Image);

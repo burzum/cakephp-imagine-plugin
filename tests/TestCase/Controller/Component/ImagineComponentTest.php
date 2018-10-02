@@ -1,4 +1,6 @@
 <?php
+declare(strict_types = 1);
+
 /**
  * Copyright 2011-2017, Florian Krämer
  *
@@ -13,10 +15,13 @@ namespace Burzum\Imagine\Test\TestCase\Controller\Component;
 use Cake\Controller\Controller;
 use Cake\Core\Configure;
 use Cake\Event\Event;
-use Cake\Network\Request;
-use Cake\Network\Response;
+use Cake\Http\ServerRequest as Request;
+use Cake\Http\Response;
 use Cake\TestSuite\TestCase;
 
+/**
+ * ImagineImagesTestController
+ */
 class ImagineImagesTestController extends Controller {
 
 	/**
@@ -76,6 +81,13 @@ class ImagineComponentTest extends TestCase {
 	];
 
 	/**
+	 * Controller
+	 *
+	 * @var \Cake\Controller\Controller
+	 */
+	public $Controller;
+
+	/**
 	 * setUp method
 	 *
 	 * @return void
@@ -105,9 +117,10 @@ class ImagineComponentTest extends TestCase {
 	 * @return void
 	 */
 	public function testGetHash() {
-		$this->Controller->request->query = [
+		$this->Controller->setRequest($this->Controller->getRequest()->withQueryParams([
 			'thumbnail' => 'width|200;height|150'
-		];
+		]));
+
 		$hash = $this->Controller->Imagine->getHash();
 		$this->assertTrue(is_string($hash));
 	}
@@ -118,31 +131,35 @@ class ImagineComponentTest extends TestCase {
 	 * @return void
 	 */
 	public function testCheckHash() {
-		$this->Controller->request->query = [
+		$this->Controller->setRequest($this->Controller->getRequest()->withQueryParams([
 			'thumbnail' => 'width|200;height|150',
 			'hash' => '69aa9f46cdc5a200dc7539fc10eec00f2ba89023'
-		];
-		$this->Controller->Imagine->checkHash();
+		]));
+
+		$result = $this->Controller->Imagine->checkHash();
+		$this->assertTrue($result);
 	}
 
 	/**
-	 * @expectedException \Cake\Network\Exception\NotFoundException
+	 * @expectedException \Cake\Http\Exception\NotFoundException
 	 */
 	public function testInvalidHash() {
-		$this->Controller->request->query = [
+		$this->Controller->setRequest($this->Controller->getRequest()->withQueryParams([
 			'thumbnail' => 'width|200;height|150',
 			'hash' => 'wrong-hash-value'
-		];
+		]));
+
 		$this->Controller->Imagine->checkHash();
 	}
 
 	/**
-	 * @expectedException \Cake\Network\Exception\NotFoundException
+	 * @expectedException \Cake\Http\Exception\NotFoundException
 	 */
 	public function testMissingHash() {
-		$this->Controller->request->query = [
+		$this->Controller->setRequest($this->Controller->getRequest()->withQueryParams([
 			'thumbnail' => 'width|200;height|150'
-		];
+		]));
+
 		$this->Controller->Imagine->checkHash();
 	}
 
@@ -152,8 +169,12 @@ class ImagineComponentTest extends TestCase {
 	 * @return void
 	 */
 	public function testUnpackParams() {
+		$this->Controller->setRequest($this->Controller->getRequest()->withQueryParams([
+			'thumbnail' => 'width|200;height|150'
+		]));
+
 		$this->assertEquals($this->Controller->Imagine->operations, []);
-		$this->Controller->request->query['thumbnail'] = 'width|200;height|150';
+		//$this->Controller->getRequest()->query['thumbnail'] = 'width|200;height|150';
 		$this->Controller->Imagine->unpackParams();
 		$this->assertEquals($this->Controller->Imagine->operations, [
 				'thumbnail' => [

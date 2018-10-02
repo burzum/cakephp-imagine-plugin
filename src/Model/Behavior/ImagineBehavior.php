@@ -1,4 +1,6 @@
 <?php
+declare(strict_types = 1);
+
 /**
  * Copyright 2011-2017, Florian Krämer
  *
@@ -118,18 +120,18 @@ class ImagineBehavior extends Behavior {
 			));
 		}
 
-		$event = $this->_table->dispatchEvent('ImagineBehavior.beforeApplyOperations', compact('image', 'operations'));
+		$event = $this->getTable()->dispatchEvent('ImagineBehavior.beforeApplyOperations', compact('image', 'operations'));
 		if ($event->isStopped()) {
 			return $event->result;
 		}
 
-		$data = $event->data();
+		$data = $event->getData();
 		$this->_applyOperations(
 			$data['operations'],
 			$data['image']
 		);
 
-		$event = $this->_table->dispatchEvent('ImagineBehavior.afterApplyOperations', $data);
+		$event = $this->getTable()->dispatchEvent('ImagineBehavior.afterApplyOperations', $data);
 		if ($event->isStopped()) {
 			return $event->result;
 		}
@@ -151,13 +153,13 @@ class ImagineBehavior extends Behavior {
 	 */
 	protected function _applyOperations($operations, $image) {
 		foreach ($operations as $operation => $params) {
-			$event = $this->_table->dispatchEvent('ImagineBehavior.applyOperation', compact('image', 'operations'));
+			$event = $this->getTable()->dispatchEvent('ImagineBehavior.applyOperation', compact('image', 'operations'));
 			if ($event->isStopped()) {
 				continue;
 			}
 
 			if (method_exists($this->_table, $operation)) {
-				$this->_table->{$operation}($image, $params);
+				$this->getTable()->{$operation}($image, $params);
 			} elseif (method_exists($this->_processor, $operation)) {
 				$this->_processor->{$operation}($params);
 			} else {

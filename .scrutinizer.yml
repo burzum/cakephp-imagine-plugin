@@ -1,25 +1,32 @@
-checks:
-    php:
-        code_rating: true
-        remove_extra_empty_lines: true
-        remove_php_closing_tag: true
-        remove_trailing_whitespace: true
-tools:
-    php_code_coverage: true
-    php_loc:
-        enabled: true
-        excluded_dirs: [vendor, tests, config, docs]
-    php_cpd:
-        enabled: true
-        excluded_dirs: [vendor, tests, config, docs]
 build:
-    environment:
-        php:
-            version: 7.1
-    tests:
-        override:
-            -
-                command: './vendor/bin/phpunit --coverage-clover=coverage.xml'
-                coverage:
-                    file: 'coverage.xml'
-                    format: 'php-clover'
+    nodes:
+        analysis:
+            environment:
+                php:
+                    version: 7.1
+            project_setup:
+                override:
+                    - 'true'
+            tests:
+                override:
+                    - php-scrutinizer-run
+                    -
+                       command: './vendor/bin/phpunit --coverage-clover=coverage.xml'
+                       coverage:
+                           file: 'coverage.xml'
+                           format: 'php-clover'
+        tests71:
+            environment:
+                php:
+                    version: 7.1
+        tests72:
+            environment:
+                php:
+                    version: 7.2
+filter:
+    excluded_paths:
+        - 'tests/*'
+checks:
+    php: true
+coding_style:
+    php: {  }

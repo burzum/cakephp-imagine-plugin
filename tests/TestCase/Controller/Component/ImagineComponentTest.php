@@ -1,4 +1,6 @@
 <?php
+declare(strict_types = 1);
+
 /**
  * Copyright 2011-2017, Florian Krämer
  *
@@ -134,7 +136,8 @@ class ImagineComponentTest extends TestCase {
 			'hash' => '69aa9f46cdc5a200dc7539fc10eec00f2ba89023'
 		]));
 
-		$this->Controller->Imagine->checkHash();
+		$result = $this->Controller->Imagine->checkHash();
+		$this->assertTrue($result);
 	}
 
 	/**

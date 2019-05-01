@@ -266,7 +266,7 @@ class ImageProcessor
             throw new \InvalidArgumentException(__d('imagine', 'You have to pass size in the options!'));
         }
 
-        $imageSize = $this->getImageSize($this->_image);
+        $imageSize = $this->getImageSize();
 
         $width = $imageSize['x'];
         $height = $imageSize['y'];
@@ -381,7 +381,7 @@ class ImageProcessor
             $method = 'scale';
         }
 
-        $imageSize = $this->getImageSize($this->_image);
+        $imageSize = $this->getImageSize();
         $width = $imageSize[0];
         $height = $imageSize[1];
 
@@ -591,20 +591,20 @@ class ImageProcessor
     /**
      * Gets the size of an image
      *
-     * @param string|null $Image Image object or string of a file name
+     * @param string|null $image Image object or string of a file name
      * @return array first value is width, second height
      * @see \Imagine\Image\ImageInterface::getSize()
      */
-    public function getImageSize($Image = null)
+    public function getImageSize($image = null)
     {
-        $Image = $this->_getImage($Image);
-        $BoxInterface = $Image->getSize();
+        $image = $this->_getImage($image);
+        $box = $image->getSize();
 
         return [
-            $BoxInterface->getWidth(),
-            $BoxInterface->getHeight(),
-            'x' => $BoxInterface->getWidth(),
-            'y' => $BoxInterface->getHeight(),
+            $box->getWidth(),
+            $box->getHeight(),
+            'x' => $box->getWidth(),
+            'y' => $box->getHeight(),
         ];
     }
 
@@ -612,17 +612,17 @@ class ImageProcessor
      * Gets an image from a file string or returns the image object that is
      * loaded in the ImageProcessor::_image property.
      *
-     * @param string|null $Image Image
+     * @param string|null $image Image
      * @return \Imagine\Image\ImageInterface
      */
-    protected function _getImage($Image = null)
+    protected function _getImage($image = null)
     {
-        if (is_string($Image)) {
+        if (is_string($image)) {
             $class = 'Imagine\\' . $this->getConfig('engine') . '\Imagine';
             $Imagine = new $class();
 
             /** @var \Imagine\Image\ImagineInterface $Imagine */
-            return $Imagine->open($Image);
+            return $Imagine->open($image);
         }
 
         if (!empty($this->_image)) {

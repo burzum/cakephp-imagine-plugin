@@ -11,23 +11,8 @@ declare(strict_types=1);
 namespace Burzum\Imagine\Test\TestCase\Model\Behavior;
 
 use Cake\Core\Plugin;
-use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
 use Cake\TestSuite\TestCase;
-
-/**
- * Class ImagineTestModel
- *
- * @package Burzum\Imagine\Test\TestCase\Model\Behavior
- * @method getImageProcessor(): \Burzum\Imagine\Lib\ImageProcessor
- * @method operationsToString($operations, $separators = [], $hash = false)
- * @method processImage($image, $output = null, $imagineOptions = [], $operations = [])
- * @method getImageSize($image)
- */
-class ImagineTestModel extends Table
-{
-    public $name = 'ImagineTestModel';
-}
 
 /**
  * Class ImagineBehaviorTest
@@ -53,7 +38,7 @@ class ImagineBehaviorTest extends TestCase
     ];
 
     /**
-     * @var ImagineTestModel
+     * @var ImagineTestTable
      */
     protected $Model;
 
@@ -64,7 +49,7 @@ class ImagineBehaviorTest extends TestCase
      */
     public function setUp()
     {
-        $this->Model = TableRegistry::getTableLocator()->get('ImagineTestModel');
+        $this->Model = TableRegistry::getTableLocator()->get('ImagineTestTable');
         $this->Model->addBehavior('Burzum/Imagine.Imagine');
     }
 

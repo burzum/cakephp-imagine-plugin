@@ -24,6 +24,10 @@ use InvalidArgumentException;
  */
 class ImagineBehavior extends Behavior
 {
+    public const BEFORE_APPLY_OPERATIONS = 'ImagineBehavior.beforeApplyOperations';
+    public const APPLY_OPERATIONS = 'ImagineBehavior.applyOperation';
+    public const AFTER_APPLY_OPERATIONS = 'ImagineBehavior.afterApplyOperations';
+
     /**
      * Default settings array
      *
@@ -115,13 +119,11 @@ class ImagineBehavior extends Behavior
             $image = $this->_processor->image();
         }
         if (!$image instanceof AbstractImage) {
-            throw new InvalidArgumentException(sprintf(
-                'An instance of `\Imagine\Image\AbstractImage` is required, you passed `%s`!',
-                get_class($image)
-            ));
+            $message = 'An instance of `\Imagine\Image\AbstractImage` is required, you passed `%s`!';
+            throw new InvalidArgumentException(sprintf($message, get_class($image)));
         }
 
-        $event = $this->getTable()->dispatchEvent('ImagineBehavior.beforeApplyOperations', compact('image', 'operations'));
+        $event = $this->getTable()->dispatchEvent(self::BEFORE_APPLY_OPERATIONS, compact('image', 'operations'));
         if ($event->isStopped()) {
             return $event->getResult();
         }
@@ -132,7 +134,7 @@ class ImagineBehavior extends Behavior
             $data['image']
         );
 
-        $event = $this->getTable()->dispatchEvent('ImagineBehavior.afterApplyOperations', $data);
+        $event = $this->getTable()->dispatchEvent(self::AFTER_APPLY_OPERATIONS, $data);
         if ($event->isStopped()) {
             return $event->getResult();
         }
@@ -155,7 +157,7 @@ class ImagineBehavior extends Behavior
     protected function _applyOperations($operations, $image)
     {
         foreach ($operations as $operation => $params) {
-            $event = $this->getTable()->dispatchEvent('ImagineBehavior.applyOperation', compact('image', 'operations'));
+            $event = $this->getTable()->dispatchEvent(self::APPLY_OPERATIONS, compact('image', 'operations'));
             if ($event->isStopped()) {
                 continue;
             }

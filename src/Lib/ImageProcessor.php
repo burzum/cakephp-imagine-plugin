@@ -71,7 +71,9 @@ class ImageProcessor
             $engine = $this->getConfig('engine');
 
             if (($engine === 'Imagick' || $engine === 'imagick') && !extension_loaded('imagick')) {
-                throw new RuntimeException('Imagick php extension is not loaded! Please see http://php.net/manual/en/imagick.installation.php');
+                $message = 'Imagick php extension is not loaded! ' .
+                    'Please see http://php.net/manual/en/imagick.installation.php';
+                throw new RuntimeException($message);
             }
 
             $class = '\Imagine\\' . $this->getConfig('engine') . '\Imagine';

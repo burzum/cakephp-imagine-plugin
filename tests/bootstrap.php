@@ -1,5 +1,9 @@
 <?php
 declare(strict_types=1);
+/**
+ * Bootstrap logic.
+ */
+
 use Cake\Core\Plugin;
 
 $findRoot = function ($root) {

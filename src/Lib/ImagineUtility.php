@@ -58,7 +58,11 @@ class ImagineUtility
                     $tmp[] = $key . $separators['value'] . $value;
                 }
             }
-            $result = $separators['operations'] . $operation . $separators['params'] . implode($separators['params'], $tmp);
+            $result = $separators['operations'] . $operation . $separators['params'];
+            $result .= implode(
+                $separators['params'],
+                $tmp
+            );
         }
 
         if ($hash && $result !== '') {
@@ -104,7 +108,9 @@ class ImagineUtility
         // God damn php bug...
         // * https://stackoverflow.com/questions/37352371/php-exif-read-data-illegal-ifd-size
         // * https://bugs.php.net/bug.php?id=74956
+        // phpcs:disable
         $exif = @exif_read_data($imageFile);
+        // phpcs:enable
         if ($exif === false) {
             return null;
         }

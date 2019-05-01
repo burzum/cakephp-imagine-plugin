@@ -89,7 +89,8 @@ class ImagineComponent extends Component
     {
         $mediaSalt = Configure::read('Imagine.salt');
         if (empty($mediaSalt)) {
-            throw new InvalidArgumentException('Please configure Imagine.salt using Configure::write(\'Imagine.salt\', \'YOUR-SALT-VALUE\')');
+            $message = 'Please configure Imagine.salt using Configure::write(\'Imagine.salt\', \'YOUR-SALT-VALUE\')';
+            throw new InvalidArgumentException($message);
         }
 
         $request = $this->getController()->getRequest();

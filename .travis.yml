@@ -24,7 +24,6 @@ matrix:
     - php: 7.3
       env: PHPSTAN=1 DEFAULT=0
 
-	  
 before_script:
   - printf "\n" | pecl install imagick
   - composer self-update

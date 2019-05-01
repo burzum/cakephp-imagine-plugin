@@ -6,6 +6,9 @@ php:
   - 7.3
 
 env:
+  matrix:
+    - GENERIC=1
+    
   global:
     - DEFAULT=1
   

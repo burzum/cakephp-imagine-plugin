@@ -12,13 +12,15 @@
         }
     ],
     "require": {
-        "cakephp/cakephp": "^3.7",
+        "php": ">=7.2.0",
+        "cakephp/cakephp": "4.x-dev as 4.0.0",
         "imagine/imagine": "0.6.*",
         "cakephp/plugin-installer": "*"
     },
     "require-dev": {
-        "phpunit/phpunit": "^6.0",
-        "cakephp/cakephp-codesniffer": "dev-master"
+        "phpunit/phpunit": "^7",
+        "vlucas/phpdotenv": "^3.3",
+        "cakephp/cakephp-codesniffer": "dev-next"
     },
     "autoload": {
          "psr-4": {
@@ -42,6 +44,7 @@
         ],
         "cs-check": "phpcs -p --standard=vendor/cakephp/cakephp-codesniffer/CakePHP src/ tests/",
         "cs-fix": "phpcbf --standard=vendor/cakephp/cakephp-codesniffer/CakePHP src/ tests/",
+        "rector": "rector process tests/",
         "test": "phpunit --stderr",
         "stan": "phpstan analyse src/ && psalm --show-info=false",
         "psalm": "psalm --show-info=false",

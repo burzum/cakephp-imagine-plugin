@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Copyright 2011-2017, Florian Krämer
  *
@@ -24,7 +25,6 @@ use InvalidArgumentException;
  */
 class ImagineComponent extends Component
 {
-
     /**
      * Default config
      *
@@ -60,7 +60,7 @@ class ImagineComponent extends Component
      * @param \Cake\Event\Event $event Event instance
      * @return void
      */
-    public function startup(Event $event)
+    public function startup(Event $event): void
     {
         $Controller = $event->getSubject();
         $this->Controller = $Controller;
@@ -82,7 +82,7 @@ class ImagineComponent extends Component
      * of the requested image that was processed with these params. How you do that
      * is up to you.
      *
-     * @throws InvalidArgumentException
+     * @throws \InvalidArgumentException
      * @return mixed String if a hash could be retrieved, false if not
      */
     public function getHash()
@@ -112,10 +112,10 @@ class ImagineComponent extends Component
      * just incrementing the width and height for example in the url.
      *
      * @param bool $error If set to false no 404 page will be rendered if the hash is wrong
-     * @throws NotFoundException if the hash was not present
+     * @throws \Cake\Http\Exception\NotFoundException if the hash was not present
      * @return bool True if the hashes match
      */
-    public function checkHash($error = true)
+    public function checkHash(bool $error = true): bool
     {
         $request = $this->getController()->getRequest();
         $hashField = $request->getQuery($this->_config['hashField']);
@@ -139,7 +139,7 @@ class ImagineComponent extends Component
      * @internal param array $params If empty the method tries to get them from Controller->request['named']
      * @return array Array with operation options for imagine, if none found an empty array
      */
-    public function unpackParams(array $namedParams = [])
+    public function unpackParams(array $namedParams = []): array
     {
         $request = $this->getController()->getRequest();
 
@@ -151,7 +151,7 @@ class ImagineComponent extends Component
             $tmpParams = explode(';', $params);
             $resultParams = [];
             foreach ($tmpParams as &$param) {
-                list($key, $value) = explode('|', $param);
+                [$key, $value] = explode('|', $param);
                 $resultParams[$key] = $value;
             }
 
@@ -168,7 +168,7 @@ class ImagineComponent extends Component
      *
      * @return array An array of image operations to perform
      */
-    public function getOperations()
+    public function getOperations(): array
     {
         return $this->operations;
     }

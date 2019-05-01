@@ -5,25 +5,41 @@ php:
   - 7.2
   - 7.3
 
+env:
+  global:
+    - DEFAULT=1
+  
 matrix:
   fast_finish: true
   include:
     - php: 7.3
-      env:
-        - COVERALLS=1
+      env: COVERAGE=1 DEFAULT=0
 
+    - php: 7.3
+      env: PHPCS=1 DEFAULT=0
+
+    - php: 7.3
+      env: PHPSTAN=1 DEFAULT=0
+
+	  
 before_script:
   - printf "\n" | pecl install imagick
   - composer self-update
   - composer global require hirak/prestissimo
   - composer install --prefer-dist --no-interaction
-  - sh -c "if [ '$COVERALLS' = '1' ]; then composer require --dev satooshi/php-coveralls:dev-master; fi"
   - sh -c "if [ '$COVERALLS' = '1' ]; then mkdir -p build/logs; fi"
+  - if [[ $TRAVIS_PHP_VERSION != 7.3 ]]; then phpenv config-rm xdebug.ini; fi
+  - if [[ $PHPSTAN = 1 ]]; then composer stan-setup; fi
 
 script:
   - vendor/bin/phpunit
-  - sh -c "if [ '$COVERALLS' = '1' ]; then vendor/bin/phpunit --stderr --coverage-clover build/logs/clover.xml; fi"
-  - sh -c "if [ '$COVERALLS' = '1' ]; then php vendor/bin/coveralls -c .coveralls.yml -v; fi"
+  - if [[ $DEFAULT = 1 ]]; then composer test; fi
+  - if [[ $COVERAGE = 1 ]]; then composer coverage-test; fi
+  - if [[ $PHPCS = 1 ]]; then composer cs-check; fi
+  - if [[ $PHPSTAN = 1 ]]; then composer stan; fi
+
+after_success:
+  - if [[ $COVERAGE = 1 ]]; then bash <(curl -s https://codecov.io/bash); fi
 
 notifications:
   email: false

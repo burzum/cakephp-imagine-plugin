@@ -15,7 +15,6 @@ use BadMethodCallException;
 use Cake\Core\InstanceConfigTrait;
 use Imagine\Image\Box;
 use Imagine\Image\ImageInterface;
-use Imagine\Image\ImagineInterface;
 use Imagine\Image\Point;
 use InvalidArgumentException;
 use RuntimeException;
@@ -46,7 +45,7 @@ class ImageProcessor
     /**
      * Image object instance
      *
-     * @var ImageInterface|null
+     * @var \Imagine\Image\ImageInterface|null
      */
     protected $_image = null;
 
@@ -134,7 +133,7 @@ class ImageProcessor
     /**
      * Gets the image object.
      *
-     * @return ImageInterface
+     * @return \Imagine\Image\ImageInterface
      */
     public function image(): ?ImageInterface
     {
@@ -207,7 +206,7 @@ class ImageProcessor
      * @return string Filename compatible String representation of the operations
      * @link http://support.microsoft.com/kb/177506
      */
-    public function operationsToString($operations, $separators = [], string $hash = null)
+    public function operationsToString($operations, $separators = [], ?string $hash = null)
     {
         return ImagineUtility::operationsToString($operations, $separators, $hash);
     }
@@ -612,7 +611,7 @@ class ImageProcessor
      * loaded in the ImageProcessor::_image property.
      *
      * @param string|null $Image Image
-     * @return ImageInterface
+     * @return \Imagine\Image\ImageInterface
      */
     protected function _getImage($Image = null)
     {
@@ -620,7 +619,7 @@ class ImageProcessor
             $class = 'Imagine\\' . $this->getConfig('engine') . '\Imagine';
             $Imagine = new $class();
 
-            /** @var ImagineInterface $Imagine */
+            /** @var \Imagine\Image\ImagineInterface $Imagine */
             return $Imagine->open($Image);
         }
 

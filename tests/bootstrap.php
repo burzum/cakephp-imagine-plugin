@@ -1,6 +1,5 @@
 <?php
 declare(strict_types=1);
-
 use Cake\Core\Plugin;
 
 $findRoot = function ($root) {

@@ -44,7 +44,7 @@ class ImagineBehavior extends Behavior
     /**
      * Image processor instance
      *
-     * @var ImageProcessor|null
+     * @var \Burzum\Imagine\Lib\ImageProcessor|null
      */
     protected $_processor;
 
@@ -73,7 +73,7 @@ class ImagineBehavior extends Behavior
     /**
      * Returns the image processor object.
      *
-     * @return ImageProcessor
+     * @return \Burzum\Imagine\Lib\ImageProcessor
      */
     public function getImageProcessor(): ?ImageProcessor
     {
@@ -106,7 +106,7 @@ class ImagineBehavior extends Behavior
      * @param array $imagineOptions Image Options
      * @param array $operations Image operations
      * @throws \InvalidArgumentException
-     * @return bool|AbstractImage
+     * @return bool|\Imagine\Image\AbstractImage
      */
     public function processImage($image, $output = null, $imagineOptions = [], $operations = [])
     {

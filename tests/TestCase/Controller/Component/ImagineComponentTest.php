@@ -11,7 +11,6 @@ declare(strict_types=1);
  */
 namespace Burzum\Imagine\Test\TestCase\Controller\Component;
 
-use Burzum\Imagine\Controller\Component\ImagineComponent;
 use Cake\Controller\Controller;
 use Cake\Core\Configure;
 use Cake\Event\EventInterface;

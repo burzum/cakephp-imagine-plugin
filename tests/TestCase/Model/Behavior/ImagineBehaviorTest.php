@@ -47,7 +47,7 @@ class ImagineBehaviorTest extends TestCase
      *
      * @return void
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->Model = TableRegistry::getTableLocator()->get('ImagineTestTable');
         $this->Model->addBehavior('Burzum/Imagine.Imagine');
@@ -58,7 +58,7 @@ class ImagineBehaviorTest extends TestCase
      *
      * @return void
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         unset($this->Model);
         TableRegistry::getTableLocator()->clear();

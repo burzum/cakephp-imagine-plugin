@@ -22,194 +22,203 @@ use InvalidArgumentException;
 /**
  * CakePHP Imagine Plugin
  */
-class ImagineBehavior extends Behavior {
+class ImagineBehavior extends Behavior
+{
 
-	/**
-	 * Default settings array
-	 *
-	 * @var array
-	 */
-	protected $_defaultConfig = [
-		'engine' => 'Gd',
-		'processorClass' => '\Burzum\Imagine\Lib\ImageProcessor'
-	];
+    /**
+     * Default settings array
+     *
+     * @var array
+     */
+    protected $_defaultConfig = [
+        'engine' => 'Gd',
+        'processorClass' => '\Burzum\Imagine\Lib\ImageProcessor'
+    ];
 
-	/**
-	 * Class name of the image processor to use.
-	 *
-	 * @var string
-	 */
-	protected $_processorClass;
+    /**
+     * Class name of the image processor to use.
+     *
+     * @var string
+     */
+    protected $_processorClass;
 
-	/**
-	 * Image processor instance
-	 *
-	 * @var null|\Imagine
-	 */
-	protected $_processor;
+    /**
+     * Image processor instance
+     *
+     * @var null|\Imagine
+     */
+    protected $_processor;
 
-	/**
-	 * Constructor
-	 *
-	 * @param Table $table The table this behavior is attached to.
-	 * @param array $settings The settings for this behavior.
-	 */
-	public function __construct(Table $table, array $settings = []) {
-		parent::__construct($table, $settings);
+    /**
+     * Constructor
+     *
+     * @param Table $table The table this behavior is attached to.
+     * @param array $settings The settings for this behavior.
+     */
+    public function __construct(Table $table, array $settings = [])
+    {
+        parent::__construct($table, $settings);
 
-		$class = '\Imagine\\' . $this->getConfig('engine') . '\Imagine';
-		$this->Imagine = new $class();
-		$this->_table = $table;
-		$processorClass = $this->getConfig('processorClass');
-		$this->_processor = new $processorClass($this->getConfig());
-	}
+        $class = '\Imagine\\' . $this->getConfig('engine') . '\Imagine';
+        $this->Imagine = new $class();
+        $this->_table = $table;
+        $processorClass = $this->getConfig('processorClass');
+        $this->_processor = new $processorClass($this->getConfig());
+    }
 
-	/**
-	 * Returns the image processor object.
-	 *
-	 * @return mixed
-	 */
-	public function getImageProcessor() {
-		return $this->_processor;
-	}
+    /**
+     * Returns the image processor object.
+     *
+     * @return mixed
+     */
+    public function getImageProcessor()
+    {
+        return $this->_processor;
+    }
 
-	/**
-	 * Get the imagine object
-	 *
-	 * @deprecated Call ImagineBehavior->getImageProcessor()->imagine() instead.
-	 * @return Imagine object
-	 */
-	public function imagineObject() {
-		return $this->_processor->imagine();
-	}
+    /**
+     * Get the imagine object
+     *
+     * @deprecated Call ImagineBehavior->getImageProcessor()->imagine() instead.
+     * @return Imagine object
+     */
+    public function imagineObject()
+    {
+        return $this->_processor->imagine();
+    }
 
-	/**
-	 * Delegate the calls to the image processor lib.
-	 *
-	 * @param string $method Method name
-	 * @param array $args Arguments
-	 * @return mixed
-	 */
-	public function __call($method, $args) {
-		if (method_exists($this->_processor, $args)) {
-			return call_user_func_array([$this->_processor, $method], $args);
-		}
-	}
+    /**
+     * Delegate the calls to the image processor lib.
+     *
+     * @param string $method Method name
+     * @param array $args Arguments
+     * @return mixed
+     */
+    public function __call($method, $args)
+    {
+        if (method_exists($this->_processor, $args)) {
+            return call_user_func_array([$this->_processor, $method], $args);
+        }
+    }
 
-	/**
-	 * Loads an image and applies operations on it.
-	 *
-	 * Caching and taking care of the file storage is NOT the purpose of this method!
-	 *
-	 * @param \Imagine\Image\AbstractImage|string $image Image instance or a file to open
-	 * @param string|null $output File to write
-	 * @param array $imagineOptions Image Options
-	 * @param array $operations Image operations
-	 * @throws \InvalidArgumentException
-	 * @return bool
-	 */
-	public function processImage($image, $output = null, $imagineOptions = [], $operations = []) {
-		if (is_string($image)) {
-			$this->_processor->open($image);
-			$image = $this->_processor->image();
-		}
-		if (!$image instanceof AbstractImage) {
-			throw new InvalidArgumentException(sprintf(
-				'An instance of `\Imagine\Image\AbstractImage` is required, you passed `%s`!',
-				get_class($image)
-			));
-		}
+    /**
+     * Loads an image and applies operations on it.
+     *
+     * Caching and taking care of the file storage is NOT the purpose of this method!
+     *
+     * @param \Imagine\Image\AbstractImage|string $image Image instance or a file to open
+     * @param string|null $output File to write
+     * @param array $imagineOptions Image Options
+     * @param array $operations Image operations
+     * @throws \InvalidArgumentException
+     * @return bool
+     */
+    public function processImage($image, $output = null, $imagineOptions = [], $operations = [])
+    {
+        if (is_string($image)) {
+            $this->_processor->open($image);
+            $image = $this->_processor->image();
+        }
+        if (!$image instanceof AbstractImage) {
+            throw new InvalidArgumentException(sprintf(
+                'An instance of `\Imagine\Image\AbstractImage` is required, you passed `%s`!',
+                get_class($image)
+            ));
+        }
 
-		$event = $this->getTable()->dispatchEvent('ImagineBehavior.beforeApplyOperations', compact('image', 'operations'));
-		if ($event->isStopped()) {
-			return $event->result;
-		}
+        $event = $this->getTable()->dispatchEvent('ImagineBehavior.beforeApplyOperations', compact('image', 'operations'));
+        if ($event->isStopped()) {
+            return $event->result;
+        }
 
-		$data = $event->getData();
-		$this->_applyOperations(
-			$data['operations'],
-			$data['image']
-		);
+        $data = $event->getData();
+        $this->_applyOperations(
+            $data['operations'],
+            $data['image']
+        );
 
-		$event = $this->getTable()->dispatchEvent('ImagineBehavior.afterApplyOperations', $data);
-		if ($event->isStopped()) {
-			return $event->result;
-		}
+        $event = $this->getTable()->dispatchEvent('ImagineBehavior.afterApplyOperations', $data);
+        if ($event->isStopped()) {
+            return $event->result;
+        }
 
-		if ($output === null) {
-			return $image;
-		}
+        if ($output === null) {
+            return $image;
+        }
 
-		return $this->_processor->save($output, $imagineOptions);
-	}
+        return $this->_processor->save($output, $imagineOptions);
+    }
 
-	/**
-	 * Applies the actual image operations to the image.
-	 *
-	 * @param array $operations Operations
-	 * @param array $image Image
-	 * @throws \BadMethodCallException
-	 * @return void
-	 */
-	protected function _applyOperations($operations, $image) {
-		foreach ($operations as $operation => $params) {
-			$event = $this->getTable()->dispatchEvent('ImagineBehavior.applyOperation', compact('image', 'operations'));
-			if ($event->isStopped()) {
-				continue;
-			}
+    /**
+     * Applies the actual image operations to the image.
+     *
+     * @param array $operations Operations
+     * @param array $image Image
+     * @throws \BadMethodCallException
+     * @return void
+     */
+    protected function _applyOperations($operations, $image)
+    {
+        foreach ($operations as $operation => $params) {
+            $event = $this->getTable()->dispatchEvent('ImagineBehavior.applyOperation', compact('image', 'operations'));
+            if ($event->isStopped()) {
+                continue;
+            }
 
-			if (method_exists($this->_table, $operation)) {
-				$this->getTable()->{$operation}($image, $params);
-			} elseif (method_exists($this->_processor, $operation)) {
-				$this->_processor->{$operation}($params);
-			} else {
-				throw new BadMethodCallException(sprintf(
-					'Unsupported image operation `%s`!',
-					$operation
-				));
-			}
-		}
-	}
+            if (method_exists($this->_table, $operation)) {
+                $this->getTable()->{$operation}($image, $params);
+            } elseif (method_exists($this->_processor, $operation)) {
+                $this->_processor->{$operation}($params);
+            } else {
+                throw new BadMethodCallException(sprintf(
+                    'Unsupported image operation `%s`!',
+                    $operation
+                ));
+            }
+        }
+    }
 
-	/**
-	 * Turns the operations and their params into a string that can be used in a file name to cache an image.
-	 *
-	 * Suffix your image with the string generated by this method to be able to batch delete a file that has versions of it cached.
-	 * The intended usage of this is to store the files as my_horse.thumbnail+width-100-height+100.jpg for example.
-	 *
-	 * So after upload store your image meta data in a db, give the filename the id of the record and suffix it
-	 * with this string and store the string also in the db. In the views, if no further control over the image access is needed,
-	 * you can simply direct-link the image like $this->Html->image('/images/05/04/61/my_horse.thumbnail+width-100-height+100.jpg');
-	 *
-	 * @param array $operations Imagine image operations
-	 * @param array $separators Optional
-	 * @param bool $hash Has the operations to a string, default is false
-	 * @return string Filename compatible String representation of the operations
-	 * @link http://support.microsoft.com/kb/177506
-	 */
-	public function operationsToString($operations, $separators = [], $hash = false) {
-		return ImagineUtility::operationsToString($operations, $separators, $hash);
-	}
+    /**
+     * Turns the operations and their params into a string that can be used in a file name to cache an image.
+     *
+     * Suffix your image with the string generated by this method to be able to batch delete a file that has versions of it cached.
+     * The intended usage of this is to store the files as my_horse.thumbnail+width-100-height+100.jpg for example.
+     *
+     * So after upload store your image meta data in a db, give the filename the id of the record and suffix it
+     * with this string and store the string also in the db. In the views, if no further control over the image access is needed,
+     * you can simply direct-link the image like $this->Html->image('/images/05/04/61/my_horse.thumbnail+width-100-height+100.jpg');
+     *
+     * @param array $operations Imagine image operations
+     * @param array $separators Optional
+     * @param bool $hash Has the operations to a string, default is false
+     * @return string Filename compatible String representation of the operations
+     * @link http://support.microsoft.com/kb/177506
+     */
+    public function operationsToString($operations, $separators = [], $hash = false)
+    {
+        return ImagineUtility::operationsToString($operations, $separators, $hash);
+    }
 
-	/**
-	 * hashImageOperations
-	 *
-	 * @param array $imageSizes Array of image versions
-	 * @param int $hashLength Hash length, default is 8
-	 * @return string
-	 */
-	public function hashImageOperations($imageSizes, $hashLength = 8) {
-		return ImagineUtility::hashImageOperations($imageSizes, $hashLength);
-	}
+    /**
+     * hashImageOperations
+     *
+     * @param array $imageSizes Array of image versions
+     * @param int $hashLength Hash length, default is 8
+     * @return string
+     */
+    public function hashImageOperations($imageSizes, $hashLength = 8)
+    {
+        return ImagineUtility::hashImageOperations($imageSizes, $hashLength);
+    }
 
-	/**
-	 * Gets the image size of an image
-	 *
-	 * @param string $image Image file
-	 * @return array
-	 */
-	public function getImageSize($image) {
-		return $this->_processor->getImageSize($image);
-	}
-
+    /**
+     * Gets the image size of an image
+     *
+     * @param string $image Image file
+     * @return array
+     */
+    public function getImageSize($image)
+    {
+        return $this->_processor->getImageSize($image);
+    }
 }

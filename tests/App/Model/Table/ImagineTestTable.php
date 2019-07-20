@@ -1,5 +1,6 @@
 <?php
 declare(strict_types=1);
+
 /**
  * Copyright 2011-2017, Florian Kramer
  * Licensed under The MIT License

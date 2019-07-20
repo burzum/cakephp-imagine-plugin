@@ -1,5 +1,6 @@
 <?php
 declare(strict_types=1);
+
 /**
  * Copyright 2011-2017, Florian Krämer
  *
@@ -96,11 +97,11 @@ class ImagineHelperTest extends TestCase
     /**
      * testHash method
      *
-     * @expectedException Exception
      * @return void
      */
     public function testMissingSaltForHash(): void
     {
+        $this->expectException(\Exception::class);
         Configure::write('Imagine.salt', null);
         $this->Imagine->hash(['foo']);
     }

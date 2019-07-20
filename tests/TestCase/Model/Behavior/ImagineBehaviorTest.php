@@ -1,5 +1,6 @@
 <?php
 declare(strict_types=1);
+
 /**
  * Copyright 2011-2017, Florian Krämer
  * Licensed under The MIT License
@@ -107,11 +108,11 @@ class ImagineBehaviorTest extends TestCase
     /**
      * testCropInvalidArgumentException
      *
-     * @expectedException \InvalidArgumentException
      * @return void
      */
     public function testCropInvalidArgumentException()
     {
+        $this->expectException(\InvalidArgumentException::class);
         $image = Plugin::path('Burzum/Imagine') . 'tests' . DS . 'Fixture' . DS . 'titus.jpg';
         $this->Model->processImage($image, TMP . 'crop.jpg', [], [
             'crop' => [],

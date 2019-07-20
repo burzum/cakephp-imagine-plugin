@@ -1,5 +1,6 @@
 <?php
 declare(strict_types=1);
+
 /**
  * Copyright 2011-2017, Florian Krämer
  *
@@ -13,6 +14,7 @@ namespace Burzum\Imagine\Test\TestCase\Controller\Component;
 
 use Burzum\Imagine\Test\App\Controller\ImagineImagesTestController;
 use Cake\Core\Configure;
+use Cake\Http\Exception\NotFoundException;
 use Cake\Http\Response;
 use Cake\Http\ServerRequest as Request;
 use Cake\TestSuite\TestCase;
@@ -98,11 +100,9 @@ class ImagineComponentTest extends TestCase
         $this->assertTrue($result);
     }
 
-    /**
-     * @expectedException \Cake\Http\Exception\NotFoundException
-     */
     public function testInvalidHash()
     {
+        $this->expectException(NotFoundException::class);
         $this->Controller->setRequest($this->Controller->getRequest()->withQueryParams([
             'thumbnail' => 'width|200;height|150',
             'hash' => 'wrong-hash-value',
@@ -111,11 +111,9 @@ class ImagineComponentTest extends TestCase
         $this->Controller->Imagine->checkHash();
     }
 
-    /**
-     * @expectedException \Cake\Http\Exception\NotFoundException
-     */
     public function testMissingHash()
     {
+        $this->expectException(NotFoundException::class);
         $this->Controller->setRequest($this->Controller->getRequest()->withQueryParams([
             'thumbnail' => 'width|200;height|150',
         ]));

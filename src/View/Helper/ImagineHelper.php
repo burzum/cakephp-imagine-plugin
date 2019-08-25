@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 /**
  * Copyright 2011-2017, Florian Krämer
@@ -25,6 +25,7 @@ use RuntimeException;
  */
 class ImagineHelper extends Helper
 {
+
     /**
      * Finds URL for specified action and sign it.
      *
@@ -38,23 +39,30 @@ class ImagineHelper extends Helper
      * @param array $options List of named arguments that need to sign
      * @return string Full translated signed URL with base path and with
      */
-    public function url($url = null, bool $full = false, array $options = []): string
+    public function url($url = null, $full = false, $options = [])
     {
         if (is_string($url)) {
             $url = array_merge([
                 'plugin' => 'media',
                 'admin' => false,
                 'controller' => 'media',
-                'action' => 'image',
+                'action' => 'image'
             ], [
-                $url,
+                $url
             ]);
+        }
+
+        // backward compatibility check, switches params 2 and 3
+        if (is_bool($options)) {
+            $tmp = $options;
+            $options = $full;
+            $full = $tmp;
         }
 
         $options = $this->pack($options);
         $options['hash'] = $this->hash($options);
 
-        $url = array_merge((array)$url, ['base' => false, '?' => $options]);
+        $url = array_merge((array)$url, $options + ['base' => false]);
 
         return Router::url($url, $full);
     }
@@ -66,7 +74,7 @@ class ImagineHelper extends Helper
      * @param array $options Options to hash
      * @return string
      */
-    public function hash(array $options): string
+    public function hash($options)
     {
         $mediaSalt = Configure::read('Imagine.salt');
         if (empty($mediaSalt)) {
@@ -87,7 +95,7 @@ class ImagineHelper extends Helper
      * @param array $options Options to pack
      * @return array
      */
-    public function pack(array $options): array
+    public function pack($options)
     {
         $result = [];
         foreach ($options as $operation => $data) {

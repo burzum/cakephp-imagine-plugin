@@ -1,10 +1,4 @@
 <?php
-declare(strict_types=1);
-
-/**
- * Bootstrap logic.
- */
-
 use Cake\Core\Plugin;
 
 $findRoot = function ($root) {
@@ -18,16 +12,19 @@ $findRoot = function ($root) {
     throw new \Exception('Cannot find the root of the application, unable to run tests');
 };
 
-$root = $findRoot(__FILE__);
-unset($findRoot);
-chdir($root);
+    $root = $findRoot(__FILE__);
+    unset($findRoot);
+    chdir($root);
+if (file_exists($root . '/config/bootstrap.php')) {
+}
+    require $root . '/vendor/cakephp/cakephp/tests/bootstrap.php';
+    $loader = require $root . '/vendor/autoload.php';
 
-require $root . '/vendor/cakephp/cakephp/tests/bootstrap.php';
-$loader = require $root . '/vendor/autoload.php';
-
-$loader->setPsr4('Cake\\', './vendor/cakephp/cakephp/src');
-$loader->setPsr4('Cake\Test\\', './vendor/cakephp/cakephp/tests');
-Plugin::getCollection()
-      ->add(new \Burzum\Imagine\Plugin([
-          'path' => dirname(dirname(__FILE__)) . DS,
-      ]));
+    $loader->setPsr4('Cake\\', './vendor/cakephp/cakephp/src');
+    $loader->setPsr4('Cake\Test\\', './vendor/cakephp/cakephp/tests');
+    Plugin::getCollection()->add(new \Burzum\Imagine\Plugin([
+    'path' => dirname(dirname(__FILE__)) . DS,
+    // 'autoload' => true,
+    // 'bootstrap' => false,
+    // 'routes' => false
+    ]));

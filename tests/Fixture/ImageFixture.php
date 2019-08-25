@@ -14,6 +14,7 @@ use Cake\TestSuite\Fixture\TestFixture;
 
 class ImageFixture extends TestFixture
 {
+
     /**
      * fields property
      *
@@ -23,8 +24,8 @@ class ImageFixture extends TestFixture
         'id' => ['type' => 'integer'],
         'title' => ['type' => 'string', 'null' => false],
         '_constraints' => [
-            'primary' => ['type' => 'primary', 'columns' => ['id']],
-        ],
+            'primary' => ['type' => 'primary', 'columns' => ['id']]
+        ]
     ];
 
     /**
@@ -34,6 +35,6 @@ class ImageFixture extends TestFixture
      */
     public $records = [
         ['title' => 'First Image'],
-        ['title' => 'Second Image'],
+        ['title' => 'Second Image']
     ];
 }

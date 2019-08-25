@@ -12,15 +12,13 @@
         }
     ],
     "require": {
-        "php": ">=7.2.0",
-        "cakephp/cakephp": "4.x-dev as 4.0.0",
+        "cakephp/cakephp": "^3.7",
         "imagine/imagine": "0.6.*",
         "cakephp/plugin-installer": "*"
     },
     "require-dev": {
-        "phpunit/phpunit": "^8.0",
-        "vlucas/phpdotenv": "^3.3",
-        "cakephp/cakephp-codesniffer": "dev-next"
+        "phpunit/phpunit": "^6.0",
+        "cakephp/cakephp-codesniffer": "dev-master"
     },
     "autoload": {
          "psr-4": {
@@ -48,7 +46,6 @@
         "stan": "phpstan analyse src/ && psalm --show-info=false",
         "psalm": "psalm --show-info=false",
         "stan-setup": "cp composer.json composer.backup && composer require --dev phpstan/phpstan:^0.11 vimeo/psalm:^3.0 && mv composer.backup composer.json", 
-        "rector": "rector process src/",
         "rector-setup": "cp composer.json composer.backup && composer require --dev rector/rector:^0.4.11 && mv composer.backup composer.json", 
         "coverage-test": "phpunit --stderr --coverage-clover=clover.xml"
     }

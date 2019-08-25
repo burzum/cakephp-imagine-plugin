@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 /**
  * Copyright 2011-2017, Florian Krämer
@@ -23,7 +23,6 @@ use RuntimeException;
  */
 class ImagineUtility
 {
-
     /**
      * Turns the operations and their params into a string that can be used in a file name to cache an image.
      *
@@ -36,19 +35,19 @@ class ImagineUtility
      *
      * @param array $operations Operations
      * @param array $separators Separators
-     * @param bool $hash Hash the string, default is false
+     * @param string|null $hash Hash the string, default is false
      * @throws \BadFunctionCallException
      * @return string Filename compatible String representation of the operations
      * @link http://support.microsoft.com/kb/177506
      */
-    public static function operationsToString($operations, $separators = [], $hash = false)
+    public static function operationsToString(array $operations, array $separators = [], ?string $hash = null): string
     {
         ksort($operations);
 
         $defaultSeparators = [
             'operations' => '.',
             'params' => '+',
-            'value' => '-'
+            'value' => '-',
         ];
         $separators = array_merge($defaultSeparators, $separators);
 
@@ -60,7 +59,11 @@ class ImagineUtility
                     $tmp[] = $key . $separators['value'] . $value;
                 }
             }
-            $result = $separators['operations'] . $operation . $separators['params'] . implode($separators['params'], $tmp);
+            $result = $separators['operations'] . $operation . $separators['params'];
+            $result .= implode(
+                $separators['params'],
+                $tmp
+            );
         }
 
         if ($hash && $result !== '') {
@@ -80,7 +83,7 @@ class ImagineUtility
      * @param int $hashLength Hash length, default is 8
      * @return array Model.configName => hashValue
      */
-    public static function hashImageOperations($imageSizes, $hashLength = 8)
+    public static function hashImageOperations(array $imageSizes, int $hashLength = 8): array
     {
         foreach ($imageSizes as $model => $operations) {
             foreach ($operations as $name => $operation) {
@@ -97,7 +100,7 @@ class ImagineUtility
      * @param string $imageFile Image file to get the orientation from.
      * @return int The degree of orientation.
      */
-    public static function getImageOrientation($imageFile)
+    public static function getImageOrientation(string $imageFile): ?int
     {
         if (!file_exists($imageFile)) {
             throw new RuntimeException(sprintf('File %s not found!', $imageFile));
@@ -106,9 +109,11 @@ class ImagineUtility
         // God damn php bug...
         // * https://stackoverflow.com/questions/37352371/php-exif-read-data-illegal-ifd-size
         // * https://bugs.php.net/bug.php?id=74956
+        // phpcs:disable
         $exif = @exif_read_data($imageFile);
+        // phpcs:enable
         if ($exif === false) {
-            return false;
+            return null;
         }
 
         $angle = 0;

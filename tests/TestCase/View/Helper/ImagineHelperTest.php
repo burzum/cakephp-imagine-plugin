@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  * Copyright 2011-2017, Florian Krämer
  *
@@ -18,16 +20,17 @@ use Cake\View\View;
 
 /**
  * ImagineHelperTest class
+ *
+ * @property ImagineHelper $Imagine
  */
 class ImagineHelperTest extends TestCase
 {
-
     /**
      * setUp method
      *
      * @return void
      */
-    public function setUp()
+    public function setUp(): void
     {
         Router::reload();
         Router::connect('/:controller/:action');
@@ -44,7 +47,7 @@ class ImagineHelperTest extends TestCase
      *
      * @return void
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         unset($this->Imagine);
     }
@@ -54,20 +57,20 @@ class ImagineHelperTest extends TestCase
      *
      * @return void
      */
-    public function testUrl()
+    public function testUrl(): void
     {
         $result = $this->Imagine->url(
             [
                 'controller' => 'Images',
                 'action' => 'display',
-                1
+                1,
             ],
             false,
             [
                 'thumbnail' => [
                     'width' => 200,
-                    'height' => 150
-                ]
+                    'height' => 150,
+                ],
             ]
         );
         $expected = '/Images/display/1?thumbnail=width%7C200%3Bheight%7C150&hash=69aa9f46cdc5a200dc7539fc10eec00f2ba89023';
@@ -75,42 +78,17 @@ class ImagineHelperTest extends TestCase
     }
 
     /**
-     * testUrl method for backward compatibility
-     *
-     * @return void
-     */
-    public function testUrlBackwardCompatibility()
-    {
-        $param1 = [
-            'controller' => 'Images',
-            'action' => 'display',
-            1
-        ];
-        $param2 = false;
-        $param3 = [
-            'thumbnail' => [
-                'width' => 200,
-                'height' => 150
-            ]
-        ];
-
-        $result1 = $this->Imagine->url($param1, $param2, $param3);
-        $result2 = $this->Imagine->url($param1, $param3, $param2);
-        $this->assertEquals($result1, $result2);
-    }
-
-    /**
      * testHash method
      *
      * @return void
      */
-    public function testHash()
+    public function testHash(): void
     {
         $options = $this->Imagine->pack([
                 'thumbnail' => [
                     'width' => 200,
-                    'height' => 150
-                ]
+                    'height' => 150,
+                ],
             ]);
         $result = $this->Imagine->hash($options);
         $this->assertEquals($result, '69aa9f46cdc5a200dc7539fc10eec00f2ba89023');
@@ -119,13 +97,13 @@ class ImagineHelperTest extends TestCase
     /**
      * testHash method
      *
-     * @expectedException Exception
      * @return void
      */
-    public function testMissingSaltForHash()
+    public function testMissingSaltForHash(): void
     {
+        $this->expectException(\Exception::class);
         Configure::write('Imagine.salt', null);
-        $this->Imagine->hash('foo');
+        $this->Imagine->hash(['foo']);
     }
 
     /**
@@ -133,13 +111,13 @@ class ImagineHelperTest extends TestCase
      *
      * @return void
      */
-    public function testPack()
+    public function testPack(): void
     {
         $result = $this->Imagine->pack([
                 'thumbnail' => [
                     'width' => 200,
-                    'height' => 150
-                ]
+                    'height' => 150,
+                ],
             ]);
 
         $this->assertEquals($result, ['thumbnail' => 'width|200;height|150']);

@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  * Copyright 2011-2017, Florian Krämer
  * Licensed under The MIT License
@@ -10,18 +12,16 @@
 namespace Burzum\Imagine\Test\TestCase\Model\Behavior;
 
 use Cake\Core\Plugin;
-use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
 use Cake\TestSuite\TestCase;
 
-class ImagineTestModel extends Table
-{
-    public $name = 'ImagineTestModel';
-}
-
+/**
+ * Class ImagineBehaviorTest
+ *
+ * @package Burzum\Imagine\Test\TestCase\Model\Behavior
+ */
 class ImagineBehaviorTest extends TestCase
 {
-
     /**
      * Holds the instance of the model
      *
@@ -35,17 +35,22 @@ class ImagineBehaviorTest extends TestCase
      * @var array
      */
     public $fixtures = [
-        'plugin.Burzum\Imagine.Image'
+        'plugin.Burzum\Imagine.Image',
     ];
+
+    /**
+     * @var ImagineTestTable
+     */
+    protected $Model;
 
     /**
      * setUp
      *
      * @return void
      */
-    public function setUp()
+    public function setUp(): void
     {
-        $this->Model = TableRegistry::get('ImagineTestModel');
+        $this->Model = TableRegistry::getTableLocator()->get('ImagineTestTable');
         $this->Model->addBehavior('Burzum/Imagine.Imagine');
     }
 
@@ -54,10 +59,10 @@ class ImagineBehaviorTest extends TestCase
      *
      * @return void
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         unset($this->Model);
-        TableRegistry::clear();
+        TableRegistry::getTableLocator()->clear();
     }
 
     /**
@@ -67,7 +72,7 @@ class ImagineBehaviorTest extends TestCase
      */
     public function testImagineObject()
     {
-        $result = $this->Model->imagineObject();
+        $result = $this->Model->getImageProcessor()->imagine();
         $this->assertTrue(is_a($result, 'Imagine\Gd\Imagine'));
     }
 
@@ -81,8 +86,8 @@ class ImagineBehaviorTest extends TestCase
         $operations = [
             'thumbnail' => [
                 'width' => 200,
-                'height' => 150
-            ]
+                'height' => 150,
+            ],
         ];
         $result = $this->Model->operationsToString($operations);
         $this->assertEquals($result, '.thumbnail+width-200+height-150');
@@ -103,14 +108,14 @@ class ImagineBehaviorTest extends TestCase
     /**
      * testCropInvalidArgumentException
      *
-     * @expectedException \InvalidArgumentException
      * @return void
      */
     public function testCropInvalidArgumentException()
     {
+        $this->expectException(\InvalidArgumentException::class);
         $image = Plugin::path('Burzum/Imagine') . 'tests' . DS . 'Fixture' . DS . 'titus.jpg';
         $this->Model->processImage($image, TMP . 'crop.jpg', [], [
-            'crop' => []
+            'crop' => [],
         ]);
     }
 
@@ -125,8 +130,8 @@ class ImagineBehaviorTest extends TestCase
         $this->Model->processImage($image, TMP . 'resize.jpg', [], [
             'resize' => [
                 'height' => 150,
-                'width' => 200
-            ]
+                'width' => 200,
+            ],
         ]);
         $result = $this->Model->getImageSize(TMP . 'resize.jpg');
         $this->assertEquals($result, [200, 150, 'x' => 200, 'y' => 150]);
@@ -143,8 +148,8 @@ class ImagineBehaviorTest extends TestCase
         $this->Model->processImage($image, TMP . 'crop.jpg', [], [
             'crop' => [
                 'height' => 300,
-                'width' => 300
-            ]
+                'width' => 300,
+            ],
         ]);
         $result = $this->Model->getImageSize(TMP . 'crop.jpg');
         $this->assertEquals($result, [300, 300, 'x' => 300, 'y' => 300]);
@@ -163,8 +168,8 @@ class ImagineBehaviorTest extends TestCase
             'thumbnail' => [
                 'mode' => 'inbound',
                 'height' => 300,
-                'width' => 300
-            ]
+                'width' => 300,
+            ],
         ]);
 
         $result = $this->Model->getImageSize(TMP . 'thumbnailInbound.jpg');
@@ -174,8 +179,8 @@ class ImagineBehaviorTest extends TestCase
             'thumbnail' => [
                 'mode' => 'outbound',
                 'height' => 300,
-                'width' => 300
-            ]
+                'width' => 300,
+            ],
         ]);
 
         $result = $this->Model->getImageSize(TMP . 'thumbnailOutbound.jpg');
@@ -185,8 +190,8 @@ class ImagineBehaviorTest extends TestCase
                 'thumbnail' => [
                     'mode' => 'inset',
                     'height' => 300,
-                    'width' => 300
-                ]
+                    'width' => 300,
+                ],
             ]);
 
         $result = $this->Model->getImageSize(TMP . 'thumbnail2.jpg');
@@ -203,15 +208,15 @@ class ImagineBehaviorTest extends TestCase
         $image = Plugin::path('Burzum/Imagine') . 'tests' . DS . 'Fixture' . DS . 'titus.jpg';
         $this->Model->processImage($image, TMP . 'testSquareCenterCrop.jpg', [], [
             'squareCenterCrop' => [
-                'size' => 255
-            ]
+                'size' => 255,
+            ],
         ]);
         $result = $this->Model->getImageSize(TMP . 'testSquareCenterCrop.jpg');
         $this->assertEquals($result, [255, 255, 'x' => 255, 'y' => 255]);
     }
 
     /**
-     * testgetImageSize
+     * testGetImageSize
      *
      * @return void
      */
@@ -237,8 +242,8 @@ class ImagineBehaviorTest extends TestCase
         // Width
         $this->Model->processImage($image, TMP . 'widen.jpg', [], [
             'widen' => [
-                'size' => 200
-            ]
+                'size' => 200,
+            ],
         ]);
 
         $result = $this->Model->getImageSize(TMP . 'widen.jpg');
@@ -247,8 +252,8 @@ class ImagineBehaviorTest extends TestCase
         // Height
         $this->Model->processImage($image, TMP . 'heighten.jpg', [], [
                 'heighten' => [
-                    'size' => 200
-                ]
+                    'size' => 200,
+                ],
             ]);
 
         $result = $this->Model->getImageSize(TMP . 'heighten.jpg');
@@ -268,7 +273,7 @@ class ImagineBehaviorTest extends TestCase
         $this->Model->processImage($image, TMP . 'heighten-upscale.jpg', [], [
                 'heighten' => [
                     'size' => 2000,
-                    'preventUpscale' => true
+                    'preventUpscale' => true,
                 ],
             ]);
 
@@ -279,8 +284,8 @@ class ImagineBehaviorTest extends TestCase
         $this->Model->processImage($image, TMP . 'widen-upscale.jpg', [], [
             'widen' => [
                 'size' => 2000,
-                'preventUpscale' => true
-            ]
+                'preventUpscale' => true,
+            ],
         ]);
 
         $result = $this->Model->getImageSize(TMP . 'widen-upscale.jpg');
@@ -291,8 +296,8 @@ class ImagineBehaviorTest extends TestCase
             'thumbnail' => [
                 'height' => 2000,
                 'width' => 2000,
-                'preventUpscale' => true
-            ]
+                'preventUpscale' => true,
+            ],
         ]);
 
         $result = $this->Model->getImageSize(TMP . 'thumbnail-upscale.jpg');
@@ -311,8 +316,8 @@ class ImagineBehaviorTest extends TestCase
         // Scale
         $this->Model->processImage($image, TMP . 'scale-factor2.jpg', [], [
             'scale' => [
-                'factor' => 2
-            ]
+                'factor' => 2,
+            ],
         ]);
 
         $result = $this->Model->getImageSize(TMP . 'scale-factor2.jpg');
@@ -321,8 +326,8 @@ class ImagineBehaviorTest extends TestCase
         // Scale2
         $this->Model->processImage($image, TMP . 'scale-factor1.25.jpg', [], [
             'scale' => [
-                'factor' => 1.25
-            ]
+                'factor' => 1.25,
+            ],
         ]);
 
         $result = $this->Model->getImageSize(TMP . 'scale-factor1.25.jpg');

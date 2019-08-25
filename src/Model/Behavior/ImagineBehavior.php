@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 /**
  * Copyright 2011-2017, Florian Krämer
@@ -13,6 +13,7 @@ declare(strict_types = 1);
 namespace Burzum\Imagine\Model\Behavior;
 
 use BadMethodCallException;
+use Burzum\Imagine\Lib\ImageProcessor;
 use Burzum\Imagine\Lib\ImagineUtility;
 use Cake\ORM\Behavior;
 use Cake\ORM\Table;
@@ -24,6 +25,9 @@ use InvalidArgumentException;
  */
 class ImagineBehavior extends Behavior
 {
+    public const BEFORE_APPLY_OPERATIONS = 'ImagineBehavior.beforeApplyOperations';
+    public const APPLY_OPERATIONS = 'ImagineBehavior.applyOperation';
+    public const AFTER_APPLY_OPERATIONS = 'ImagineBehavior.afterApplyOperations';
 
     /**
      * Default settings array
@@ -32,7 +36,7 @@ class ImagineBehavior extends Behavior
      */
     protected $_defaultConfig = [
         'engine' => 'Gd',
-        'processorClass' => '\Burzum\Imagine\Lib\ImageProcessor'
+        'processorClass' => '\Burzum\Imagine\Lib\ImageProcessor',
     ];
 
     /**
@@ -45,14 +49,19 @@ class ImagineBehavior extends Behavior
     /**
      * Image processor instance
      *
-     * @var null|\Imagine
+     * @var \Burzum\Imagine\Lib\ImageProcessor|null
      */
     protected $_processor;
 
     /**
+     * Imagine engine
+     */
+    protected $Imagine;
+
+    /**
      * Constructor
      *
-     * @param Table $table The table this behavior is attached to.
+     * @param \Cake\ORM\Table $table The table this behavior is attached to.
      * @param array $settings The settings for this behavior.
      */
     public function __construct(Table $table, array $settings = [])
@@ -69,22 +78,11 @@ class ImagineBehavior extends Behavior
     /**
      * Returns the image processor object.
      *
-     * @return mixed
+     * @return \Burzum\Imagine\Lib\ImageProcessor
      */
-    public function getImageProcessor()
+    public function getImageProcessor(): ?ImageProcessor
     {
         return $this->_processor;
-    }
-
-    /**
-     * Get the imagine object
-     *
-     * @deprecated Call ImagineBehavior->getImageProcessor()->imagine() instead.
-     * @return Imagine object
-     */
-    public function imagineObject()
-    {
-        return $this->_processor->imagine();
     }
 
     /**
@@ -96,9 +94,11 @@ class ImagineBehavior extends Behavior
      */
     public function __call($method, $args)
     {
-        if (method_exists($this->_processor, $args)) {
+        if (method_exists($this->_processor, $method)) {
             return call_user_func_array([$this->_processor, $method], $args);
         }
+
+        return null;
     }
 
     /**
@@ -111,7 +111,7 @@ class ImagineBehavior extends Behavior
      * @param array $imagineOptions Image Options
      * @param array $operations Image operations
      * @throws \InvalidArgumentException
-     * @return bool
+     * @return bool|\Imagine\Image\AbstractImage
      */
     public function processImage($image, $output = null, $imagineOptions = [], $operations = [])
     {
@@ -120,15 +120,13 @@ class ImagineBehavior extends Behavior
             $image = $this->_processor->image();
         }
         if (!$image instanceof AbstractImage) {
-            throw new InvalidArgumentException(sprintf(
-                'An instance of `\Imagine\Image\AbstractImage` is required, you passed `%s`!',
-                get_class($image)
-            ));
+            $message = 'An instance of `\Imagine\Image\AbstractImage` is required, you passed `%s`!';
+            throw new InvalidArgumentException(sprintf($message, get_class($image)));
         }
 
-        $event = $this->getTable()->dispatchEvent('ImagineBehavior.beforeApplyOperations', compact('image', 'operations'));
+        $event = $this->getTable()->dispatchEvent(self::BEFORE_APPLY_OPERATIONS, compact('image', 'operations'));
         if ($event->isStopped()) {
-            return $event->result;
+            return $event->getResult();
         }
 
         $data = $event->getData();
@@ -137,9 +135,9 @@ class ImagineBehavior extends Behavior
             $data['image']
         );
 
-        $event = $this->getTable()->dispatchEvent('ImagineBehavior.afterApplyOperations', $data);
+        $event = $this->getTable()->dispatchEvent(self::AFTER_APPLY_OPERATIONS, $data);
         if ($event->isStopped()) {
-            return $event->result;
+            return $event->getResult();
         }
 
         if ($output === null) {
@@ -160,7 +158,7 @@ class ImagineBehavior extends Behavior
     protected function _applyOperations($operations, $image)
     {
         foreach ($operations as $operation => $params) {
-            $event = $this->getTable()->dispatchEvent('ImagineBehavior.applyOperation', compact('image', 'operations'));
+            $event = $this->getTable()->dispatchEvent(self::APPLY_OPERATIONS, compact('image', 'operations'));
             if ($event->isStopped()) {
                 continue;
             }
@@ -190,11 +188,11 @@ class ImagineBehavior extends Behavior
      *
      * @param array $operations Imagine image operations
      * @param array $separators Optional
-     * @param bool $hash Has the operations to a string, default is false
+     * @param string $hash Has the operations to a string, default is false
      * @return string Filename compatible String representation of the operations
      * @link http://support.microsoft.com/kb/177506
      */
-    public function operationsToString($operations, $separators = [], $hash = false)
+    public function operationsToString($operations, $separators = [], ?string $hash = null)
     {
         return ImagineUtility::operationsToString($operations, $separators, $hash);
     }
@@ -204,9 +202,9 @@ class ImagineBehavior extends Behavior
      *
      * @param array $imageSizes Array of image versions
      * @param int $hashLength Hash length, default is 8
-     * @return string
+     * @return array
      */
-    public function hashImageOperations($imageSizes, $hashLength = 8)
+    public function hashImageOperations($imageSizes, $hashLength = 8): array
     {
         return ImagineUtility::hashImageOperations($imageSizes, $hashLength);
     }

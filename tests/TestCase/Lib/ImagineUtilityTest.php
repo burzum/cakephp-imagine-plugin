@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  * Copyright 2011-2017, Florian Krämer
  * Licensed under The MIT License
@@ -16,7 +18,6 @@ use Cake\TestSuite\TestCase;
 
 class ImagineUtilityTest extends TestCase
 {
-
     /**
      * Fixtures
      *
@@ -29,13 +30,13 @@ class ImagineUtilityTest extends TestCase
      *
      * @return void
      */
-    public function testOperationsToString()
+    public function testOperationsToString(): void
     {
         $operations = [
             'thumbnail' => [
                 'width' => 200,
-                'height' => 150
-            ]
+                'height' => 150,
+            ],
         ];
         $result = ImagineUtility::operationsToString($operations);
         $this->assertEquals($result, '.thumbnail+width-200+height-150');
@@ -46,21 +47,21 @@ class ImagineUtilityTest extends TestCase
      *
      * @return void
      */
-    public function testHashImageOperations()
+    public function testHashImageOperations(): void
     {
         $operations = [
             'SomeModel' => [
                 't200x150' => [
                     'thumbnail' => [
                         'width' => 200,
-                        'height' => 150
-                    ]
-                ]
-            ]
+                        'height' => 150,
+                    ],
+                ],
+            ],
         ];
         $result = ImagineUtility::hashImageOperations($operations);
         $this->assertEquals($result, [
-            'SomeModel' => ['t200x150' => '38b1868f']
+            'SomeModel' => ['t200x150' => '38b1868f'],
         ]);
     }
 
@@ -69,7 +70,7 @@ class ImagineUtilityTest extends TestCase
      *
      * @return void
      */
-    public function testGetImageOrientation()
+    public function testGetImageOrientation(): void
     {
         $image = Plugin::path('Burzum/Imagine') . 'tests' . DS . 'Fixture' . DS . 'titus.jpg';
         $result = ImagineUtility::getImageOrientation($image);

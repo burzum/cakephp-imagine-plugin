@@ -23,6 +23,10 @@ build:
             environment:
                 php:
                     version: 7.2
+        tests73:
+            environment:
+                php:
+                    version: 7.3
 filter:
     excluded_paths:
         - 'tests/*'

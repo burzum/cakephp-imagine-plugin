@@ -1,4 +1,4 @@
-# Imagine Plugin for CakePHP3 #
+# Imagine Plugin for CakePHP #
 
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.txt)
 [![Build Status](https://img.shields.io/travis/burzum/cakephp-imagine-plugin/master.svg?style=flat-square)](https://travis-ci.org/burzum/cakephp-imagine-plugin)
